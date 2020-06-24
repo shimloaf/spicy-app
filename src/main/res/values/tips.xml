@@ -1,0 +1,14 @@
+<resources>
+    <string-array name="tips_array">
+        <item>Always agree and heighten!</item>
+        <item>Try to find the game of the scene!</item>
+        <item>Keep track of your object work!</item>
+        <item>Statements give gifts to your scene partner!</item>
+        <item>Try and raise the stakes!</item>
+        <item>You can still have energy in scenes without a lot of action!</item>
+        <item>Avoid questions if possible!</item>
+        <item>Be respectful of your scene partner\'s boundaries!</item>
+        <item>Have Fun!</item>
+        <item>At the end of the day, all that matters is that you had fun!</item>
+    </string-array>
+</resources>

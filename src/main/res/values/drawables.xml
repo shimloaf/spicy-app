@@ -1,0 +1,9 @@
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+        <item name="ic_menu_home" type="drawable">@drawable/home_icon</item>
+    <item name="ic_menu_games" type="drawable">@drawable/games_icon</item>
+    <item name="ic_menu_suggestions" type="drawable">@drawable/suggestion_icon</item>
+    <item name="ic_menu_timer" type="drawable">@drawable/timer_icon</item>
+    <item name="ic_menu_tools" type="drawable">@drawable/tools_icon</item>
+    <item name="ic_menu_showbuilder" type="drawable">@drawable/build_icon</item>
+    <item name="ic_menu_credits" type="drawable">@drawable/credit_icon</item>
+</resources>

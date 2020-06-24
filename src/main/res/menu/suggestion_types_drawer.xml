@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/sugg_emotion"
+            android:title="Emotions" />
+        <item
+            android:id="@+id/sugg_grab_bag"
+            android:title="Grab Bag: Anything At All" />
+        <item
+            android:id="@+id/sugg_ssuggs"
+            android:title="Suggestion Types" />
+        <item
+            android:id="@+id/sugg_household"
+            android:title="Household Objects" />
+        <item
+            android:id="@+id/sugg_event"
+            android:title="Events" />
+        <item
+            android:id="@+id/sugg_location"
+            android:title="Locations" />
+        <item
+            android:id="@+id/sugg_duo"
+            android:title="Famous Duos" />
+        <item
+            android:id="@+id/sugg_relationship"
+            android:title="Relationships" />
+    </group>
+
+</menu>

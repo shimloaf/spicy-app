@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="emotions">
+        <item>Happy</item>
+        <item>Sad</item>
+        <item>Envious</item>
+        <item>Gleeful</item>
+        <item>Tentative</item>
+        <item>Sleepy</item>
+        <item>Elated</item>
+        <item>Furious</item>
+        <item>Wistful</item>
+        <item>Ecstatic</item>
+        <item>Euphoric</item>
+        <item>Scared</item>
+        <item>Terrified</item>
+        <item>Bored</item>
+        <item>Antsy</item>
+        <item>Enamoured</item>
+        <item>Curious</item>
+        <item>Existential</item>
+        <item>Anxious</item>
+        <item>Concerned</item>
+        <item>Nervous</item>
+        <item>Bashful</item>
+        <item>Brimming with Energy</item>
+        <item>Forlorn</item>
+        <item>Lethargic</item>
+        <item>Grieving</item>
+        <item>Malicious</item>
+        <item>Primal Hunger</item>
+        <item>Contemplative</item>
+        <item>Jealous</item>
+        <item>Jubilant</item>
+        <item>Optimistic</item>
+        <item>Pessimistic</item>
+        <item>Mischievous</item>
+        <item>Edgy</item>
+        <item>Angry</item>
+        <item>Mad</item>
+        <item>High-Strung</item>
+        <item>Incensed</item>
+        <item>Jovial</item>
+        <item>Horrified</item>
+    </string-array>
+    <string-array name="grab_bag">
+        <item>Beans</item>
+        <item>Light Bulb</item>
+        <item>El Dorado: The City of Gold</item>
+        <item>Bank Teller</item>
+        <item>Grain Alcohol</item>
+        <item>Topsoil</item>
+        <item>Whale Song</item>
+        <item>Keyboard</item>
+        <item>Garage Door Opener</item>
+        <item>Tuna Fish</item>
+        <item>Album Cover</item>
+        <item>Lamborghini</item>
+        <item>Expensive Watch</item>
+        <item>Medium Rare Steak</item>
+        <item>A Blu-Ray of Shrek 2</item>
+        <item>Pencil</item>
+        <item>Global Warming</item>
+        <item>Brett Favre</item>
+        <item>Christmas In July</item>
+        <item>Nebula</item>
+        <item>Perseus and the Gorgon</item>
+        <item>Magic Mirror</item>
+        <item>Naked Mole Rat</item>
+        <item>Stroopwafel</item>
+        <item>Polar Bear</item>
+        <item>Amphitheater</item>
+        <item>Big Brother</item>
+        <item>Shotgun Wedding</item>
+        <item>Six Flags: The Greatest Place on Earth</item>
+        <item>Fungus</item>
+        <item>Locked in the Cellar</item>
+        <item>Edgar Allen Poe</item>
+        <item>Tie Fighter</item>
+        <item>Caboose</item>
+        <item>Monet Painting</item>
+        <item>Combine Harvester</item>
+        <item>Ant Colony</item>
+    </string-array>
+    <string-array name="ssuggs">
+        <item>A location</item>
+        <item>An emotion</item>
+        <item>grab bag: anything at all</item>
+        <item>A household object</item>
+        <item>A major life event</item>
+        <item>A non-familial relationship</item>
+        <item>A reason these people are together</item>
+        <item>Your favorite thing to do on the weekend</item>
+        <item>A childhood memory</item>
+        <item>Something you heard today</item>
+        <item>A movie title</item>
+        <item>A famous duo</item>
+        <item>A title of a book</item>
+        <item>Your least favorite word</item>
+        <item>Something you might find in your kitchen</item>
+        <item>Something you might find around the house</item>
+        <item>Something that doesn\'t exist yet</item>
+        <item>Something you like to eat</item>
+        <item>Something that could fit in a shoebox</item>
+        <item>Something you owned as a kid</item>
+        <item>Something you often lose</item>
+        <item>An animal</item>
+        <item>An ailment</item>
+    </string-array>
+    <string-array name="household">
+        <item>Lamp</item>
+        <item>Oven</item>
+        <item>Spatula</item>
+        <item>Fork</item>
+        <item>Toaster</item>
+        <item>Tape Measure</item>
+        <item>Couch</item>
+        <item>TV</item>
+        <item>Stapler</item>
+        <item>Clock Radio</item>
+        <item>Chapter Book</item>
+        <item>Calendar</item>
+        <item>Blender</item>
+        <item>Painting</item>
+        <item>Spool of Thread</item>
+        <item>Remote Control</item>
+        <item>Cushion</item>
+        <item>Bed</item>
+        <item>Hair Tie</item>
+        <item>Headphones</item>
+        <item>Victrola</item>
+        <item>Lawnmower</item>
+        <item>Gaming Console</item>
+        <item>Atlas</item>
+        <item>The Dog</item>
+        <item>Rug</item>
+        <item>Your Parents</item>
+        <item>Mousepad</item>
+        <item>Tapestry</item>
+        <item>Fridge</item>
+        <item>Sink</item>
+        <item>Dishwasher</item>
+        <item>Hanging Plant</item>
+        <item>Doorknob</item>
+        <item>Hair Dryer</item>
+        <item>Scissors</item>
+        <item>Stovetop</item>
+    </string-array>
+    <string-array name="event">
+        <item>Graduation</item>
+        <item>Wedding</item>
+        <item>Funeral</item>
+        <item>Fifth Birthday</item>
+        <item>Bar Mitzvah</item>
+        <item>Alien Invasion</item>
+        <item>Presidential Election</item>
+        <item>Baby Shower</item>
+        <item>Groundhog\'s Day</item>
+        <item>Family Reunion</item>
+        <item>Apocalypse</item>
+        <item>St. Patrick\'s Day</item>
+        <item>Celestial Alignment</item>
+        <item>A Party</item>
+        <item>Midnight Release of a Film</item>
+        <item>The Met Gala</item>
+        <item>Horse Race</item>
+        <item>Rodeo</item>
+        <item>Christmas in July</item>
+        <item>Hanukkah</item>
+        <item>Fourth of July</item>
+        <item>Office Party</item>
+        <item>Easter Egg Hunt</item>
+        <item>Cookout</item>
+        <item>First Contact</item>
+        <item>Quarantine</item>
+        <item>Chicken Pox Party</item>
+        <item>Charity Fun Run</item>
+        <item>Ribbon Cutting Ceremony</item>
+        <item>Concert</item>
+        <item>Rocket Launch Sequence</item>
+        <item>Scientific Discovery</item>
+        <item>Field Day</item>
+        <item>Pep Rally</item>
+    </string-array>
+    <string-array name="location">
+        <item>Fast Food Restaurant</item>
+        <item>Grocery Store</item>
+        <item>Beach</item>
+        <item>Moon</item>
+        <item>Atlantis</item>
+        <item>On Top of a Building</item>
+        <item>Volcanic Beach in Hawaii</item>
+        <item>An Alien Planet</item>
+        <item>Paris</item>
+        <item>The Frozen North</item>
+        <item>Inside a Computer</item>
+        <item>On a Set</item>
+        <item>Texas Roadhouse</item>
+        <item>On Stage</item>
+        <item>At a Concert</item>
+        <item>The Glue Factory</item>
+        <item>Your House</item>
+        <item>College Campus</item>
+        <item>Dorm Room</item>
+        <item>Ice Caps</item>
+        <item>Best Buy</item>
+        <item>The Park</item>
+        <item>Museum</item>
+        <item>The Caribbean</item>
+        <item>A Pirate Ship</item>
+        <item>The North Pole</item>
+        <item>Secret Lair</item>
+        <item>The Bat Cave</item>
+        <item>Farmstead</item>
+        <item>The Mariana Trench</item>
+        <item>The Trenches</item>
+        <item>The Great Wall of China</item>
+        <item>Japan</item>
+        <item>The Amazon Rainforest</item>
+        <item>The Pyramids of Giza</item>
+        <item>Chichen Iza</item>
+        <item>Atop a Skyscraper</item>
+        <item>The Empire State Building</item>
+        <item>Circus Big Top</item>
+        <item>Zoo</item>
+        <item>Convention Center</item>
+        <item>Prison</item>
+        <item>Chicago</item>
+        <item>New York City</item>
+        <item>London</item>
+        <item>Australia</item>
+        <item>A Dollhouse</item>
+        <item>Inside the Human Body</item>
+        <item>The Pool</item>
+        <item>A News Station</item>
+        <item>A Pharmacy</item>
+        <item>The White House</item>
+        <item>Easter Island</item>
+        <item>The Jelly Belly Factory</item>
+        <item>Willa Wonka\'s Chocolate Factory</item>
+    </string-array>
+    <string-array name="duo">
+        <item>Poet and Muse</item>
+        <item>Father and Son</item>
+        <item>Interrogator and Suspect</item>
+        <item>Criminal and Cop</item>
+        <item>Husband and Wife</item>
+        <item>Personal Trainer and CEO</item>
+        <item>Captain and First Mate</item>
+        <item>Boy and His Dog</item>
+        <item>Mario and Luigi</item>
+        <item>Bonnie and Clyde</item>
+        <item>Aunt and Uncle</item>
+        <item>Mother and Daughter</item>
+        <item>Teacher and Pupil</item>
+        <item>Tenant and Landlord</item>
+        <item>Human and Monster</item>
+        <item>Alien and Human</item>
+        <item>President and Vice-President</item>
+        <item>Dictator and Revolutionary</item>
+        <item>Dentist and Patient</item>
+    </string-array>
+    <string-array name="relationship">
+        <item>Coworkers</item>
+        <item>Farmers</item>
+        <item>Neighbors</item>
+        <item>Childhood Friends</item>
+        <item>Superhero Team</item>
+        <item>Bankers</item>
+        <item>Newscasters</item>
+        <item>Aliens</item>
+        <item>Fellow Rebels</item>
+        <item>Land Inspectors</item>
+        <item>Private Detectives</item>
+        <item>Airplane Pilots</item>
+        <item>Soldiers</item>
+        <item>Dragons</item>
+        <item>Talent Show Contestants</item>
+        <item>Archenemies</item>
+        <item>Rival Business Owners</item>
+        <item>Tiny People Amidst a Sea of Normal Sized Ones</item>
+        <item>Scientists</item>
+        <item>Step-Siblings</item>
+    </string-array>
+
+</resources>

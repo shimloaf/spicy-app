@@ -1,0 +1,18 @@
+<resources>
+
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+    </style>
+
+    <style name="NavBarItem">
+        <item name ="android:fontFamily">@font/seguibl</item>
+        <item name ="android:textColor">@color/colorMenu</item>
+    </style>
+
+    <style name="NavBarItemOn">
+        <item name ="android:fontFamily">@font/seguibl</item>
+        <item name ="android:textColor">@color/colorPrimary</item>
+    </style>
+</resources>

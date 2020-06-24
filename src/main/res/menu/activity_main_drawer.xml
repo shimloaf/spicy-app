@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_home"
+            android:icon="@drawable/ic_menu_home"
+            android:title="@string/home" />
+        <item
+            android:id="@+id/nav_games"
+            android:icon="@drawable/ic_menu_games"
+            android:title="@string/games" />
+        <item
+            android:id="@+id/nav_suggestion"
+            android:icon="@drawable/ic_menu_suggestions"
+            android:title="@string/suggestions" />
+        <item
+        android:id="@+id/nav_timer"
+        android:icon="@drawable/ic_menu_timer"
+        android:title="@string/timer" />
+        <item
+            android:id="@+id/nav_tools"
+            android:icon="@drawable/ic_menu_tools"
+            android:title="@string/tools" />
+    </group>
+
+    <item android:title="@string/spicy_specials">
+        <menu>
+            <item
+                android:id="@+id/nav_showbuilder"
+                android:icon="@drawable/ic_menu_showbuilder"
+                android:title="@string/build_a_show" />
+            <item
+                android:id="@+id/nav_credits"
+                android:icon="@drawable/ic_menu_credits"
+                android:title="@string/credits" />
+        </menu>
+    </item>
+
+</menu>

@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">Spicy Clamatapp</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Spicy Clamatapp</string>
+    <string name="nav_header_subtitle">Follow us on Facegram!</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+    <string name="home">Home</string>
+    <string name="games">Games</string>
+    <string name="suggestions">Suggestions</string>
+    <string name="timer">Timer</string>
+    <string name="tools">Tools</string>
+    <string name="spicy_specials">Spicy Specials</string>
+    <string name="build_a_show">Build-a-Show</string>
+    <string name="credits">Credits</string>
+</resources>
