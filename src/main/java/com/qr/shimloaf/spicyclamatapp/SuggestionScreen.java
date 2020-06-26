@@ -22,6 +22,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
@@ -52,36 +53,62 @@ public class SuggestionScreen extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     ClamatoUtils c;
+    sType currType = sType.emotion;
+
+    static class ButtonData {
+        Integer drawableId;
+        Integer arrayId;
+        String name;
+        ButtonData(Integer a_drawable, Integer a_array, String a_name) {
+            drawableId = a_drawable;
+            arrayId = a_array;
+            name = a_name;
+        }
+
+        ButtonData(Integer a_array, String a_name) {
+            arrayId = a_array;
+            name = a_name;
+            drawableId = -1;
+        }
+
+    }
 
     /*
     // Managing suggestion types
     */
-    HashMap<sType, Integer> types = new HashMap<>();
-    HashMap<sType, Integer> arrayTypes = new HashMap<>();
+    HashMap<sType, ButtonData> types = new HashMap<>();
     private void setUpTypes() {
-        types.put(sType.emotion, R.drawable.emotion_button);
-        types.put(sType.location, R.drawable.location_button);
-        types.put(sType.household, R.drawable.household_button);
-        types.put(sType.event, R.drawable.event_button);
-        types.put(sType.grab_bag, R.drawable.grab_bag_button);
-        types.put(sType.relationship, R.drawable.relationship_button);
-        types.put(sType.duo, R.drawable.duo_button);
 
-        arrayTypes.put(sType.ssugg, R.array.ssuggs);
-        arrayTypes.put(sType.emotion, R.array.emotions);
-        arrayTypes.put(sType.location, R.array.location);
-        arrayTypes.put(sType.household, R.array.household);
-        arrayTypes.put(sType.event, R.array.event);
-        arrayTypes.put(sType.grab_bag, R.array.grab_bag);
-        arrayTypes.put(sType.relationship, R.array.relationship);
-        arrayTypes.put(sType.duo, R.array.duo);
+        ButtonData emotionButton = new ButtonData(R.drawable.emotion_button, R.array.emotions, "Emotion");
+        ButtonData locationButton = new ButtonData(R.drawable.location_button, R.array.location, "Location");
+        ButtonData householdButton = new ButtonData(R.drawable.household_button, R.array.household, "Household Object");
+        ButtonData eventButton = new ButtonData(R.drawable.event_button, R.array.event, "Life Event");
+        ButtonData grabBagButton = new ButtonData(R.drawable.grab_bag_button, R.array.grab_bag, "Grab Bag");
+        ButtonData relationshipButton = new ButtonData(R.drawable.relationship_button, R.array.relationship, "Relationship");
+        ButtonData duoButton = new ButtonData(R.drawable.duo_button, R.array.duo, "Famous Duo");
+        ButtonData ssugButton = new ButtonData(R.array.ssuggs, "Suggest a Suggestion");
+
+        types.put(sType.emotion, emotionButton);
+        types.put(sType.location, locationButton);
+        types.put(sType.household, householdButton);
+        types.put(sType.event, eventButton);
+        types.put(sType.grab_bag, grabBagButton);
+        types.put(sType.relationship, relationshipButton);
+        types.put(sType.duo, duoButton);
+        types.put(sType.ssugg, ssugButton);
     }
 
-    sType currType = sType.emotion;
     private void setSuggestionContent() {
         TextView suggestion = findViewById(R.id.suggestion_text);
         String c = "";
-        String[] possibleSuggestions = getResources().getStringArray(arrayTypes.get(currType));
+        String[] possibleSuggestions;
+        try {
+            possibleSuggestions = getResources().getStringArray(types.get(currType).arrayId);
+
+        } catch (NullPointerException e) {
+            Toast.makeText(this, "David Hopping messed up. Tell him that. Code's buggy as f***.", Toast.LENGTH_SHORT).show();
+            possibleSuggestions = getResources().getStringArray(R.array.duo);
+        }
 
         if (currType == sType.ssugg) {
             c = "Ask for a suggestion of: ";
@@ -157,14 +184,14 @@ public class SuggestionScreen extends AppCompatActivity
         });
 
         ImageView[] miniButtons = getButtons();
+        final GestureDetector miniHandler = new GestureDetector(this, new smallSuggestionGesture(this));
 
-        for (ImageView miniButton : miniButtons) {
-            miniButton.setOnClickListener(new View.OnClickListener() {
+        for (final ImageView miniButton : miniButtons) {
+             miniButton.setOnTouchListener(new View.OnTouchListener() {
                 @Override
-                public void onClick(View v) {
-                    currType = (sType) v.getTag();
-                    c.quickVibe(50);
-                    changeScreen(screenState.suggDisplay);
+                public boolean onTouch(View v, MotionEvent event) {
+                    currType = (sType) miniButton.getTag();
+                    return miniHandler.onTouchEvent(event);
                 }
             });
         }
@@ -294,6 +321,31 @@ public class SuggestionScreen extends AppCompatActivity
 
     }
 
+    //Controls Small Button Input
+    class smallSuggestionGesture extends GestureDetector.SimpleOnGestureListener {
+
+        Context cText;
+
+        smallSuggestionGesture(Context a_cText) {
+            cText = a_cText;
+        }
+
+        public boolean onSingleTapUp (MotionEvent e) {
+            c.quickVibe(50);
+            changeScreen(screenState.suggDisplay);
+            return true;
+        }
+
+        @Override
+        public void onLongPress(MotionEvent e) {
+            String type;
+            type = types.get(currType).name;
+            Toast.makeText(cText, type, Toast.LENGTH_SHORT).show();
+            c.quickVibe(50);
+        }
+
+    }
+
     /*
     // State behavior
     */
@@ -391,24 +443,29 @@ public class SuggestionScreen extends AppCompatActivity
         ArrayList<sType> possibleTypes = new ArrayList<>();
 
         for (sType suggType : EnumSet.allOf(sType.class)) {
-            if (!used.get(suggType)) {
+            if (used.get(suggType) != null && !used.get(suggType)) {
                 possibleTypes.add(suggType);
             }
         }
 
         int pos = (int) (Math.random() * possibleTypes.size());
+        int imageResource;
+        try {
+            imageResource = types.get(possibleTypes.get(pos)).drawableId;
+        } catch (NullPointerException e) {
+            Toast.makeText(this, "David Hopping messed up. Tell him that. Code's buggy as f***.", Toast.LENGTH_SHORT).show();
+            imageResource = R.drawable.duo_button;
 
-        int imageResource = types.get(possibleTypes.get(pos));
+        }
         image.setImageResource(imageResource);
         image.setTag(possibleTypes.get(pos));
         used.put(possibleTypes.get(pos), true);
-
     }
 
     private HashMap<sType,Boolean> resetUsed() {
         HashMap<sType, Boolean> ret = new HashMap<>();
         for (sType suggType : EnumSet.allOf(sType.class)) {
-            if (suggType == com.qr.shimloaf.spicyclamatapp.sType.ssugg) {
+            if (suggType == sType.ssugg) {
                 ret.put(suggType, true);
             } else {
                 ret.put(suggType, false);
@@ -423,19 +480,19 @@ public class SuggestionScreen extends AppCompatActivity
         ImageView[] images = getButtons();
 
         float[] posX = new float[6];
-        posX[0] = 400f;
-        posX[1] = -400f;
-        posX[2] = 200f;
-        posX[3] = -200f;
-        posX[4] = 300f;
-        posX[5] = -300f;
+        posX[0] = 500f;
+        posX[1] = -500f;
+        posX[2] = 300f;
+        posX[3] = -300f;
+        posX[4] = 400f;
+        posX[5] = -400f;
         float[] posY = new float[6];
         posY[0] = 0f;
         posY[1] = 0f;
-        posY[2] = 250f;
-        posY[3] = 250f;
-        posY[4] = -250;
-        posY[5] = -250f;
+        posY[2] = 350f;
+        posY[3] = 350f;
+        posY[4] = -350;
+        posY[5] = -350f;
 
         float xPos = suggestionButton.getScaleX();
         float yPos = suggestionButton.getScaleY();
@@ -465,7 +522,7 @@ public class SuggestionScreen extends AppCompatActivity
 
     private void clearFullMenu() {
         NavigationView full_nav = findViewById(R.id.full_menu);
-        for (int n = 0; n < arrayTypes.size(); n++) {
+        for (int n = 0; n < used.size(); n++) {
             full_nav.getMenu().getItem(n).setChecked(false);
         }
     }
