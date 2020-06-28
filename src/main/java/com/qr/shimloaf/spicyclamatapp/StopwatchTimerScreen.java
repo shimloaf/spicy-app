@@ -55,17 +55,16 @@ public class StopwatchTimerScreen extends AppCompatActivity {
     }
 
 
-    private void clockToggle(boolean on) {
-
-        clockRunning = on;
-
+    private void clockToggle(boolean shouldStart) {
         ImageView stopwatchToggle = findViewById(R.id.stopwatchPlayButton);
-        if (clockRunning) {
+        if (shouldStart) {
             stopwatchToggle.setImageResource(R.drawable.pause_button);
             startClock();
+            clockRunning = true;
         } else {
             stopwatchToggle.setImageResource(R.drawable.play_button);
             stopClock();
+            clockRunning = false;
         }
 
     }
@@ -84,7 +83,7 @@ public class StopwatchTimerScreen extends AppCompatActivity {
     }
 
     private void changeClock() {
-        TextView clockDisplay = findViewById(R.id.stopwatchDisplay);
+        TextView clockDisplay = findViewById(R.id.stopwatchClockDisplay);
 
         long seconds = millis / 1000;
         long minutes = seconds / 60;

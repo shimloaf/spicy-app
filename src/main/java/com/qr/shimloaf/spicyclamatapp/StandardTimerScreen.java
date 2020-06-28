@@ -147,17 +147,16 @@ public class StandardTimerScreen extends AppCompatActivity {
         clockDisplay.setText(s);
     }
 
-    private void clockToggle(boolean on) {
-
-        clockRunning = on;
-
+    private void clockToggle(boolean shouldStart) {
         ImageView clockToggleButton = findViewById(R.id.startClock);
-        if (clockRunning) {
+        if (shouldStart) {
             clockToggleButton.setImageResource(R.drawable.pause_button);
             startClock();
+            clockRunning = true;
         } else {
             clockToggleButton.setImageResource(R.drawable.play_button);
             stopClock();
+            clockRunning = false;
         }
 
     }

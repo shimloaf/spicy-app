@@ -43,6 +43,7 @@ public class TimerScreen extends AppCompatActivity
 
         ImageView defaultTimerButton = findViewById(R.id.standard_timer_button);
         ImageView stopwatchTimerButton = findViewById(R.id.stopwatch_timer_button);
+        ImageView halfLifeTimerButton = findViewById(R.id.halflife_timer_button);
         final TimerScreen t = this;
         defaultTimerButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -57,6 +58,14 @@ public class TimerScreen extends AppCompatActivity
             public void onClick(View v) {
                 c.quickVibe(50);
                 Intent appBrowser = new Intent(t, StopwatchTimerScreen.class);
+                startActivity(appBrowser);
+            }
+        });
+        halfLifeTimerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                c.quickVibe(50);
+                Intent appBrowser = new Intent(t, HalfLifeTimerScreen.class);
                 startActivity(appBrowser);
             }
         });
@@ -81,20 +90,25 @@ public class TimerScreen extends AppCompatActivity
 
         if (id == R.id.nav_home) {
             Intent appBrowser = new Intent(this, HomeScreen.class);
+            appBrowser.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(appBrowser);
         } else if (id == R.id.nav_games) {
             Intent appBrowser = new Intent(this, GamerScreen.class);
+            appBrowser.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(appBrowser);
         } else if (id == R.id.nav_suggestion) {
             Intent appBrowser = new Intent(this, SuggestionScreen.class);
+            appBrowser.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(appBrowser);
         } else if (id == R.id.nav_tools) {
             Intent appBrowser = new Intent(this, ToolsScreen.class);
+            appBrowser.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(appBrowser);
         }  else if (id == R.id.nav_showbuilder) {
 
         } else if (id == R.id.nav_credits) {
             Intent appBrowser = new Intent(this, CreditsScreen.class);
+            appBrowser.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(appBrowser);
         }
 

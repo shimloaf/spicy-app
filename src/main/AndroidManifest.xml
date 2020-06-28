@@ -43,6 +43,7 @@
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".StandardTimerScreen" />
         <activity android:name=".StopwatchTimerScreen" />
+        <activity android:name=".HalfLifeTimerScreen" />
     </application>
 
 </manifest>

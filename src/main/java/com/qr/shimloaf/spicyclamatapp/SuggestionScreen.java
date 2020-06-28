@@ -244,22 +244,27 @@ public class SuggestionScreen extends AppCompatActivity
         //Nav Drawer
         if (id == R.id.nav_home) {
             Intent appBrowser = new Intent(this, HomeScreen.class);
+            appBrowser.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(appBrowser);
         } else if (id == R.id.nav_games) {
             Intent appBrowser = new Intent(this, GamerScreen.class);
+            appBrowser.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(appBrowser);
         } else if (id == R.id.nav_timer) {
             Intent appBrowser = new Intent(this, TimerScreen.class);
+            appBrowser.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(appBrowser);
         } else if (id == R.id.nav_suggestion) {
             changeScreen(screenState.prime);
         } else if (id == R.id.nav_tools) {
             Intent appBrowser = new Intent(this, ToolsScreen.class);
+            appBrowser.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(appBrowser);
         } else if (id == R.id.nav_showbuilder) {
 
         } else if (id == R.id.nav_credits) {
             Intent appBrowser = new Intent(this, CreditsScreen.class);
+            appBrowser.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(appBrowser);
         }
 

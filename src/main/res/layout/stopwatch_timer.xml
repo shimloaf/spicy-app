@@ -25,7 +25,7 @@
         app:srcCompat="@drawable/reset_button_timer" />
 
     <TextView
-        android:id="@+id/stopwatchDisplay"
+        android:id="@+id/stopwatchClockDisplay"
         android:layout_width="349dp"
         android:layout_height="177dp"
         android:layout_marginStart="8dp"

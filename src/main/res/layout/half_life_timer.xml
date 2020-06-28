@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#615D5D">
+
+    <ImageView
+        android:id="@+id/hProgressBar"
+        android:layout_width="745dp"
+        android:layout_height="938dp"
+        android:layout_marginTop="130dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.596"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/green_gradient" />
+
+    <TextView
+        android:id="@+id/hClockDisplay"
+        android:layout_width="343dp"
+        android:layout_height="178dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:fontFamily="@font/digitaldream"
+        android:gravity="center"
+        android:text="60"
+        android:textAlignment="center"
+        android:textColor="#E11A1A"
+        android:textSize="36sp"
+        android:textStyle="bold"
+        app:autoSizeTextType="uniform"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.276" />
+
+    <ImageView
+        android:id="@+id/massiveExplosion"
+        android:layout_width="595dp"
+        android:layout_height="645dp"
+        android:adjustViewBounds="false"
+        android:scaleType="fitCenter"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        app:srcCompat="@drawable/explosion" />
+
+    <ImageView
+        android:id="@+id/blackYellowBar"
+        android:layout_width="452dp"
+        android:layout_height="146dp"
+        android:adjustViewBounds="true"
+        android:cropToPadding="true"
+        android:scaleType="centerCrop"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.521"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0"
+        app:srcCompat="@drawable/stripy_yellow_bars" />
+
+    <ImageView
+        android:id="@+id/hReset"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/blackYellowBar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.972"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/blackYellowBar"
+        app:layout_constraintVertical_bias="0.434"
+        app:srcCompat="@drawable/reset_button_timer" />
+
+    <ImageView
+        android:id="@+id/hPlay"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
+        app:layout_constraintBottom_toBottomOf="@+id/blackYellowBar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.051"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/blackYellowBar"
+        app:layout_constraintVertical_bias="0.413"
+        app:srcCompat="@drawable/play_button" />
+
+    <ImageView
+        android:id="@+id/hHalfButton"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        app:layout_constraintBottom_toBottomOf="@+id/blackYellowBar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/blackYellowBar"
+        app:layout_constraintVertical_bias="1.0"
+        app:srcCompat="@drawable/half_button" />
+
+    <ImageView
+        android:id="@+id/hAbortButton"
+        android:layout_width="269dp"
+        android:layout_height="104dp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/blackYellowBar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/blackYellowBar"
+        app:srcCompat="@drawable/abort_button" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -50,20 +50,25 @@ public class GamerScreen extends AppCompatActivity
 
         if (id == R.id.nav_home) {
             Intent appBrowser = new Intent(this, HomeScreen.class);
+            appBrowser.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(appBrowser);
         } else if (id == R.id.nav_suggestion) {
             Intent appBrowser = new Intent(this, SuggestionScreen.class);
+            appBrowser.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(appBrowser);
         } else if (id == R.id.nav_timer) {
             Intent appBrowser = new Intent(this, TimerScreen.class);
+            appBrowser.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(appBrowser);
         } else if (id == R.id.nav_tools) {
             Intent appBrowser = new Intent(this, ToolsScreen.class);
+            appBrowser.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(appBrowser);
         } else if (id == R.id.nav_showbuilder) {
 
         } else if (id == R.id.nav_credits) {
             Intent appBrowser = new Intent(this, CreditsScreen.class);
+            appBrowser.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(appBrowser);
         }
 
