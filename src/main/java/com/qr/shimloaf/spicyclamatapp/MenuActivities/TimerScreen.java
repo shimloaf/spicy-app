@@ -1,8 +1,15 @@
-package com.qr.shimloaf.spicyclamatapp;
+package com.qr.shimloaf.spicyclamatapp.MenuActivities;
 
 import android.content.Intent;
 import android.os.Bundle;
 import com.google.android.material.navigation.NavigationView;
+import com.qr.shimloaf.spicyclamatapp.R;
+import com.qr.shimloaf.spicyclamatapp.TimerActivities.HalfLifeTimerScreen;
+import com.qr.shimloaf.spicyclamatapp.TimerActivities.StandardTimerScreen;
+import com.qr.shimloaf.spicyclamatapp.TimerActivities.StopwatchTimerScreen;
+import com.qr.shimloaf.spicyclamatapp.TimerActivities.TenInSixtyTimerScreen;
+import com.qr.shimloaf.spicyclamatapp.Utility.ClamatoUtils;
+
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -11,27 +18,16 @@ import androidx.appcompat.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.ScrollView;
 
-enum tool {
-
-    screwdriver,
-    bbb_list,
-    menu
-
-}
-
-public class ToolsScreen extends AppCompatActivity
+public class TimerScreen extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-
-    boolean usingTool = false;
     ClamatoUtils c;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_tools);
+        setContentView(R.layout.activity_timer);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -43,59 +39,63 @@ public class ToolsScreen extends AppCompatActivity
 
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-        navigationView.getMenu().getItem(4).setChecked(true);
+        navigationView.getMenu().getItem(3).setChecked(true);
 
          c = new ClamatoUtils(this.getApplication());
-         hideEverything();
-         setUpMenu();
+        setUpMenu();
+
     }
 
     private void setUpMenu() {
-        ImageView screwdriver_button = findViewById(R.id.screwdriver_button);
-        screwdriver_button.setOnClickListener(new View.OnClickListener() {
+
+        ImageView defaultTimerButton = findViewById(R.id.standard_timer_button);
+        ImageView stopwatchTimerButton = findViewById(R.id.stopwatch_timer_button);
+        ImageView halfLifeTimerButton = findViewById(R.id.halflife_timer_button);
+        ImageView tenin60TimerButton = findViewById(R.id.tenin60_timer_button);
+        final TimerScreen t = this;
+        defaultTimerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 c.quickVibe(50);
-                pullUpSimpleTool(tool.screwdriver);
+                Intent appBrowser = new Intent(t, StandardTimerScreen.class);
+                startActivity(appBrowser);
             }
         });
-        pullUpSimpleTool(tool.menu);
-    }
+        stopwatchTimerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                c.quickVibe(50);
+                Intent appBrowser = new Intent(t, StopwatchTimerScreen.class);
+                startActivity(appBrowser);
+            }
+        });
+        halfLifeTimerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                c.quickVibe(50);
+                Intent appBrowser = new Intent(t, HalfLifeTimerScreen.class);
+                startActivity(appBrowser);
+            }
+        });
+        tenin60TimerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                c.quickVibe(50);
+                Intent appBrowser = new Intent(t, TenInSixtyTimerScreen.class);
+                startActivity(appBrowser);
+            }
+        });
 
-    private void pullUpSimpleTool(tool t) {
-        hideEverything();
-        usingTool = true;
-        if (t == tool.screwdriver) {
-            ImageView screwdriver = findViewById(R.id.screwdriver);
-            screwdriver.setVisibility(View.VISIBLE);
-        } else {
-            ScrollView menu = findViewById(R.id.tools_menu);
-            menu.setVisibility(View.VISIBLE);
-            usingTool = false;
-        }
-    }
-
-    private void hideEverything() {
-
-        ScrollView menu = findViewById(R.id.tools_menu);
-        menu.setVisibility(View.INVISIBLE);
-
-        ImageView screwdriver = findViewById(R.id.screwdriver);
-        screwdriver.setVisibility(View.INVISIBLE);
     }
 
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
-
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        } else if (usingTool) {
-            pullUpSimpleTool(tool.menu);
         } else {
             super.onBackPressed();
         }
-
     }
 
 
@@ -117,14 +117,12 @@ public class ToolsScreen extends AppCompatActivity
             Intent appBrowser = new Intent(this, SuggestionScreen.class);
             appBrowser.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(appBrowser);
-        } else if (id == R.id.nav_timer) {
-            Intent appBrowser = new Intent(this, TimerScreen.class);
+        } else if (id == R.id.nav_tools) {
+            Intent appBrowser = new Intent(this, ToolsScreen.class);
             appBrowser.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(appBrowser);
-        } else if (id == R.id.nav_showbuilder) {
+        }  else if (id == R.id.nav_showbuilder) {
 
-        } else if (id == R.id.nav_tools && usingTool) {
-            pullUpSimpleTool(tool.menu);
         } else if (id == R.id.nav_credits) {
             Intent appBrowser = new Intent(this, CreditsScreen.class);
             appBrowser.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

@@ -1,6 +1,7 @@
 <resources>
     <string-array name="titles_2">
         <item>Clamatapp</item>
+        <item>Clamato</item>
         <item>Cab</item>
         <item>Cabana</item>
         <item>Cabaret</item>
@@ -60,7 +61,6 @@
         <item>Campmate</item>
         <item>Can</item>
         <item>Cancellation</item>
-        <item>Cancer</item>
         <item>Candidacy</item>
         <item>Candidate</item>
         <item>Candle</item>
@@ -78,7 +78,6 @@
         <item>Canoe</item>
         <item>Canon</item>
         <item>Canopy</item>
-        <item>Cant</item>
         <item>Cantaloupe</item>
         <item>Canteen</item>
         <item>Canter</item>
@@ -93,7 +92,6 @@
         <item>Capacity</item>
         <item>Cape</item>
         <item>Caper</item>
-        <item>Capercailzie</item>
         <item>Capillary</item>
         <item>Capita</item>
         <item>Capital</item>

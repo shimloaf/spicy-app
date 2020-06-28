@@ -1,4 +1,4 @@
-package com.qr.shimloaf.spicyclamatapp;
+package com.qr.shimloaf.spicyclamatapp.TimerActivities;
 
 import android.animation.ObjectAnimator;
 import android.content.Context;
@@ -15,6 +15,9 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.qr.shimloaf.spicyclamatapp.Utility.ClamatoUtils;
+import com.qr.shimloaf.spicyclamatapp.R;
+
 public class HalfLifeTimerScreen extends AppCompatActivity {
 
 
@@ -27,15 +30,18 @@ public class HalfLifeTimerScreen extends AppCompatActivity {
     ClamatoUtils c;
     ObjectAnimator animateBar;
     ObjectAnimator reverseAnimateBar;
+    ImageView halfTimeButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.half_life_timer);
         c = new ClamatoUtils(this.getApplication());
+
+        halfTimeButton = findViewById(R.id.hHalfButton);
+
         resetClock();
 
-        final ImageView halfTimeButton = findViewById(R.id.hHalfButton);
         ImageView playButton = findViewById(R.id.hPlay);
         ImageView resetButton = findViewById(R.id.hReset);
         ImageView abortButton = findViewById(R.id.hAbortButton);
@@ -75,7 +81,9 @@ public class HalfLifeTimerScreen extends AppCompatActivity {
                 Handler buttonHandler = new Handler();
                 Runnable undoButton = new Runnable() {
                     public void run() {
-                        halfTimeButton.setImageDrawable(getDrawable(R.drawable.half_button));
+                        if (topValue / 2 > 100) {
+                            halfTimeButton.setImageDrawable(getDrawable(R.drawable.half_button));
+                        }
                     }
                 };
                 buttonHandler.postDelayed(undoButton, 100);
@@ -128,6 +136,10 @@ public class HalfLifeTimerScreen extends AppCompatActivity {
         topValue = topValue / 2;
         millis = topValue;
 
+        if (topValue / 2 < 100) {
+            halfTimeButton.setImageDrawable(getDrawable(R.drawable.half_button_danger));
+        }
+
         sendBarToStart();
     }
 
@@ -135,7 +147,6 @@ public class HalfLifeTimerScreen extends AppCompatActivity {
         ImageView explosion = findViewById(R.id.massiveExplosion);
         c.quickVibe(1000);
         explosion.setVisibility(View.VISIBLE);
-        ImageView halfTimeButton = findViewById(R.id.hHalfButton);
         ImageView playButton = findViewById(R.id.hPlay);
         ImageView resetButton = findViewById(R.id.hReset);
         ImageView blackYellow = findViewById(R.id.blackYellowBar);
@@ -169,7 +180,6 @@ public class HalfLifeTimerScreen extends AppCompatActivity {
     }
 
     private void clockToggle(boolean shouldStart) {
-        ImageView halfTimeButton = findViewById(R.id.hHalfButton);
         ImageView playButton = findViewById(R.id.hPlay);
         ImageView resetButton = findViewById(R.id.hReset);
         ImageView abortButton = findViewById(R.id.hAbortButton);
@@ -194,7 +204,6 @@ public class HalfLifeTimerScreen extends AppCompatActivity {
 
     private void startClock() {
         clock = new CountDownTimer(millis, 10) {
-            ImageView halfTimeButton = findViewById(R.id.hHalfButton);
 
             public void onTick(long millisUntilFinished) {
                 millis = millisUntilFinished;
@@ -206,7 +215,11 @@ public class HalfLifeTimerScreen extends AppCompatActivity {
                 Vibrator vibe = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     vibe.vibrate(VibrationEffect.createOneShot(1000, VibrationEffect.DEFAULT_AMPLITUDE));
-                    halfTimeButton.setImageDrawable(getDrawable(R.drawable.half_button_please_press_me));
+                    if (topValue / 2 > 100) {
+                        halfTimeButton.setImageDrawable(getDrawable(R.drawable.half_button_please_press_me));
+                    } else {
+                        halfTimeButton.setImageDrawable(getDrawable(R.drawable.half_button_danger));
+                    }
                 }
             }
         }.start();

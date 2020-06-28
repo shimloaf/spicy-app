@@ -24,19 +24,14 @@
             android:id="@+id/nav_tools"
             android:icon="@drawable/ic_menu_tools"
             android:title="@string/tools" />
+        <item
+            android:id="@+id/nav_showbuilder"
+            android:icon="@drawable/ic_menu_showbuilder"
+            android:title="@string/build_a_show" />
+        <item
+            android:id="@+id/nav_credits"
+            android:icon="@drawable/ic_menu_credits"
+            android:title="@string/credits" />
     </group>
-
-    <item android:title="@string/spicy_specials">
-        <menu>
-            <item
-                android:id="@+id/nav_showbuilder"
-                android:icon="@drawable/ic_menu_showbuilder"
-                android:title="@string/build_a_show" />
-            <item
-                android:id="@+id/nav_credits"
-                android:icon="@drawable/ic_menu_credits"
-                android:title="@string/credits" />
-        </menu>
-    </item>
 
 </menu>

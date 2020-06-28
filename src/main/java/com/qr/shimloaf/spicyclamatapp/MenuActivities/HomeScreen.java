@@ -1,8 +1,12 @@
-package com.qr.shimloaf.spicyclamatapp;
+package com.qr.shimloaf.spicyclamatapp.MenuActivities;
 
 import android.content.Intent;
 import android.os.Bundle;
+
 import com.google.android.material.navigation.NavigationView;
+import com.qr.shimloaf.spicyclamatapp.R;
+import com.qr.shimloaf.spicyclamatapp.Utility.ClamatoUtils;
+
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -10,17 +14,22 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
+import android.view.animation.Animation;
+import android.view.animation.LinearInterpolator;
+import android.view.animation.RotateAnimation;
+import android.widget.TextView;
 
-public class TimerScreen extends AppCompatActivity
+public class HomeScreen extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     ClamatoUtils c;
+    boolean inProgress = false;
+    int rotations = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_timer);
+        setContentView(R.layout.activity_home);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -32,43 +41,11 @@ public class TimerScreen extends AppCompatActivity
 
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-        navigationView.getMenu().getItem(3).setChecked(true);
 
-         c = new ClamatoUtils(this.getApplication());
-        setUpMenu();
+        navigationView.getMenu().getItem(0).setChecked(true);
+        changeTip();
+        c = new ClamatoUtils(this.getApplication());
 
-    }
-
-    private void setUpMenu() {
-
-        ImageView defaultTimerButton = findViewById(R.id.standard_timer_button);
-        ImageView stopwatchTimerButton = findViewById(R.id.stopwatch_timer_button);
-        ImageView halfLifeTimerButton = findViewById(R.id.halflife_timer_button);
-        final TimerScreen t = this;
-        defaultTimerButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                c.quickVibe(50);
-                Intent appBrowser = new Intent(t, StandardTimerScreen.class);
-                startActivity(appBrowser);
-            }
-        });
-        stopwatchTimerButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                c.quickVibe(50);
-                Intent appBrowser = new Intent(t, StopwatchTimerScreen.class);
-                startActivity(appBrowser);
-            }
-        });
-        halfLifeTimerButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                c.quickVibe(50);
-                Intent appBrowser = new Intent(t, HalfLifeTimerScreen.class);
-                startActivity(appBrowser);
-            }
-        });
     }
 
     @Override
@@ -84,15 +61,10 @@ public class TimerScreen extends AppCompatActivity
 
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_home) {
-            Intent appBrowser = new Intent(this, HomeScreen.class);
-            appBrowser.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(appBrowser);
-        } else if (id == R.id.nav_games) {
+        if (id == R.id.nav_games) {
             Intent appBrowser = new Intent(this, GamerScreen.class);
             appBrowser.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(appBrowser);
@@ -100,11 +72,15 @@ public class TimerScreen extends AppCompatActivity
             Intent appBrowser = new Intent(this, SuggestionScreen.class);
             appBrowser.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(appBrowser);
+        } else if (id == R.id.nav_timer) {
+            Intent appBrowser = new Intent(this, TimerScreen.class);
+            appBrowser.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(appBrowser);
         } else if (id == R.id.nav_tools) {
             Intent appBrowser = new Intent(this, ToolsScreen.class);
             appBrowser.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(appBrowser);
-        }  else if (id == R.id.nav_showbuilder) {
+        } else if (id == R.id.nav_showbuilder) {
 
         } else if (id == R.id.nav_credits) {
             Intent appBrowser = new Intent(this, CreditsScreen.class);
@@ -117,9 +93,56 @@ public class TimerScreen extends AppCompatActivity
         return true;
     }
 
+    public void onImageClick(View view) {
+        changeTip();
+        if (!inProgress) {
+            rotateImage(view);
+        } else {
+            rotations++;
+        }
+        c.quickVibe(100);
+        setTitle(c.generateTitle());
+    }
+
+
+    public void changeTip() {
+        TextView tip = findViewById(R.id.tip_message);
+        String[] tips = getResources().getStringArray(R.array.tips_array);
+        String prevTip = (String)(tip.getText());
+        do {
+            tip.setText("Spicy Tip:\n" + tips[(int)(Math.random()*tips.length)]);
+        } while ((tip.getText()).equals(prevTip));
+    }
+
+    public void rotateImage(View view) {
+
+        final RotateAnimation rotateAnimation = new RotateAnimation(0,  360f,
+                Animation.RELATIVE_TO_SELF, 0.5f,
+                Animation.RELATIVE_TO_SELF, 0.5f);
+
+        rotateAnimation.setInterpolator(new LinearInterpolator());
+        rotateAnimation.setDuration(500);
+        rotateAnimation.setRepeatCount(Animation.ABSOLUTE);
+
+        rotateAnimation.setAnimationListener(new Animation.AnimationListener() {
+
+            public void onAnimationStart(Animation a) {
+                inProgress = true;
+            }
+
+            public void onAnimationRepeat(Animation a) {
+                rotations--;
+            }
+
+            public void onAnimationEnd(Animation a) {
+                inProgress = false;
+                if (rotations > 0) {
+                    rotateAnimation.setRepeatCount(rotations);
+                }
+            }
+        });
+
+        findViewById(R.id.logo).startAnimation(rotateAnimation);
+    }
 
 }
-
-
-
-

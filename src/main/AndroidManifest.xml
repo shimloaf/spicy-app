@@ -14,7 +14,7 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
         <activity
-            android:name=".HomeScreen"
+            android:name=".MenuActivities.HomeScreen"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -23,27 +23,33 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- MENU ACTIVITIES-->
         <activity
-            android:name=".GamerScreen"
-            android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar"/>
-        <activity
-            android:name=".TimerScreen"
+            android:name=".MenuActivities.GamerScreen"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity
-            android:name=".SuggestionScreen"
+            android:name=".MenuActivities.TimerScreen"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".ToolsScreen"
+        <activity
+            android:name=".MenuActivities.SuggestionScreen"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".CreditsScreen"
+        <activity android:name=".MenuActivities.ToolsScreen"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".StandardTimerScreen" />
-        <activity android:name=".StopwatchTimerScreen" />
-        <activity android:name=".HalfLifeTimerScreen" />
+        <activity android:name=".MenuActivities.CreditsScreen"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar"/>
+
+        <!-- TIMER SUB-ACTIVITIES-->
+        <activity android:name=".TimerActivities.StandardTimerScreen" />
+        <activity android:name=".TimerActivities.StopwatchTimerScreen" />
+        <activity android:name=".TimerActivities.HalfLifeTimerScreen" />
+        <activity android:name=".TimerActivities.TenInSixtyTimerScreen" />
+
     </application>
 
 </manifest>

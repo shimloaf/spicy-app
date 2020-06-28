@@ -137,7 +137,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ToolsScreen">
+        tools:context=".MenuActivities.ToolsScreen">
 
         <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"

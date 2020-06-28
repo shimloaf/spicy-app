@@ -1,4 +1,4 @@
-package com.qr.shimloaf.spicyclamatapp;
+package com.qr.shimloaf.spicyclamatapp.Utility;
 
 import android.app.Application;
 import android.content.Context;
@@ -8,6 +8,8 @@ import android.os.Vibrator;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.qr.shimloaf.spicyclamatapp.R;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;

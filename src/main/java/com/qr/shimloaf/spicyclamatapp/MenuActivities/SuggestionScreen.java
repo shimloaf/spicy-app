@@ -1,4 +1,4 @@
-package com.qr.shimloaf.spicyclamatapp;
+package com.qr.shimloaf.spicyclamatapp.MenuActivities;
 
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
@@ -11,6 +11,9 @@ import android.os.VibrationEffect;
 import android.os.Vibrator;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import com.google.android.material.navigation.NavigationView;
+import com.qr.shimloaf.spicyclamatapp.R;
+import com.qr.shimloaf.spicyclamatapp.Utility.ClamatoUtils;
+
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.ActionBarDrawerToggle;

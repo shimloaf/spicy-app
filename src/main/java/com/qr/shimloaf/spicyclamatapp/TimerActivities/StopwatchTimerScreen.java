@@ -1,4 +1,4 @@
-package com.qr.shimloaf.spicyclamatapp;
+package com.qr.shimloaf.spicyclamatapp.TimerActivities;
 
 import android.os.Bundle;
 import android.os.Handler;
@@ -7,6 +7,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.qr.shimloaf.spicyclamatapp.Utility.ClamatoUtils;
+import com.qr.shimloaf.spicyclamatapp.R;
 
 public class StopwatchTimerScreen extends AppCompatActivity {
 

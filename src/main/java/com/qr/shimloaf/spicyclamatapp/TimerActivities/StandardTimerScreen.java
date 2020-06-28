@@ -1,4 +1,4 @@
-package com.qr.shimloaf.spicyclamatapp;
+package com.qr.shimloaf.spicyclamatapp.TimerActivities;
 
 import android.content.Context;
 import android.os.Build;
@@ -7,14 +7,14 @@ import android.os.CountDownTimer;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
 
-import androidx.core.view.GravityCompat;
-import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.qr.shimloaf.spicyclamatapp.Utility.ClamatoUtils;
+import com.qr.shimloaf.spicyclamatapp.R;
 
 public class StandardTimerScreen extends AppCompatActivity {
 
