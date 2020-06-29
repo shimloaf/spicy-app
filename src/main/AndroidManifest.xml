@@ -50,6 +50,9 @@
         <activity android:name=".TimerActivities.HalfLifeTimerScreen" />
         <activity android:name=".TimerActivities.TenInSixtyTimerScreen" />
 
+        <!-- TOOL SUB-ACTIVITIES -->
+        <activity android:name=".ToolActivities.BuzzerScreen" />
+
     </application>
 
 </manifest>

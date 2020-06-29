@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import com.google.android.material.navigation.NavigationView;
 import com.qr.shimloaf.spicyclamatapp.R;
+import com.qr.shimloaf.spicyclamatapp.TimerActivities.HalfLifeTimerScreen;
+import com.qr.shimloaf.spicyclamatapp.ToolActivities.BuzzerScreen;
 import com.qr.shimloaf.spicyclamatapp.Utility.ClamatoUtils;
 
 import androidx.core.view.GravityCompat;
@@ -16,10 +18,9 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.ScrollView;
 
-enum tool {
+enum simpleTool {
 
     screwdriver,
-    bbb_list,
     menu
 
 }
@@ -28,6 +29,7 @@ public class ToolsScreen extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
 
+    final ToolsScreen t = this;
     boolean usingTool = false;
     ClamatoUtils c;
 
@@ -54,21 +56,30 @@ public class ToolsScreen extends AppCompatActivity
     }
 
     private void setUpMenu() {
-        ImageView screwdriver_button = findViewById(R.id.screwdriver_button);
-        screwdriver_button.setOnClickListener(new View.OnClickListener() {
+        ImageView screwdriverButton = findViewById(R.id.screwdriver_button);
+        ImageView buzzerButton = findViewById(R.id.buzzer_button);
+        screwdriverButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 c.quickVibe(50);
-                pullUpSimpleTool(tool.screwdriver);
+                pullUpSimpleTool(simpleTool.screwdriver);
             }
         });
-        pullUpSimpleTool(tool.menu);
+        buzzerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                c.quickVibe(50);
+                Intent appBrowser = new Intent(t, BuzzerScreen.class);
+                startActivity(appBrowser);
+            }
+        });
+        pullUpSimpleTool(simpleTool.menu);
     }
 
-    private void pullUpSimpleTool(tool t) {
+    private void pullUpSimpleTool(simpleTool t) {
         hideEverything();
         usingTool = true;
-        if (t == tool.screwdriver) {
+        if (t == simpleTool.screwdriver) {
             ImageView screwdriver = findViewById(R.id.screwdriver);
             screwdriver.setVisibility(View.VISIBLE);
         } else {
@@ -94,7 +105,7 @@ public class ToolsScreen extends AppCompatActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else if (usingTool) {
-            pullUpSimpleTool(tool.menu);
+            pullUpSimpleTool(simpleTool.menu);
         } else {
             super.onBackPressed();
         }
@@ -127,7 +138,7 @@ public class ToolsScreen extends AppCompatActivity
         } else if (id == R.id.nav_showbuilder) {
 
         } else if (id == R.id.nav_tools && usingTool) {
-            pullUpSimpleTool(tool.menu);
+            pullUpSimpleTool(simpleTool.menu);
         } else if (id == R.id.nav_credits) {
             Intent appBrowser = new Intent(this, CreditsScreen.class);
             appBrowser.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

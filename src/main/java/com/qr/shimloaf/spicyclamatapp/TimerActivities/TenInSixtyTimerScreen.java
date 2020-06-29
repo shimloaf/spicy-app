@@ -114,11 +114,11 @@ public class TenInSixtyTimerScreen extends AppCompatActivity {
 
         String time = Long.toString(millis);
         if (millis >= 10000) {
-           time = time.substring(0, 2) + "." + time.substring(2, 4);
-        } else if (millis > 1000){
-           time = "0" + time.substring(0, 1) + "." + time.substring(1, 3);
-        } else if (millis > 100){
-           time = "00." + time.substring(0, 2);
+            time = time.substring(0, 2) + "." + time.substring(2, 4);
+        } else if (millis > 1000) {
+            time = "0" + time.substring(0, 1) + "." + time.substring(1, 3);
+        } else if (millis > 100) {
+            time = "00." + time.substring(0, 2);
         } else {
             time = "TIME!";
         }
@@ -174,7 +174,7 @@ public class TenInSixtyTimerScreen extends AppCompatActivity {
     }
 
     private void clockToggle(boolean shouldStart) {
-       if (shouldStart) {
+        if (shouldStart) {
             startClock();
             clockRunning = true;
         } else {
