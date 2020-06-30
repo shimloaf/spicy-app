@@ -1,6 +1,5 @@
 package com.qr.shimloaf.spicyclamatapp.ToolActivities;
 
-import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.os.Bundle;
@@ -27,8 +26,6 @@ public class BuzzerScreen extends AppCompatActivity {
         ImageView buzzer;
         ClamatoUtils c;
         MediaPlayer mp;
-        Drawable imageDrawable;
-        int soundId;
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -39,17 +36,10 @@ public class BuzzerScreen extends AppCompatActivity {
 
         @Override
         public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-            buzzer = getView().findViewById(R.id.buzzer);
-            init();
             super.onViewCreated(view, savedInstanceState);
         }
 
-        public void setValues(Drawable image, int sound) {
-            imageDrawable = image;
-            soundId = sound;
-        }
-
-        private void init() {
+        private void init(Drawable imageDrawable, int soundId) {
 
             c = new ClamatoUtils(getActivity().getApplication());
 
@@ -59,6 +49,7 @@ public class BuzzerScreen extends AppCompatActivity {
                 //Don't initialize this fragment not in an outer context, I guess.
             }
 
+            buzzer = getView().findViewById(R.id.buzzer);
             buzzer.setImageDrawable(imageDrawable);
 
             buzzer.setOnClickListener(new View.OnClickListener() {
@@ -78,9 +69,7 @@ public class BuzzerScreen extends AppCompatActivity {
 
         @Override
         public Fragment createFragment(int position) {
-            BuzzerSliderFragment f = new BuzzerSliderFragment();
-            f.setValues(getDrawable(R.drawable.green_pip_bright), R.raw.that_was_easy);
-            return f;
+            return new BuzzerSliderFragment();
         }
 
         @Override
@@ -91,7 +80,7 @@ public class BuzzerScreen extends AppCompatActivity {
     }
 
     final int NUM_PAGES = 5;
-
+    ViewPager2 mPager;
     ClamatoUtils c;
 
     @Override
@@ -99,22 +88,41 @@ public class BuzzerScreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.buzzers);
         c = new ClamatoUtils(this.getApplication());
-        ViewPager2 mPager = findViewById(R.id.pager);
+        mPager = findViewById(R.id.pager);
         BuzzerSliderAdapter pagerAdapter = new BuzzerSliderAdapter(this);
-        pagerAdapter.createFragment(0);
-        pagerAdapter.createFragment(1);
-        pagerAdapter.createFragment(2);
-        pagerAdapter.createFragment(3);
-        pagerAdapter.createFragment(4);
         mPager.setAdapter(pagerAdapter);
+        for (int n = 0; n < NUM_PAGES; n++) {
+            pagerAdapter.createFragment(n);
+        }
 
-
+        mPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                BuzzerSliderFragment currFragment = (BuzzerSliderFragment) getSupportFragmentManager().findFragmentByTag("f" + mPager.getCurrentItem());
+                if (position == 0) {
+                    currFragment.init(getDrawable(R.drawable.duo_button), R.raw.buzzer);
+                } else if (position == 1) {
+                    currFragment.init(getDrawable(R.drawable.clamato_icon), R.raw.ding);
+                } else if (position == 2) {
+                    currFragment.init(getDrawable(R.drawable.clamato_icon), R.raw.that_was_easy);
+                } else if (position == 3) {
+                    currFragment.init(getDrawable(R.drawable.clamato_icon), R.raw.air_horn);
+                } else if (position == 4) {
+                    currFragment.init(getDrawable(R.drawable.clamato_icon), R.raw.fart);
+                }
+                super.onPageScrolled(position, positionOffset, positionOffsetPixels);
+            }
+        });
 
     }
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
+        if (mPager.getCurrentItem() == 0) {
+            super.onBackPressed();
+        } else {
+            mPager.setCurrentItem(mPager.getCurrentItem() - 1);
+        }
     }
 }
 

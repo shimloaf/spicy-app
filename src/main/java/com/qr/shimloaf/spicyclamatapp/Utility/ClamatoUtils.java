@@ -2,6 +2,7 @@ package com.qr.shimloaf.spicyclamatapp.Utility;
 
 import android.app.Application;
 import android.content.Context;
+import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
@@ -21,9 +22,11 @@ import java.io.OutputStreamWriter;
 public class ClamatoUtils extends AppCompatActivity {
 
     Application a;
+    public MediaPlayer mediaPlayer;
 
     public ClamatoUtils(Application application) {
         a = application;
+        mediaPlayer = new MediaPlayer();
     }
 
     public void quickVibe(int n) {

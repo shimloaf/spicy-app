@@ -1,15 +1,12 @@
 package com.qr.shimloaf.spicyclamatapp.TimerActivities;
 
-import android.animation.ObjectAnimator;
 import android.content.Context;
-import android.media.Image;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;

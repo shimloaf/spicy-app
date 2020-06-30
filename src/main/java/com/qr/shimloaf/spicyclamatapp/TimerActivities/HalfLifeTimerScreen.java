@@ -2,6 +2,7 @@ package com.qr.shimloaf.spicyclamatapp.TimerActivities;
 
 import android.animation.ObjectAnimator;
 import android.content.Context;
+import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -15,8 +16,8 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.qr.shimloaf.spicyclamatapp.Utility.ClamatoUtils;
 import com.qr.shimloaf.spicyclamatapp.R;
+import com.qr.shimloaf.spicyclamatapp.Utility.ClamatoUtils;
 
 public class HalfLifeTimerScreen extends AppCompatActivity {
 
@@ -144,6 +145,7 @@ public class HalfLifeTimerScreen extends AppCompatActivity {
     }
 
     private void explodeScreen() {
+        MediaPlayer.create(this, R.raw.explosion);
         ImageView explosion = findViewById(R.id.massiveExplosion);
         c.quickVibe(1000);
         explosion.setVisibility(View.VISIBLE);
