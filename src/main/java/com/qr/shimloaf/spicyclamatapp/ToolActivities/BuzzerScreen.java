@@ -3,6 +3,7 @@ package com.qr.shimloaf.spicyclamatapp.ToolActivities;
 import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,8 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.qr.shimloaf.spicyclamatapp.R;
 import com.qr.shimloaf.spicyclamatapp.Utility.ClamatoUtils;
+
+import java.io.IOException;
 
 public class BuzzerScreen extends AppCompatActivity {
 
@@ -39,7 +42,7 @@ public class BuzzerScreen extends AppCompatActivity {
             super.onViewCreated(view, savedInstanceState);
         }
 
-        private void init(Drawable imageDrawable, int soundId) {
+        private void init(final Drawable imageDrawable, final Drawable imageDrawableDepressed, final int soundId) {
 
             c = new ClamatoUtils(getActivity().getApplication());
 
@@ -55,8 +58,24 @@ public class BuzzerScreen extends AppCompatActivity {
             buzzer.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    buzzer.setImageDrawable(imageDrawableDepressed);
+                    mp.stop();
+                    try {
+                        mp.prepare();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                     c.quickVibe(50);
                     mp.start();
+
+                    Handler buttonHandler = new Handler();
+                    Runnable depressed = new Runnable() {
+                        public void run() {
+                            buzzer.setImageDrawable(imageDrawable);
+                        }
+                    };
+                    buttonHandler.postDelayed(depressed, 100);
+
                 }
             });
         }
@@ -97,20 +116,20 @@ public class BuzzerScreen extends AppCompatActivity {
 
         mPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            public void onPageSelected(int position) {
                 BuzzerSliderFragment currFragment = (BuzzerSliderFragment) getSupportFragmentManager().findFragmentByTag("f" + mPager.getCurrentItem());
                 if (position == 0) {
-                    currFragment.init(getDrawable(R.drawable.duo_button), R.raw.buzzer);
+                    currFragment.init(getDrawable(R.drawable.big_red_button), getDrawable(R.drawable.big_red_button_depressed), R.raw.air_horn);
                 } else if (position == 1) {
-                    currFragment.init(getDrawable(R.drawable.clamato_icon), R.raw.ding);
+                    currFragment.init(getDrawable(R.drawable.big_red_button), getDrawable(R.drawable.big_red_button_depressed), R.raw.ding);
                 } else if (position == 2) {
-                    currFragment.init(getDrawable(R.drawable.clamato_icon), R.raw.that_was_easy);
+                    currFragment.init(getDrawable(R.drawable.big_red_button), getDrawable(R.drawable.big_red_button_depressed), R.raw.buzzer);
                 } else if (position == 3) {
-                    currFragment.init(getDrawable(R.drawable.clamato_icon), R.raw.air_horn);
+                    currFragment.init(getDrawable(R.drawable.big_red_button), getDrawable(R.drawable.big_red_button_depressed), R.raw.that_was_easy);
                 } else if (position == 4) {
-                    currFragment.init(getDrawable(R.drawable.clamato_icon), R.raw.fart);
+                    currFragment.init(getDrawable(R.drawable.big_red_button), getDrawable(R.drawable.big_red_button_depressed), R.raw.fart);
                 }
-                super.onPageScrolled(position, positionOffset, positionOffsetPixels);
+                super.onPageSelected(position);
             }
         });
 

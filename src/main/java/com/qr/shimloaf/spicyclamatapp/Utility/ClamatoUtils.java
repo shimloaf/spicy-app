@@ -22,11 +22,9 @@ import java.io.OutputStreamWriter;
 public class ClamatoUtils extends AppCompatActivity {
 
     Application a;
-    public MediaPlayer mediaPlayer;
 
     public ClamatoUtils(Application application) {
         a = application;
-        mediaPlayer = new MediaPlayer();
     }
 
     public void quickVibe(int n) {
@@ -39,7 +37,13 @@ public class ClamatoUtils extends AppCompatActivity {
     public String generateTitle() {
         String[] part1 = a.getResources().getStringArray(R.array.titles_1);
         String[] part2 = a.getResources().getStringArray(R.array.titles_2);
-        return (part1[(int)(Math.random()*part1.length)] + " " + part2[(int)(Math.random()*part2.length)]);
+        return (part1[(int) (Math.random() * part1.length)] + " " + part2[(int) (Math.random() * part2.length)]);
+    }
+
+    public void playSound(Context c, int soundId) {
+        MediaPlayer mediaPlayer = new MediaPlayer();
+        mediaPlayer.create(c, soundId);
+        mediaPlayer.start();
     }
 
     private void writeToFile(String data, String path, Context context) {
@@ -47,8 +51,7 @@ public class ClamatoUtils extends AppCompatActivity {
             OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput(path, Context.MODE_PRIVATE));
             outputStreamWriter.write(data);
             outputStreamWriter.close();
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             Toast.makeText(context, "File Write Failed. AKA David Hopping f**ked up coding.", Toast.LENGTH_SHORT).show();
         }
     }
