@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -27,6 +28,7 @@ public class BuzzerScreen extends AppCompatActivity {
     public static class BuzzerSliderFragment extends Fragment {
 
         ImageView buzzer;
+        TextView caption;
         ClamatoUtils c;
         MediaPlayer mp;
 
@@ -42,7 +44,7 @@ public class BuzzerScreen extends AppCompatActivity {
             super.onViewCreated(view, savedInstanceState);
         }
 
-        private void init(final Drawable imageDrawable, final Drawable imageDrawableDepressed, final int soundId) {
+        private void init(final Drawable imageDrawable, final Drawable imageDrawableDepressed, final int soundId, String captionText) {
 
             c = new ClamatoUtils(getActivity().getApplication());
 
@@ -51,6 +53,9 @@ public class BuzzerScreen extends AppCompatActivity {
             } catch (NullPointerException e) {
                 //Don't initialize this fragment not in an outer context, I guess.
             }
+
+            caption = getView().findViewById(R.id.buzzer_text);
+            caption.setText("\"" + captionText + "\"");
 
             buzzer = getView().findViewById(R.id.buzzer);
             buzzer.setImageDrawable(imageDrawable);
@@ -119,15 +124,15 @@ public class BuzzerScreen extends AppCompatActivity {
             public void onPageSelected(int position) {
                 BuzzerSliderFragment currFragment = (BuzzerSliderFragment) getSupportFragmentManager().findFragmentByTag("f" + mPager.getCurrentItem());
                 if (position == 0) {
-                    currFragment.init(getDrawable(R.drawable.big_red_button), getDrawable(R.drawable.big_red_button_depressed), R.raw.air_horn);
+                    currFragment.init(getDrawable(R.drawable.big_red_button), getDrawable(R.drawable.big_red_button_depressed), R.raw.air_horn, "The Classic Buzzer");
                 } else if (position == 1) {
-                    currFragment.init(getDrawable(R.drawable.big_red_button), getDrawable(R.drawable.big_red_button_depressed), R.raw.ding);
+                    currFragment.init(getDrawable(R.drawable.big_red_button), getDrawable(R.drawable.big_red_button_depressed), R.raw.ding, "For Whom the Bell Tolls");
                 } else if (position == 2) {
-                    currFragment.init(getDrawable(R.drawable.big_red_button), getDrawable(R.drawable.big_red_button_depressed), R.raw.buzzer);
+                    currFragment.init(getDrawable(R.drawable.big_red_button), getDrawable(R.drawable.big_red_button_depressed), R.raw.buzzer, "Whose Buzzer Is This Anyway?");
                 } else if (position == 3) {
-                    currFragment.init(getDrawable(R.drawable.big_red_button), getDrawable(R.drawable.big_red_button_depressed), R.raw.that_was_easy);
+                    currFragment.init(getDrawable(R.drawable.big_red_button), getDrawable(R.drawable.big_red_button_depressed), R.raw.that_was_easy, "Not Sponsored...(Yet)?");
                 } else if (position == 4) {
-                    currFragment.init(getDrawable(R.drawable.big_red_button), getDrawable(R.drawable.big_red_button_depressed), R.raw.fart);
+                    currFragment.init(getDrawable(R.drawable.big_red_button), getDrawable(R.drawable.big_red_button_depressed), R.raw.fart, "The Finest Vintage");
                 }
                 super.onPageSelected(position);
             }
