@@ -2,6 +2,7 @@ package com.qr.shimloaf.spicyclamatapp.TimerActivities;
 
 import android.animation.ObjectAnimator;
 import android.content.Context;
+import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -31,6 +32,7 @@ public class HalfLifeTimerScreen extends AppCompatActivity {
     ObjectAnimator animateBar;
     ObjectAnimator reverseAnimateBar;
     ImageView halfTimeButton;
+    MediaPlayer mp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -144,7 +146,8 @@ public class HalfLifeTimerScreen extends AppCompatActivity {
     }
 
     private void explodeScreen() {
-        c.playSound(this, R.raw.explosion);
+        mp = MediaPlayer.create(this.getApplicationContext(), R.raw.explosion);
+        mp.start();
         ImageView explosion = findViewById(R.id.massiveExplosion);
         c.quickVibe(1000);
         explosion.setVisibility(View.VISIBLE);

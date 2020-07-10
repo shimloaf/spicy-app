@@ -52,6 +52,7 @@
 
         <!-- TOOL SUB-ACTIVITIES -->
         <activity android:name=".ToolActivities.BuzzerScreen" />
+        <activity android:name=".ToolActivities.NotesScreen" />
 
     </application>
 
