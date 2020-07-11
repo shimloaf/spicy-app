@@ -9,16 +9,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import com.google.android.material.navigation.NavigationView;
-import com.qr.shimloaf.spicyclamatapp.R;
-import com.qr.shimloaf.spicyclamatapp.Utility.ClamatoUtils;
-
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import android.view.GestureDetector;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -27,33 +17,44 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+
+import com.google.android.material.navigation.NavigationView;
+import com.qr.shimloaf.spicyclamatapp.R;
+import com.qr.shimloaf.spicyclamatapp.Utility.ClamatoUtils;
+
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.HashMap;
 
 
-enum sType {
-    ssugg,
-    location,
-    household,
-    emotion,
-    event,
-    grab_bag,
-    relationship,
-    duo
-
-}
-
-enum screenState {
-    prime,
-    expanded,
-    suggDisplay,
-    menuUpPrime,
-    menuUpExpanded
-}
-
 public class SuggestionScreen extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    enum sType {
+        ssugg,
+        location,
+        household,
+        emotion,
+        event,
+        grab_bag,
+        relationship,
+        duo
+
+    }
+
+    enum screenState {
+        prime,
+        expanded,
+        suggDisplay,
+        menuUpPrime,
+        menuUpExpanded
+    }
 
     ClamatoUtils c;
     sType currType = sType.emotion;
@@ -62,6 +63,7 @@ public class SuggestionScreen extends AppCompatActivity
         Integer drawableId;
         Integer arrayId;
         String name;
+
         ButtonData(Integer a_drawable, Integer a_array, String a_name) {
             drawableId = a_drawable;
             arrayId = a_array;
@@ -77,7 +79,7 @@ public class SuggestionScreen extends AppCompatActivity
     }
 
     /*
-    // Managing suggestion types
+      Managing suggestion types
     */
     HashMap<sType, ButtonData> types = new HashMap<>();
     private void setUpTypes() {
@@ -123,7 +125,7 @@ public class SuggestionScreen extends AppCompatActivity
     }
 
     /*
-    // State manipulation
+      State manipulation
     */
     @SuppressLint("ClickableViewAccessibility")
     @Override
