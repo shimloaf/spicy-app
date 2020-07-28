@@ -14,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -106,6 +107,27 @@ public class NotesScreen extends AppCompatActivity {
             }
         });
 
+        ConstraintLayout cl = findViewById(R.id.noteDisplayConstraintLayout);
+        cl.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                c.quickVibe(50);
+                clearTrash();
+            }
+        });
+    }
+
+    private boolean clearTrash() {
+        boolean cleared = false;
+        for (int n = 0; n < notesManager.getChildCount(); n++) {
+            if (notesManager.findViewByPosition(n).findViewById(R.id.trash_display).getVisibility() == View.VISIBLE) {
+                cleared = true;
+            }
+            notesManager.findViewByPosition(n).findViewById(R.id.trash_display).setVisibility(View.INVISIBLE);
+            notesManager.findViewByPosition(n).findViewById(R.id.note_title).setVisibility(View.VISIBLE);
+        }
+        pairAdapter();
+        return cleared;
     }
 
     private ArrayList<ClamatoNote> initializeNotesList() {
@@ -204,6 +226,58 @@ public class NotesScreen extends AppCompatActivity {
         c.writeToFile(data, path, "notes");
     }
 
+    private void swapScreen() {
+        RecyclerView r = findViewById(R.id.notes_list);
+        TextView notesTitle = findViewById(R.id.notes_title);
+        EditText viewNote = findViewById(R.id.noteViewNote);
+        EditText viewTitle = findViewById(R.id.noteViewTitle);
+        LinearLayout l = findViewById(R.id.noteView);
+        FloatingActionButton b = findViewById(R.id.save_note_button);
+        if (viewingNote) {
+            String newTitle = (String) viewTitle.getText().toString();
+            String newNote = (String) viewNote.getText().toString();
+            try {
+                deleteNote(currentNote);
+                encodeNote(createNote(newTitle, newNote));
+                currentNote = null;
+            } catch (TitleDuplicateException e) {
+                Toast.makeText(getApplicationContext(), e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+            }
+            pairAdapter();
+
+            viewingNote = false;
+            notesTitle.setVisibility(View.VISIBLE);
+            r.setVisibility(View.VISIBLE);
+            l.setVisibility(View.INVISIBLE);
+            b.setVisibility(View.INVISIBLE);
+        } else {
+            viewingNote = true;
+            notesTitle.setVisibility(View.INVISIBLE);
+            r.setVisibility(View.INVISIBLE);
+            l.setVisibility(View.VISIBLE);
+            b.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void setNoteContent(ClamatoNote note) {
+        TextView titleText = findViewById(R.id.noteViewTitle);
+        TextView noteText = findViewById(R.id.noteViewNote);
+        titleText.setText(note.getTitleNoPos());
+        noteText.setText(note.note);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (viewingNote) {
+            swapScreen();
+        } else if (clearTrash()) {
+            Log.d("Trash", "Trash Taken Out");
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+
     public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteHolder> {
         private ClamatoNote[] noteDatabase;
 
@@ -287,9 +361,15 @@ public class NotesScreen extends AppCompatActivity {
                     @Override
                     public boolean onLongClick(View view) {
                         c.quickVibe(50);
-                        holder.trashIcon.setVisibility(View.VISIBLE);
-                        holder.textView.setVisibility(View.INVISIBLE);
-                        holder.trashtivated = true;
+                        if (!holder.trashtivated) {
+                            holder.trashIcon.setVisibility(View.VISIBLE);
+                            holder.textView.setVisibility(View.INVISIBLE);
+                            holder.trashtivated = true;
+                        } else {
+                            holder.trashIcon.setVisibility(View.INVISIBLE);
+                            holder.textView.setVisibility(View.VISIBLE);
+                            holder.trashtivated = false;
+                        }
                         return true;
                     }
                 });
@@ -303,55 +383,6 @@ public class NotesScreen extends AppCompatActivity {
         }
     }
 
-    private void swapScreen() {
-        RecyclerView r = findViewById(R.id.notes_list);
-        TextView notesTitle = findViewById(R.id.notes_title);
-        EditText viewNote = findViewById(R.id.noteViewNote);
-        EditText viewTitle = findViewById(R.id.noteViewTitle);
-        LinearLayout l = findViewById(R.id.noteView);
-        FloatingActionButton b = findViewById(R.id.save_note_button);
-        if (viewingNote) {
-            String newTitle = (String) viewTitle.getText().toString();
-            String newNote = (String) viewNote.getText().toString();
-            try {
-                deleteNote(currentNote);
-                encodeNote(createNote(newTitle, newNote));
-                currentNote = null;
-            } catch (TitleDuplicateException e) {
-                Toast.makeText(getApplicationContext(), e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
-            }
-            pairAdapter();
-
-            viewingNote = false;
-            notesTitle.setVisibility(View.VISIBLE);
-            r.setVisibility(View.VISIBLE);
-            l.setVisibility(View.INVISIBLE);
-            b.setVisibility(View.INVISIBLE);
-        } else {
-            viewingNote = true;
-            notesTitle.setVisibility(View.INVISIBLE);
-            r.setVisibility(View.INVISIBLE);
-            l.setVisibility(View.VISIBLE);
-            b.setVisibility(View.VISIBLE);
-        }
-    }
-
-    private void setNoteContent(ClamatoNote note) {
-        TextView titleText = findViewById(R.id.noteViewTitle);
-        TextView noteText = findViewById(R.id.noteViewNote);
-        titleText.setText(note.getTitleNoPos());
-        noteText.setText(note.note);
-    }
-
-    @Override
-    public void onBackPressed() {
-
-        if (viewingNote) {
-            swapScreen();
-        } else {
-            super.onBackPressed();
-        }
-    }
 }
 
 

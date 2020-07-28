@@ -54,6 +54,11 @@
         <activity android:name=".ToolActivities.BuzzerScreen" />
         <activity android:name=".ToolActivities.NotesScreen" />
 
+        <!-- GAME SUB-ACTIVITIES -->
+        <activity android:name=".GameActivities.GamesList" />
+        <activity android:name=".GameActivities.GameDisplay" />
+
+
     </application>
 
 </manifest>

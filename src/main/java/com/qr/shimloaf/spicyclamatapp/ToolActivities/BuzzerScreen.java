@@ -123,17 +123,21 @@ public class BuzzerScreen extends AppCompatActivity {
             @Override
             public void onPageSelected(int position) {
                 BuzzerSliderFragment currFragment = (BuzzerSliderFragment) getSupportFragmentManager().findFragmentByTag("f" + mPager.getCurrentItem());
-                if (position == 0) {
-                    currFragment.init(getDrawable(R.drawable.big_red_button), getDrawable(R.drawable.big_red_button_depressed), R.raw.air_horn, "The Classic Buzzer");
-                } else if (position == 1) {
-                    currFragment.init(getDrawable(R.drawable.big_red_button), getDrawable(R.drawable.big_red_button_depressed), R.raw.ding, "For Whom the Bell Tolls");
-                } else if (position == 2) {
-                    currFragment.init(getDrawable(R.drawable.big_red_button), getDrawable(R.drawable.big_red_button_depressed), R.raw.buzzer, "Whose Buzzer Is This Anyway?");
-                } else if (position == 3) {
-                    currFragment.init(getDrawable(R.drawable.big_red_button), getDrawable(R.drawable.big_red_button_depressed), R.raw.that_was_easy, "Not Sponsored...(Yet)?");
-                } else if (position == 4) {
-                    currFragment.init(getDrawable(R.drawable.big_red_button), getDrawable(R.drawable.big_red_button_depressed), R.raw.fart, "The Finest Vintage");
+
+                if (currFragment != null) {
+                    if (position == 0) {
+                        currFragment.init(getDrawable(R.drawable.big_red_button), getDrawable(R.drawable.big_red_button_depressed), R.raw.air_horn, "The Classic Buzzer");
+                    } else if (position == 1) {
+                        currFragment.init(getDrawable(R.drawable.big_red_button), getDrawable(R.drawable.big_red_button_depressed), R.raw.ding, "For Whom the Bell Tolls");
+                    } else if (position == 2) {
+                        currFragment.init(getDrawable(R.drawable.big_red_button), getDrawable(R.drawable.big_red_button_depressed), R.raw.buzzer, "Whose Buzzer Is This Anyway?");
+                    } else if (position == 3) {
+                        currFragment.init(getDrawable(R.drawable.big_red_button), getDrawable(R.drawable.big_red_button_depressed), R.raw.that_was_easy, "Not Sponsored...(Yet)?");
+                    } else if (position == 4) {
+                        currFragment.init(getDrawable(R.drawable.big_red_button), getDrawable(R.drawable.big_red_button_depressed), R.raw.fart, "The Finest Vintage");
+                    }
                 }
+
                 super.onPageSelected(position);
             }
         });
