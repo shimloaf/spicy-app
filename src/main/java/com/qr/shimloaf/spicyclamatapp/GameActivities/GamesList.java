@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -71,9 +72,18 @@ public class GamesList extends AppCompatActivity {
 
     private ArrayList<Integer> getGamesList(int filterNum) {
 
-        ArrayList<Integer> ids = new ArrayList<>();
-        ids.add(1);
-        return ids;
+        if (filter == 0) {
+            return c.getAllGameIds();
+        } else if (filter == 1) {
+
+        } else if (filter == 2) {
+
+        } else if (filter == 3) {
+
+        } else if (filter == 4) {
+
+        }
+        return c.getAllGameIds();
     }
 
     @Override
@@ -90,6 +100,8 @@ public class GamesList extends AppCompatActivity {
             private TextView gameTitle;
             private TextView gameTagline;
             private TextView tags;
+            private ImageView cardBackground;
+            private boolean curated;
 
             public GameHolder(View v) {
                 super(v);
@@ -97,6 +109,7 @@ public class GamesList extends AppCompatActivity {
                 gameTitle = v.findViewById(R.id.game_title);
                 gameTagline = v.findViewById(R.id.game_blurb);
                 tags = v.findViewById(R.id.game_tags);
+                cardBackground = v.findViewById(R.id.game_background);
             }
         }
 
@@ -118,11 +131,31 @@ public class GamesList extends AppCompatActivity {
         @Override
         public void onBindViewHolder(final GameHolder holder, final int position) {
 
-            ClamatoUtils.ClamatoGame game = c.getGameByID(idDatabase.get(position).intValue());
+            ClamatoUtils.ClamatoGame game = c.getGameByID(idDatabase.get(position));
 
-            holder.gameTitle.setText(game.getRandomTitle());
-            holder.gameTagline.setText("\"" + game.getRandomTagline() + "\"");
-            holder.tags.setText(game.getPlayersTag(true) + " | " + game.getLength());
+            holder.curated = game.getCurated();
+
+            holder.gameTitle.setText(game.getTitles()[0]);
+
+            if (!holder.curated) {
+                holder.cardBackground.setImageDrawable(getDrawable(R.drawable.game_background2));
+                holder.gameTagline.setVisibility(View.GONE);
+                if (game.hasCardInfo() == -1) {
+                    holder.tags.setVisibility(View.GONE);
+                } else if (game.hasCardInfo() == 1) {
+                    holder.tags.setVisibility(View.VISIBLE);
+                    holder.tags.setText(game.getLength());
+                } else if (game.hasCardInfo() == 2) {
+                    holder.tags.setVisibility(View.VISIBLE);
+                    holder.tags.setText(game.getPlayersTag(true));
+                }
+            } else {
+                holder.cardBackground.setImageDrawable(getDrawable(R.drawable.game_background));
+                holder.gameTagline.setVisibility(View.VISIBLE);
+                holder.tags.setVisibility(View.VISIBLE);
+                holder.gameTagline.setText("\"" + game.getRandomTagline() + "\"");
+                holder.tags.setText(game.getPlayersTag(true) + " | " + game.getLength());
+            }
 
             holder.gameCard.setOnClickListener(new View.OnClickListener() {
                 @Override

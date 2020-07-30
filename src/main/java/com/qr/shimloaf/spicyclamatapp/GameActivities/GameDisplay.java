@@ -1,6 +1,7 @@
 package com.qr.shimloaf.spicyclamatapp.GameActivities;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,6 +16,7 @@ public class GameDisplay extends AppCompatActivity {
     TextView title;
     TextView tagline;
     TextView instructions;
+    TextView instructionsTitle;
     TextView blurb;
     TextView blurbTitle;
     TextView tags;
@@ -33,6 +35,7 @@ public class GameDisplay extends AppCompatActivity {
         title = findViewById(R.id.game_title);
         tagline = findViewById(R.id.tagline);
         instructions = findViewById(R.id.instructions_text);
+        instructionsTitle = findViewById(R.id.instructions_title);
         blurb = findViewById(R.id.blurb_text);
         blurbTitle = findViewById(R.id.blurb_title);
         tags = findViewById(R.id.game_display_tags);
@@ -42,10 +45,24 @@ public class GameDisplay extends AppCompatActivity {
 
         instructions.setText(game.getInstructions());
 
-        blurbTitle.setText("Tip:");
         blurb.setText(game.getTips()[0]);
 
         tags.setText(game.getTagsText());
+
+        if (!game.getCurated()) {
+
+            tagline.setVisibility(View.GONE);
+            blurb.setVisibility(View.GONE);
+
+            blurbTitle.setText("Courtesy of Improv Encyclopedia");
+            blurbTitle.setTextSize(14);
+
+            instructionsTitle.setText("Description:");
+
+        } else {
+            blurbTitle.setText("Tip:");
+        }
+
 
     }
 

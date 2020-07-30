@@ -12,6 +12,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.qr.shimloaf.spicyclamatapp.R;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -20,6 +24,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 public class ClamatoUtils extends AppCompatActivity {
@@ -36,6 +41,8 @@ public class ClamatoUtils extends AppCompatActivity {
         String length;
         String[] skills;
         String[] taglines;
+        String[] tags;
+        boolean curated;
 
         public int getId() {
             return id;
@@ -90,10 +97,20 @@ public class ClamatoUtils extends AppCompatActivity {
         }
 
         public String[] getTags() {
+
             ArrayList<String> tagsList = new ArrayList<>();
-            tagsList.add(length);
-            tagsList.add(getPlayersTag(false));
-            tagsList.add(titles[0]);
+            if (!curated) {
+                if (length != null && !length.equals("")) {
+                    tagsList.add(length);
+                }
+                tagsList.add(titles[0]);
+            } else {
+                tagsList.add(length);
+                tagsList.add(getPlayersTag(false));
+                tagsList.add(titles[0]);
+                tagsList.addAll(Arrays.asList(tags));
+            }
+
             return tagsList.toArray(new String[0]);
         }
 
@@ -114,6 +131,25 @@ public class ClamatoUtils extends AppCompatActivity {
 
         public String getRandomTagline() {
             return taglines[(int) (Math.random() * taglines.length)];
+        }
+
+        public boolean getCurated() {
+            return curated;
+        }
+
+        public int hasCardInfo() {
+            boolean hasLength = (length != null && !length.equals(""));
+            boolean hasPlayer = (playersMin > 0 && playersMax > 0);
+            if (curated) {
+                return 0;
+            } else if (hasLength && hasPlayer) {
+                return 0;
+            } else if (hasLength) {
+                return 1;
+            } else if (hasPlayer) {
+                return 2;
+            }
+            return -1;
         }
     }
 
@@ -145,37 +181,141 @@ public class ClamatoUtils extends AppCompatActivity {
 
     private void generateGames() {
         if (games.size() == 0) {
-            ClamatoGame game = new ClamatoGame();
+            String rawGamesJson = loadJSONFromAsset("Games List.json");
+            JSONArray gamesArray = new JSONArray();
+            try {
+                gamesArray = new JSONArray(rawGamesJson);
+            } catch (JSONException e) {
+                Toast.makeText(a.getApplicationContext(), "David Hopping messed up his JSON formatting. Let him know.", Toast.LENGTH_SHORT).show();
+            }
 
-            game.id = 1;
+            for (int i = 0; i < gamesArray.length(); i++) {
+                try {
+                    JSONObject currentGame = gamesArray.getJSONObject(i);
+                    ClamatoGame game = new ClamatoGame();
 
-            game.titles = new String[1];
-            game.titles[0] = "Half Life";
+                    game.id = currentGame.getInt("id");
 
-            game.instructions = "Perform a short scene in 60 seconds, then perform the \"exact\" same scene in 30 seconds, then 15, and so on and so forth.";
+                    game.titles = new String[currentGame.getJSONArray("titles").length()];
+                    for (int n = 0; n < currentGame.getJSONArray("titles").length(); n++) {
+                        game.titles[n] = currentGame.getJSONArray("titles").getString(n);
+                    }
 
-            game.tips = new String[1];
-            game.tips[0] = "Try and be very physical while performing the scene! It's much easier to remember big physical events than exact lines of dialogue, and the audience will catch on with the gimmick quicker!";
+                    game.instructions = currentGame.getString("instructions");
 
-            game.facts = new String[1];
-            game.facts[0] = "Uranium-234's half life is the shortest of all time, clocking in at 245,500 years.";
+                    game.tips = new String[currentGame.getJSONArray("tips").length()];
+                    for (int n = 0; n < currentGame.getJSONArray("tips").length(); n++) {
+                        game.tips[n] = currentGame.getJSONArray("tips").getString(n);
+                    }
 
-            game.variants = new String[1];
-            game.variants[0] = "A good way to play this game with three players is by having the third player start off on the sidelines, and then enter the scene at about halfway through the scene. That way, you can easily define a pivotal moment in the scene, for free!";
+                    game.facts = new String[currentGame.getJSONArray("facts").length()];
+                    for (int n = 0; n < currentGame.getJSONArray("facts").length(); n++) {
+                        game.facts[n] = currentGame.getJSONArray("facts").getString(n);
+                    }
 
-            game.playersMin = 2;
-            game.playersMax = 3;
+                    game.variants = new String[currentGame.getJSONArray("variants").length()];
+                    for (int n = 0; n < currentGame.getJSONArray("variants").length(); n++) {
+                        game.variants[n] = currentGame.getJSONArray("variants").getString(n);
+                    }
 
-            game.length = "Short Form";
+                    game.playersMin = currentGame.getInt("playersMin");
+                    game.playersMax = currentGame.getInt("playersMax");
 
-            game.skills = new String[1];
-            game.skills[0] = "Physicality";
+                    game.length = currentGame.getString("length");
 
-            game.taglines = new String[1];
-            game.taglines[0] = "Now let's do it in 0.00732421975 seconds!";
+                    game.skills = new String[currentGame.getJSONArray("skills").length()];
+                    for (int n = 0; n < currentGame.getJSONArray("skills").length(); n++) {
+                        game.skills[n] = currentGame.getJSONArray("skills").getString(n);
+                    }
 
-            games.put(game.id, game);
+                    game.taglines = new String[currentGame.getJSONArray("taglines").length()];
+                    for (int n = 0; n < currentGame.getJSONArray("taglines").length(); n++) {
+                        game.taglines[n] = currentGame.getJSONArray("taglines").getString(n);
+                    }
+
+                    game.tags = new String[currentGame.getJSONArray("tags").length()];
+                    for (int n = 0; n < currentGame.getJSONArray("tags").length(); n++) {
+                        game.tags[n] = currentGame.getJSONArray("tags").getString(n);
+                    }
+
+                    game.curated = true;
+
+                    games.put(game.id, game);
+
+                } catch (JSONException e) {
+                    Toast.makeText(a.getApplicationContext(), "David Hopping messed up his JSON formatting. Let him know.", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            int encyclopediaId = gamesArray.length();
+            String[] encyclopediaGames = a.getResources().getStringArray(R.array.encyclopediagames);
+            String[] encyclopediaGamesTitles = a.getResources().getStringArray(R.array.encyclopediagamestitles);
+            for (int n = 0; n < encyclopediaGames.length; n++) {
+
+                String title = encyclopediaGamesTitles[n].replaceAll(
+                        String.format("%s|%s|%s",
+                                "(?<=[A-Z])(?=[A-Z][a-z])",
+                                "(?<=[^A-Z])(?=[A-Z])",
+                                "(?<=[A-Za-z])(?=[^A-Za-z])"
+                        ),
+                        " "
+                );
+
+                String desc = encyclopediaGames[n];
+
+                ClamatoGame game = new ClamatoGame();
+
+                game.id = encyclopediaId;
+                encyclopediaId++;
+
+                game.titles = new String[1];
+                game.titles[0] = title;
+
+                game.instructions = desc;
+
+                game.curated = false;
+
+                game.tips = new String[1];
+                game.tips[0] = "";
+
+                game.facts = new String[1];
+                game.facts[0] = "";
+
+                game.variants = new String[1];
+                game.variants[0] = "";
+
+                game.playersMin = 0;
+                game.playersMax = 0;
+
+                if (desc.toLowerCase().contains("short form") && desc.toLowerCase().contains("long form")) {
+                    game.length = "";
+                } else if (desc.toLowerCase().contains("short form")) {
+                    game.length = "Short Form";
+                } else if (desc.toLowerCase().contains("long form")) {
+                    game.length = "Long Form";
+                } else if (desc.toLowerCase().contains("warmup") || desc.toLowerCase().contains("warm up") || desc.toLowerCase().contains("warm-up")) {
+                    game.length = "Warmup";
+                }
+
+                game.skills = new String[1];
+                game.skills[0] = "";
+
+                game.taglines = new String[1];
+                game.taglines[0] = "";
+
+                game.tags = new String[1];
+                game.tags[0] = "";
+
+                games.put(game.id, game);
+            }
+
         }
+    }
+
+
+    public ArrayList<Integer> getAllGameIds() {
+        generateGames();
+        return new ArrayList<>(games.keySet());
     }
 
     public ClamatoGame getGameByID(int id) {
@@ -187,7 +327,6 @@ public class ClamatoUtils extends AppCompatActivity {
 
         String[] paths = new String[1];
         paths[0] = "notes.txt";
-
         for (String p : paths) {
             try {
                 InputStream inputStream = context.openFileInput(p);
@@ -216,6 +355,22 @@ public class ClamatoUtils extends AppCompatActivity {
         } catch (IOException e) {
             Toast.makeText(a.getApplicationContext(), "File Write Failed. AKA David Hopping f**ked up coding.", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    public String loadJSONFromAsset(String filename) {
+        String json = null;
+        try {
+            InputStream is = a.getAssets().open(filename);
+            int size = is.available();
+            byte[] buffer = new byte[size];
+            is.read(buffer);
+            is.close();
+            json = new String(buffer, "UTF-8");
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            return null;
+        }
+        return json;
     }
 
     public String readFromFile(String path, String directory) {

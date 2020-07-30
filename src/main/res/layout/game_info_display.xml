@@ -29,9 +29,14 @@
                 android:id="@+id/game_title"
                 style="@style/AppTextTheme"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="150dp"
+                android:paddingLeft="4dp"
+                android:paddingRight="4dp"
                 android:text="Game Title"
-                android:textSize="70sp" />
+                android:textSize="70sp"
+                app:autoSizeMaxTextSize="70sp"
+                app:autoSizeMinTextSize="25sp"
+                app:autoSizeTextType="uniform" />
 
             <TextView
                 android:id="@+id/tagline"
