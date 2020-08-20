@@ -34,9 +34,9 @@
                 android:paddingRight="4dp"
                 android:text="Game Title"
                 android:textSize="70sp"
-                app:autoSizeMaxTextSize="70sp"
-                app:autoSizeMinTextSize="25sp"
-                app:autoSizeTextType="uniform" />
+                android:autoSizeMaxTextSize="70sp"
+                android:autoSizeMinTextSize="25sp"
+                android:autoSizeTextType="uniform" />
 
             <TextView
                 android:id="@+id/tagline"
@@ -115,7 +115,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintVertical_bias="0.0"
-                    app:srcCompat="@drawable/button_blank" />
+                    app:srcCompat="@drawable/add_button" />
 
                 <ImageView
                     android:id="@+id/game_bookmark_button"
@@ -127,7 +127,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintVertical_bias="0.0"
-                    app:srcCompat="@drawable/button_blank" />
+                    app:srcCompat="@drawable/unbookmarked_button" />
 
                 <ImageView
                     android:id="@+id/game_shuffle_button"
@@ -139,7 +139,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintVertical_bias="0.0"
-                    app:srcCompat="@drawable/button_blank" />
+                    app:srcCompat="@drawable/refresh_button" />
 
                 <ImageView
                     android:id="@+id/game_link_button"
@@ -151,7 +151,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintVertical_bias="0.0"
-                    app:srcCompat="@drawable/button_blank" />
+                    app:srcCompat="@drawable/game_tool_button" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <View style="@style/Divider" />

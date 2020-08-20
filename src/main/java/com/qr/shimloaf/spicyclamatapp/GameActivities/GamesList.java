@@ -24,6 +24,7 @@ public class GamesList extends AppCompatActivity {
     ClamatoUtils c;
     String mode;
     int filter = 0;
+    boolean fromFav = false;
 
     RecyclerView gameListDisplay;
     LinearLayoutManager gamesManager;
@@ -57,6 +58,7 @@ public class GamesList extends AppCompatActivity {
                 gamesFooter.setText(". . .");
                 gamesFooter.setVisibility(View.VISIBLE);
             }
+            fromFav = true;
         }
 
         gameListDisplay = (RecyclerView) findViewById(R.id.games_list_display);
@@ -73,17 +75,37 @@ public class GamesList extends AppCompatActivity {
     private ArrayList<Integer> getGamesList(int filterNum) {
 
         if (filter == 0) {
-            return c.getAllGameIds();
+            return c.getAllGameIds(0);
         } else if (filter == 1) {
-
+            return c.getAllGameIds(1);
         } else if (filter == 2) {
-
+            return c.getAllGameIds(2);
         } else if (filter == 3) {
+            return c.getAllGameIds(3);
+        } else if (filter == 4) { // Bookmarks
+            //c.writeToFile("", "favorites.txt", "");
+            String bookmarkIds = c.readFromFile("favorites.txt", "");
+            ArrayList<Integer> ret = new ArrayList<>();
 
-        } else if (filter == 4) {
+            while (bookmarkIds.length() > 0) {
 
+                if (bookmarkIds.charAt(0) == ',') {
+                    bookmarkIds = bookmarkIds.substring(1);
+                }
+
+                if (bookmarkIds.isEmpty()) {
+                    break;
+                }
+
+                String curId = bookmarkIds.substring(0, bookmarkIds.indexOf(","));
+                bookmarkIds = bookmarkIds.substring(bookmarkIds.indexOf(","));
+
+                ret.add(Integer.valueOf(curId));
+
+            }
+            return ret;
         }
-        return c.getAllGameIds();
+        return c.getAllGameIds(69);
     }
 
     @Override
@@ -92,7 +114,7 @@ public class GamesList extends AppCompatActivity {
     }
 
     public class GamesAdapter extends RecyclerView.Adapter<GamesAdapter.GameHolder> {
-        private ArrayList<Integer> idDatabase;
+        private Integer[] idDatabase;
 
         public class GameHolder extends RecyclerView.ViewHolder {
 
@@ -114,7 +136,7 @@ public class GamesList extends AppCompatActivity {
         }
 
         public GamesAdapter(ArrayList<Integer> myDataset) {
-            idDatabase = myDataset;
+            idDatabase = myDataset.toArray(new Integer[0]);
         }
 
         @Override
@@ -131,7 +153,7 @@ public class GamesList extends AppCompatActivity {
         @Override
         public void onBindViewHolder(final GameHolder holder, final int position) {
 
-            ClamatoUtils.ClamatoGame game = c.getGameByID(idDatabase.get(position));
+            ClamatoUtils.ClamatoGame game = c.getGameByID(idDatabase[position]);
 
             holder.curated = game.getCurated();
 
@@ -162,7 +184,8 @@ public class GamesList extends AppCompatActivity {
                 public void onClick(View v) {
                     c.quickVibe(50);
                     Intent gamesList = new Intent(getApplicationContext(), GameDisplay.class);
-                    gamesList.putExtra("id", idDatabase.get(position).intValue());
+                    gamesList.putExtra("id", idDatabase[position].intValue());
+                    gamesList.putExtra("fromFav", fromFav);
                     startActivity(gamesList);
                 }
             });
@@ -171,7 +194,7 @@ public class GamesList extends AppCompatActivity {
 
         @Override
         public int getItemCount() {
-            return idDatabase.size();
+            return idDatabase.length;
         }
     }
 }

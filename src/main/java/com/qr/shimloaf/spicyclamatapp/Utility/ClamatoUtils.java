@@ -25,6 +25,7 @@ import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 
 public class ClamatoUtils extends AppCompatActivity {
@@ -155,6 +156,8 @@ public class ClamatoUtils extends AppCompatActivity {
 
 
     Application a;
+    HashMap<Integer, ClamatoGame> curatedGameList = new HashMap<>();
+    HashMap<Integer, ClamatoGame> encyclopediaGameList = new HashMap<>();
     HashMap<Integer, ClamatoGame> games = new HashMap<>();
     MediaPlayer mp = new MediaPlayer();
 
@@ -180,7 +183,7 @@ public class ClamatoUtils extends AppCompatActivity {
     }
 
     private void generateGames() {
-        if (games.size() == 0) {
+        if (curatedGameList.size() == 0 && encyclopediaGameList.size() == 0) {
             String rawGamesJson = loadJSONFromAsset("Games List.json");
             JSONArray gamesArray = new JSONArray();
             try {
@@ -240,6 +243,7 @@ public class ClamatoUtils extends AppCompatActivity {
 
                     game.curated = true;
 
+                    curatedGameList.put(game.id, game);
                     games.put(game.id, game);
 
                 } catch (JSONException e) {
@@ -247,7 +251,7 @@ public class ClamatoUtils extends AppCompatActivity {
                 }
             }
 
-            int encyclopediaId = gamesArray.length();
+            int encyclopediaId = 10000;
             String[] encyclopediaGames = a.getResources().getStringArray(R.array.encyclopediagames);
             String[] encyclopediaGamesTitles = a.getResources().getStringArray(R.array.encyclopediagamestitles);
             for (int n = 0; n < encyclopediaGames.length; n++) {
@@ -306,16 +310,81 @@ public class ClamatoUtils extends AppCompatActivity {
                 game.tags = new String[1];
                 game.tags[0] = "";
 
+                encyclopediaGameList.put(game.id, game);
                 games.put(game.id, game);
             }
 
         }
     }
 
+    public ArrayList<Integer> sortIdList(int mode, ArrayList<Integer> idList) {
+        if (mode == 0) {
+            Collections.sort(idList);
+        }
+        return idList;
+    }
 
-    public ArrayList<Integer> getAllGameIds() {
+    public ArrayList<Integer> getFilteredGameIds(String query, String length) {
+
+        ArrayList<Integer> allCuratedGames = new ArrayList<>(curatedGameList.keySet());
+        ArrayList<Integer> allEncyclopediaGames = new ArrayList<>(encyclopediaGameList.keySet());
+
+        ArrayList<Integer> filteredCuratedGames = new ArrayList<>();
+        ArrayList<Integer> filteredEncyclopediaGames = new ArrayList<>();
+
+        ArrayList<Integer> allGames = new ArrayList<>();
+
+        if (length.equals("Short Form") || length.equals("Long Form") || length.equals("Warmup")) {
+            for (Integer i : allCuratedGames) {
+                ClamatoGame curGame = curatedGameList.get(i);
+                if (curGame.getLength() != null && curGame.getLength().equals(length)) {
+                    filteredCuratedGames.add(i);
+                }
+            }
+
+            for (Integer i : allEncyclopediaGames) {
+                ClamatoGame curGame = encyclopediaGameList.get(i);
+                if (curGame.getLength() != null && curGame.getLength().equals(length)) {
+                    filteredEncyclopediaGames.add(i);
+                }
+            }
+        } else if (!query.equals("")) {
+
+        } else {
+            filteredCuratedGames.addAll(allCuratedGames);
+            filteredEncyclopediaGames.addAll(allEncyclopediaGames);
+        }
+
+        allGames.addAll(filteredCuratedGames);
+        allGames.addAll(filteredEncyclopediaGames);
+
+        return allGames;
+    }
+
+
+    public ArrayList<Integer> getAllGameIds(int mode) {
         generateGames();
-        return new ArrayList<>(games.keySet());
+        ArrayList<Integer> allGames = new ArrayList<>(games.keySet());
+
+        if (mode == 0) { // All Games
+
+            allGames = getFilteredGameIds("", "");
+
+        } else if (mode == 1) { // Short Form Games, with curated on top.
+
+            allGames = getFilteredGameIds("", "Short Form");
+
+        } else if (mode == 2) { // Long Form Games, with curated on top.
+
+            allGames = getFilteredGameIds("", "Long Form");
+
+        } else if (mode == 3) { // Warmup Games, with curated on top.
+
+            allGames = getFilteredGameIds("", "Warmup");
+
+        }
+
+        return allGames;
     }
 
     public ClamatoGame getGameByID(int id) {
@@ -325,15 +394,20 @@ public class ClamatoUtils extends AppCompatActivity {
 
     public void verifySaveData(Context context) {
 
-        String[] paths = new String[1];
+        String[] paths = new String[2];
         paths[0] = "notes.txt";
+        paths[1] = "favorites.txt";
         for (String p : paths) {
             try {
                 InputStream inputStream = context.openFileInput(p);
             } catch (IOException e) {
                 try {
                     OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput(p, Context.MODE_PRIVATE));
-                    outputStreamWriter.write("Initialized.");
+                    if (p.equals("favorites.txt")) {
+                        outputStreamWriter.write(",");
+                    } else if (p.equals("notes.txt")) {
+                        outputStreamWriter.write("Initialized");
+                    }
                     outputStreamWriter.close();
                     Toast.makeText(context, "Initialized " + p, Toast.LENGTH_SHORT).show();
                 } catch (IOException ex) {
@@ -387,7 +461,7 @@ public class ClamatoUtils extends AppCompatActivity {
             }
 
         } catch (FileNotFoundException e) {
-            Toast.makeText(a.getApplicationContext(), "File not found. AKA David Hopping f**ked up coding.", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(a.getApplicationContext(), "File not found. AKA David Hopping f**ked up coding.", Toast.LENGTH_SHORT).show();
         } catch (IOException e) {
             Toast.makeText(a.getApplicationContext(), "File Write Failed. AKA David Hopping f**ked up coding.", Toast.LENGTH_SHORT).show();
 
@@ -408,7 +482,7 @@ public class ClamatoUtils extends AppCompatActivity {
             }
 
         } catch (FileNotFoundException e) {
-            Toast.makeText(a.getApplicationContext(), "File not found. AKA David Hopping f**ked up coding.", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(a.getApplicationContext(), "File not found. AKA David Hopping f**ked up coding.", Toast.LENGTH_SHORT).show();
         } catch (IOException e) {
             Toast.makeText(a.getApplicationContext(), "File Write Failed. AKA David Hopping f**ked up coding.", Toast.LENGTH_SHORT).show();
 

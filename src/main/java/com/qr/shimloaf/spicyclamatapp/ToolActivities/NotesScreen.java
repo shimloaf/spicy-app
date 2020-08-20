@@ -217,12 +217,8 @@ public class NotesScreen extends AppCompatActivity {
     //This function saves a created note to the correct file path
     private void encodeNote(ClamatoNote note) {
         String path = note.title;
-        Log.println(Log.VERBOSE, "SameTitleCount: ", note.encoding.substring(1, 3));
-
         String data = note.encoding + note.note;
 
-        Log.println(Log.VERBOSE, "Data encoded: ", data);
-        Log.println(Log.VERBOSE, "At Path: ", path);
         c.writeToFile(data, path, "notes");
     }
 
