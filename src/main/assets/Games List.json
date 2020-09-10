@@ -1,0 +1,66 @@
+[
+  {
+    "id": 1,
+    "titles": [
+      "Half Life",
+      "Scene Halving",
+      "Half Time"
+    ],
+    "instructions": "Perform a short scene in 60 seconds, then perform the \"exact\" same scene in 30 seconds, then 15, and so on and so forth.",
+    "tips": [
+      "Try and be very physical while performing the scene! It's much easier to remember big physical events than exact lines of dialogue, and the audience will catch on with the gimmick quicker!",
+      "It's okay if you don't remember every word. Holding onto a key phrase that the audience will remember is usually enough to keep the game going!"
+    ],
+    "facts": [
+      "Uranium-234's half life is the shortest of all time, clocking in at 245,500 years."
+    ],
+    "variants": [
+      "A good way to play this game with three players is by having the third player start off on the sidelines, and then enter the scene at about halfway through the scene. That way, you can easily define a pivotal moment in the scene, for free!"
+    ],
+    "playersMin": 2,
+    "playersMax": 3,
+    "length": "Short Form",
+    "skills": [
+      "Physicality",
+      "Memory"
+    ],
+    "taglines": [
+      "Now let's do it in 0.00732421975 seconds!",
+      "The fastest scenes in the West!"
+    ],
+    "tags": [
+    ]
+  },
+  {
+    "id": 2,
+    "titles": [
+      "Tech Conference"
+    ],
+    "instructions": "",
+    "tips": [
+      "",
+      ""
+    ],
+    "facts": [
+      ""
+    ],
+    "variants": [
+      ""
+    ],
+    "playersMin": 1,
+    "playersMax": 1,
+    "length": "",
+    "skills": [
+      "",
+      "",
+      ""
+    ],
+    "taglines": [
+      "",
+      ""
+    ],
+    "tags": [
+      "Opener"
+    ]
+  }
+]
