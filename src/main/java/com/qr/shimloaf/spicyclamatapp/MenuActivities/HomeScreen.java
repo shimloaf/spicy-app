@@ -2,6 +2,7 @@ package com.qr.shimloaf.spicyclamatapp.MenuActivities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
@@ -22,9 +23,17 @@ import com.qr.shimloaf.spicyclamatapp.Utility.ClamatoUtils;
 public class HomeScreen extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    final int START_SPINS = 1;
+    final float START_SPEED = 20f;
+    final float MAX_SPEED = 180f;
+    final int MAX_SPINS = 500;
+
     ClamatoUtils c;
     boolean inProgress = false;
-    int rotations = 0;
+    float momentum = 0;
+    float curDegree = 0f;
+    float speed = START_SPEED;
+    int spinLimit = START_SPINS;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,10 +105,24 @@ public class HomeScreen extends AppCompatActivity
 
     public void onImageClick(View view) {
         changeTip();
+
+        // A tap always adds a full spin, unless we have enough momentum for
+        // more spins than the spin limit
+        if (momentum <= 360 * spinLimit) {
+            momentum += 360;
+        } else {
+
+            //Otherwise, a tap will increase the speed and let the wheel spin one more time before stopping.
+            if (speed < MAX_SPEED) {
+                speed += 10f;
+            }
+            if (spinLimit < MAX_SPINS) {
+                spinLimit++;
+            }
+        }
+
         if (!inProgress) {
             rotateImage(view);
-        } else {
-            rotations++;
         }
         c.quickVibe(100);
         setTitle(c.generateTitle());
@@ -115,33 +138,43 @@ public class HomeScreen extends AppCompatActivity
         } while ((tip.getText()).equals(prevTip));
     }
 
-    public void rotateImage(View view) {
+    public void rotateImage(final View view) {
 
-        final RotateAnimation rotateAnimation = new RotateAnimation(0,  360f,
+        if (spinLimit > START_SPINS && momentum <= 360 * (spinLimit - 1)) {
+            if (speed > START_SPEED) {
+                speed -= 10f;
+            }
+            spinLimit--;
+        }
+
+        final RotateAnimation rotateAnimation = new RotateAnimation(curDegree,  curDegree + speed,
                 Animation.RELATIVE_TO_SELF, 0.5f,
                 Animation.RELATIVE_TO_SELF, 0.5f);
 
         rotateAnimation.setInterpolator(new LinearInterpolator());
-        rotateAnimation.setDuration(500);
-        rotateAnimation.setRepeatCount(Animation.ABSOLUTE);
+        rotateAnimation.setDuration(100);
 
         rotateAnimation.setAnimationListener(new Animation.AnimationListener() {
 
             public void onAnimationStart(Animation a) {
-                inProgress = true;
+                //Nothing
             }
 
             public void onAnimationRepeat(Animation a) {
-                rotations--;
+                //Nothing
             }
 
             public void onAnimationEnd(Animation a) {
-                inProgress = false;
-                if (rotations > 0) {
-                    rotateAnimation.setRepeatCount(rotations);
+                if (momentum > 0) {
+                    rotateImage(view);
+                } else {
+                    inProgress = false;
                 }
             }
         });
+
+        curDegree += speed;
+        momentum -= speed;
 
         findViewById(R.id.logo).startAnimation(rotateAnimation);
     }

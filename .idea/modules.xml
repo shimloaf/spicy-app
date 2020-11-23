@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/spicy-clamatapp.iml" filepath="$PROJECT_DIR$/.idea/modules/spicy-clamatapp.iml" group="spicy-clamatapp" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/spicy-app.iml" filepath="$PROJECT_DIR$/.idea/modules/spicy-app.iml" group="spicy-app" />
     </modules>
   </component>
 </project>
