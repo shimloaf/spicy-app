@@ -1,41 +1,117 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/noteDisplayConstraintLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/filter_button"
+    <com.github.clans.fab.FloatingActionMenu
+        android:id="@+id/filter_menu"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:clickable="true"
-        android:focusable="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:elevation="8dp"
+        android:src="@drawable/filter_icon"
         android:visibility="invisible"
-        app:backgroundTint="#F6652C"
-        app:fabSize="normal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.924"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.918"
-        app:srcCompat="@drawable/filter_icon" />
+        app:layout_constraintVertical_bias="0.971"
+        app:menu_animationDelayPerItem="50"
+        app:menu_backgroundColor="@android:color/transparent"
+        app:menu_buttonSpacing="0dp"
+        app:menu_colorNormal="@color/colorPrimary"
+        app:menu_colorPressed="@color/colorPrimaryPressed"
+        app:menu_colorRipple="#99FFFFFF"
+        app:menu_fab_size="normal"
+        app:menu_labels_colorNormal="#333333"
+        app:menu_labels_colorPressed="#444444"
+        app:menu_labels_colorRipple="#66FFFFFF"
+        app:menu_labels_cornerRadius="3dp"
+        app:menu_labels_ellipsize="none"
+        app:menu_labels_margin="0dp"
+        app:menu_labels_maxLines="-1"
+        app:menu_labels_padding="8dp"
+        app:menu_labels_paddingBottom="4dp"
+        app:menu_labels_paddingLeft="8dp"
+        app:menu_labels_paddingRight="8dp"
+        app:menu_labels_paddingTop="4dp"
+        app:menu_labels_position="left"
+        app:menu_labels_singleLine="false"
+        app:menu_labels_textColor="#FFFFFF"
+        app:menu_labels_textSize="14sp"
+        app:menu_openDirection="up"
+        app:menu_shadowColor="#66000000"
+        app:menu_shadowRadius="4dp"
+        app:menu_shadowXOffset="1dp"
+        app:menu_shadowYOffset="3dp"
+        app:menu_showShadow="true">
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/history_filter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_history_icon"
+            android:visibility="gone"
+            app:fab_colorNormal="@color/colorPrimary"
+            app:fab_colorPressed="@color/colorPrimaryPressed"
+            app:fab_colorRipple="#99FFFFFF"
+            app:fab_label="Newest" />
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/player_filter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/people_icon"
+            app:fab_colorNormal="@color/colorPrimary"
+            app:fab_colorPressed="@color/colorPrimaryPressed"
+            app:fab_colorRipple="#99FFFFFF"
+            app:fab_label="# of Players" />
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/abc_filter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/alpha_sort_icon"
+            app:fab_colorNormal="@color/colorPrimary"
+            app:fab_colorPressed="@color/colorPrimaryPressed"
+            app:fab_colorRipple="#99FFFFFF"
+            app:fab_label="Alphabetical" />
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/shuffle_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_shuffle_icon"
+            app:fab_colorNormal="@color/colorPrimary"
+            app:fab_colorPressed="@color/colorPrimaryPressed"
+            app:fab_colorRipple="#99FFFFFF"
+            app:fab_label="Shuffle" />
+
+    </com.github.clans.fab.FloatingActionMenu>
 
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:elevation="5dp"
         android:orientation="vertical"
+        android:scrollIndicators="right"
+        android:scrollbarAlwaysDrawVerticalTrack="false"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0">
 
         <SearchView
+            android:id="@+id/search_bar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:visibility="gone">
@@ -58,7 +134,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/seguibl"
             android:gravity="center"
-            android:text="Add a Favorite!"
+            android:text="You don't have any favorites yet."
             android:textColor="@color/colorTextGray"
             android:textSize="36sp"
             android:visibility="gone" />
