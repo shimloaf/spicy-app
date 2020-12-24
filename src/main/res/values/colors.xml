@@ -7,4 +7,5 @@
     <color name="displayColorRed">#E84E4E</color>
     <color name="displayColorGreen">#509F53</color>
     <color name="colorTextGray">#1C1C1C</color>
+    <color name="colorPrimaryPressed">#9F351E</color>
 </resources>

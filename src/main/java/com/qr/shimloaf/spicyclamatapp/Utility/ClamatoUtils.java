@@ -6,6 +6,15 @@ import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
+import android.util.Log;
+import android.view.View;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.LinearInterpolator;
+import android.view.animation.RotateAnimation;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -26,6 +35,7 @@ import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 
 public class ClamatoUtils extends AppCompatActivity {
@@ -105,11 +115,13 @@ public class ClamatoUtils extends AppCompatActivity {
                     tagsList.add(length);
                 }
                 tagsList.add(titles[0]);
+                tagsList.add("ImprovEncyclopedia");
             } else {
                 tagsList.add(length);
                 tagsList.add(getPlayersTag(false));
                 tagsList.add(titles[0]);
                 tagsList.addAll(Arrays.asList(tags));
+                tagsList.add("SpicyCurated");
             }
 
             return tagsList.toArray(new String[0]);
@@ -126,12 +138,52 @@ public class ClamatoUtils extends AppCompatActivity {
             return ret.toString().substring(0, ret.toString().length() - 2);
         }
 
-        public String getRandomTitle() {
-            return titles[(int) (Math.random() * titles.length)];
+        public String getRandomTitle() { return titles[(int) (Math.random() * titles.length)]; }
+        public String getRandomTagline() { return taglines[(int) (Math.random() * taglines.length)]; }
+
+        //Retrieve value from ar != s
+        //Return first value in the array if ar.length = 1
+        //That will either be s or if s isnt in ar, ar[0]
+        private String getNewInfo(String s, String[] ar) {
+            String ret = s;
+            ret = ar[(int) (Math.random() * ar.length)];
+            if (ar.length > 1) {
+                do {
+                    ret = ar[(int) (Math.random() * ar.length)];
+                } while (ret.equals(s));
+            }
+            return ret;
         }
 
-        public String getRandomTagline() {
-            return taglines[(int) (Math.random() * taglines.length)];
+        public String getNewTitle(String s) {
+            return getNewInfo(s, titles);
+        }
+
+        public String getNewTagline(String s) {
+            return getNewInfo(s, taglines);
+        }
+
+        public String getNewBlurb(String s, int mightyNumberNine) {
+            if (mightyNumberNine == 0) {
+                return getNewInfo(s, tips);
+            } else if (mightyNumberNine == 1) {
+                return getNewInfo(s, variants);
+            } else {
+                return getNewInfo(s, facts);
+            }
+        }
+
+        public String getRandomBlurb() {
+
+            int mightyNumberNine = (int) (Math.random() * 3);
+
+            if (mightyNumberNine == 0) {
+                return tips[(int) (Math.random() * tips.length)];
+            } else if (mightyNumberNine == 1) {
+                return variants[(int) (Math.random() * variants.length)];
+            } else {
+                return facts[(int) (Math.random() * facts.length)];
+            }
         }
 
         public boolean getCurated() {
@@ -154,7 +206,6 @@ public class ClamatoUtils extends AppCompatActivity {
         }
     }
 
-
     Application a;
     HashMap<Integer, ClamatoGame> curatedGameList = new HashMap<>();
     HashMap<Integer, ClamatoGame> encyclopediaGameList = new HashMap<>();
@@ -165,8 +216,34 @@ public class ClamatoUtils extends AppCompatActivity {
         a = application;
     }
 
-    public String getUniqueDelineation() {
-        return "978234897453298723458972539768523987";
+    public void fadeSwitchText(final TextView t, final String s) {
+
+        final Animation in = new AlphaAnimation(0.0f, 1.0f);
+        final Animation out = new AlphaAnimation(1.0f, 0.0f);
+
+        in.setDuration(500);
+        out.setDuration(500);
+
+        out.setAnimationListener(new Animation.AnimationListener() {
+
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                t.setText(s);
+                t.startAnimation(in);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+
+        t.startAnimation(out);
     }
 
     public void quickVibe(int n) {
@@ -174,6 +251,34 @@ public class ClamatoUtils extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             vibe.vibrate(VibrationEffect.createOneShot(n, VibrationEffect.DEFAULT_AMPLITUDE));
         }
+    }
+
+    public void quickRotateImageView(final ImageView toRotate, final int duration) {
+
+        final RotateAnimation rotateAnimation = new RotateAnimation(0, 360,
+                Animation.RELATIVE_TO_SELF, 0.5f,
+                Animation.RELATIVE_TO_SELF, 0.5f);
+
+        rotateAnimation.setInterpolator(new LinearInterpolator());
+        rotateAnimation.setDuration(duration);
+        rotateAnimation.setFillAfter(true);
+
+        rotateAnimation.setAnimationListener(new Animation.AnimationListener() {
+
+            public void onAnimationStart(Animation a) {
+                //Nothing
+            }
+
+            public void onAnimationRepeat(Animation a) {
+                //Nothing
+            }
+
+            public void onAnimationEnd(Animation a) {
+                //Nothing
+            }
+        });
+
+        toRotate.startAnimation(rotateAnimation);
     }
 
     public String generateTitle() {
@@ -293,9 +398,9 @@ public class ClamatoUtils extends AppCompatActivity {
 
                 if (desc.toLowerCase().contains("short form") && desc.toLowerCase().contains("long form")) {
                     game.length = "";
-                } else if (desc.toLowerCase().contains("short form")) {
+                } else if (desc.toLowerCase().contains("short form") || desc.toLowerCase().contains("short-form")) {
                     game.length = "Short Form";
-                } else if (desc.toLowerCase().contains("long form")) {
+                } else if (desc.toLowerCase().contains("long form") || desc.toLowerCase().contains("long-form")) {
                     game.length = "Long Form";
                 } else if (desc.toLowerCase().contains("warmup") || desc.toLowerCase().contains("warm up") || desc.toLowerCase().contains("warm-up")) {
                     game.length = "Warmup";
@@ -317,9 +422,108 @@ public class ClamatoUtils extends AppCompatActivity {
         }
     }
 
-    public ArrayList<Integer> sortIdList(int mode, ArrayList<Integer> idList) {
-        if (mode == 0) {
-            Collections.sort(idList);
+    public ArrayList<Integer> sortIdList(int mode, final ArrayList<Integer> idList) {
+        if (mode == 1) {
+            Collections.sort(idList, new Comparator<Integer>() {
+                @Override
+                public int compare(Integer lhs, Integer rhs) {
+
+                    if (curatedGameList.containsKey(lhs) && curatedGameList.containsKey(rhs)) {
+                        return (curatedGameList.get(lhs).getTitles()[0].toLowerCase().compareTo(curatedGameList.get(rhs).getTitles()[0].toLowerCase()));
+                    } else {
+                        if (curatedGameList.containsKey(lhs)) {
+                            return -1;
+                        } else if (curatedGameList.containsKey(rhs)) {
+                            return 1;
+                        } else {
+                           return (encyclopediaGameList.get(lhs).getTitles()[0].toLowerCase().compareTo(encyclopediaGameList.get(rhs).getTitles()[0].toLowerCase()));
+                        }
+                    }
+                }
+            });
+        } else if (mode == -1) {
+            Collections.sort(idList, new Comparator<Integer>() {
+                @Override
+                public int compare(Integer lhs, Integer rhs) {
+
+                    if (curatedGameList.containsKey(lhs) && curatedGameList.containsKey(rhs)) {
+                        return -1 * (curatedGameList.get(lhs).getTitles()[0].toLowerCase().compareTo(curatedGameList.get(rhs).getTitles()[0].toLowerCase()));
+                    } else {
+                        if (curatedGameList.containsKey(lhs)) {
+                            return -1;
+                        } else if (curatedGameList.containsKey(rhs)) {
+                            return 1;
+                        } else {
+                            return -1 * (encyclopediaGameList.get(lhs).getTitles()[0].toLowerCase().compareTo(encyclopediaGameList.get(rhs).getTitles()[0].toLowerCase()));
+                        }
+                    }
+                }
+            });
+        } else if (mode == 2) {
+            Collections.shuffle(idList);
+            Collections.sort(idList, new Comparator<Integer>() {
+                @Override
+                public int compare(Integer lhs, Integer rhs) {
+                    if (curatedGameList.containsKey(lhs)) {
+                        return -1;
+                    } else if (curatedGameList.containsKey(rhs)) {
+                        return 1;
+                    }
+                    return 0;
+                }
+            });
+        } else if (mode == 3) {
+            Collections.sort(idList, new Comparator<Integer>() {
+                @Override
+                public int compare(Integer lhs, Integer rhs) {
+
+                    if (curatedGameList.containsKey(lhs) && curatedGameList.containsKey(rhs)) {
+                        int lhsPlayers = curatedGameList.get(lhs).playersMin + curatedGameList.get(lhs).playersMax;
+                        int rhsPlayers = curatedGameList.get(rhs).playersMin + curatedGameList.get(rhs).playersMax;
+                        if (lhsPlayers > rhsPlayers) {
+                            return 1;
+                        } else if (lhsPlayers < rhsPlayers) {
+                            return -1;
+                        } else {
+                            return (curatedGameList.get(lhs).getTitles()[0].toLowerCase().compareTo(curatedGameList.get(rhs).getTitles()[0].toLowerCase()));
+                        }
+                    } else {
+                        if (curatedGameList.containsKey(lhs)) {
+                            return -1;
+                        } else if (curatedGameList.containsKey(rhs)) {
+                            return 1;
+                        } else {
+                            return (encyclopediaGameList.get(lhs).getTitles()[0].toLowerCase().compareTo(encyclopediaGameList.get(rhs).getTitles()[0].toLowerCase()));
+                        }
+                    }
+                }
+            });
+        } else if (mode == -3) {
+            Collections.sort(idList, new Comparator<Integer>() {
+                @Override
+                public int compare(Integer lhs, Integer rhs) {
+
+                    if (curatedGameList.containsKey(lhs) && curatedGameList.containsKey(rhs)) {
+                        int lhsPlayers = curatedGameList.get(lhs).playersMin + curatedGameList.get(lhs).playersMax;
+                        int rhsPlayers = curatedGameList.get(rhs).playersMin + curatedGameList.get(rhs).playersMax;
+                        if (lhsPlayers > rhsPlayers) {
+                            return -1;
+                        } else if (lhsPlayers < rhsPlayers) {
+                            return 1;
+                        } else {
+                            return (curatedGameList.get(lhs).getTitles()[0].toLowerCase().compareTo(curatedGameList.get(rhs).getTitles()[0].toLowerCase()));
+                        }
+                    } else {
+                        if (curatedGameList.containsKey(lhs)) {
+                            return -1;
+                        } else if (curatedGameList.containsKey(rhs)) {
+                            return 1;
+                        } else {
+                            return (encyclopediaGameList.get(lhs).getTitles()[0].toLowerCase().compareTo(encyclopediaGameList.get(rhs).getTitles()[0].toLowerCase()));
+                        }
+                    }
+                }
+            });
         }
         return idList;
     }
@@ -360,7 +564,6 @@ public class ClamatoUtils extends AppCompatActivity {
 
         return allGames;
     }
-
 
     public ArrayList<Integer> getAllGameIds(int mode) {
         generateGames();

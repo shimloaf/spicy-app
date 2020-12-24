@@ -91,7 +91,7 @@ public class SuggestionScreen extends AppCompatActivity
         ButtonData grabBagButton = new ButtonData(R.drawable.grab_bag_button, R.array.grab_bag, "Grab Bag");
         ButtonData relationshipButton = new ButtonData(R.drawable.relationship_button, R.array.relationship, "Relationship");
         ButtonData duoButton = new ButtonData(R.drawable.duo_button, R.array.duo, "Famous Duo");
-        ButtonData ssugButton = new ButtonData(R.array.ssuggs, "Suggest a Suggestion");
+        ButtonData ssugButton = new ButtonData(R.drawable.ssugg_button, R.array.ssuggs, "Suggest a Suggestion");
 
         types.put(sType.emotion, emotionButton);
         types.put(sType.location, locationButton);
@@ -116,7 +116,7 @@ public class SuggestionScreen extends AppCompatActivity
         }
 
         if (currType == sType.ssugg) {
-            c = "Ask for a suggestion of: ";
+            c = "Ask for a suggestion of:\n";
         }
 
         c = c + (possibleSuggestions[(int)(Math.random()*possibleSuggestions.length)]);
@@ -287,7 +287,7 @@ public class SuggestionScreen extends AppCompatActivity
             if (status == screenState.prime){
                 suggestionButton.setImageResource(R.drawable.question_button_depressed);
             } else if (status == screenState.expanded) {
-                suggestionButton.setImageResource(R.drawable.ssugg_button_depressed);
+                suggestionButton.setImageResource(R.drawable.happy_button_depressed);
             }
             return true;
         }
@@ -297,26 +297,19 @@ public class SuggestionScreen extends AppCompatActivity
             if (status == screenState.prime) {
                 suggestionButton.setImageResource(R.drawable.question_button);
             } else if (status == screenState.expanded) {
-                suggestionButton.setImageResource(R.drawable.ssugg_button);
+                suggestionButton.setImageResource(R.drawable.happy_button);
             }
             return true;
         }
 
         public boolean onSingleTapUp (MotionEvent e) {
             if (status == screenState.expanded) {
-                currType = sType.ssugg;
+                ArrayList<sType> possibleTypes = new ArrayList<>(EnumSet.allOf(sType.class));
+                currType = possibleTypes.get((int)(Math.random() * possibleTypes.size()));
                 changeScreen(screenState.suggDisplay);
             } else if (status == screenState.prime){
                 changeScreen(screenState.expanded);
             }
-            return true;
-        }
-
-        public boolean onDoubleTap (MotionEvent e) {
-
-            ArrayList<sType> possibleTypes = new ArrayList<>(EnumSet.allOf(sType.class));
-            currType = possibleTypes.get((int)(Math.random() * possibleTypes.size()));
-            changeScreen(screenState.suggDisplay);
             return true;
         }
 
@@ -381,7 +374,7 @@ public class SuggestionScreen extends AppCompatActivity
         }
 
         if (next == screenState.expanded || next == screenState.menuUpExpanded) {
-            suggestionButton.setImageResource(R.drawable.ssugg_button);
+            suggestionButton.setImageResource(R.drawable.happy_button);
             for (ImageView i : images) {
                 i.setVisibility(View.VISIBLE);
             }
@@ -420,7 +413,7 @@ public class SuggestionScreen extends AppCompatActivity
             for (ImageView i: images) {
                 assignImageToButton(i);
             }
-            suggestionButton.setImageResource(R.drawable.ssugg_button);
+            suggestionButton.setImageResource(R.drawable.happy_button);
         } else if (next == screenState.prime) {
             animateButtons(false);
             suggestionButton.setImageResource(R.drawable.question_button);

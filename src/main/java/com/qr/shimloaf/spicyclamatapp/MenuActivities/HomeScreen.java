@@ -2,6 +2,7 @@ package com.qr.shimloaf.spicyclamatapp.MenuActivities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
@@ -22,9 +23,16 @@ import com.qr.shimloaf.spicyclamatapp.Utility.ClamatoUtils;
 public class HomeScreen extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    final int MAX_SPINS = 20;
+    final int BASE_SPEED = 45;
+    final int MAX_MOMENTUM = 360 * MAX_SPINS;
+
     ClamatoUtils c;
     boolean inProgress = false;
-    int rotations = 0;
+    int momentum = 0;
+    float curDegree = 0f;
+    int presses = 0;
+    int prevScore = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,10 +104,19 @@ public class HomeScreen extends AppCompatActivity
 
     public void onImageClick(View view) {
         changeTip();
-        if (!inProgress) {
-            rotateImage(view);
+        presses++;
+
+        // A tap always adds a full spin, unless we have enough momentum for
+        // more spins than the spin limit
+        if (momentum < MAX_MOMENTUM) {
+            momentum += 360;
         } else {
-            rotations++;
+            momentum = MAX_MOMENTUM;
+        }
+
+        if (!inProgress) {
+            inProgress = true;
+            rotateImage(view);
         }
         c.quickVibe(100);
         setTitle(c.generateTitle());
@@ -107,42 +124,84 @@ public class HomeScreen extends AppCompatActivity
 
 
     public void changeTip() {
+
         TextView tip = findViewById(R.id.tip_message);
-        String[] tips = getResources().getStringArray(R.array.tips_array);
-        String prevTip = (String)(tip.getText());
-        do {
-            tip.setText("Spicy Tip:\n" + tips[(int)(Math.random()*tips.length)]);
-        } while ((tip.getText()).equals(prevTip));
+        if (presses == 0 && prevScore > 15) {
+            tip.setText("Final Score:\n" + prevScore + " Presses!!!");
+            prevScore = 0;
+        } else if (presses < 15) {
+            String[] tips = getResources().getStringArray(R.array.tips_array);
+            String prevTip = (String) (tip.getText());
+            do {
+                tip.setText("Spicy Tip:\n" + tips[(int) (Math.random() * tips.length)]);
+            } while ((tip.getText()).equals(prevTip));
+        } else if (presses < 25) {
+            tip.setText("Spicy Score:\n" + presses + " Presses.");
+        } else if (presses < 50) {
+            tip.setText("Spicy Score:\n" + presses + " Presses!");
+        } else if (presses < 75) {
+            tip.setText("Spicy Score:\n" + presses + " Presses!!");
+        } else if (presses > 999) {
+
+            StringBuilder awesomeString = new StringBuilder(" Presses!!!!");
+            for (int n = 0; n < presses - 1000; n++) {
+                awesomeString.append("!");
+            }
+
+            tip.setText("Spicy Score:\n" + presses + awesomeString);
+        } else {
+            tip.setText("Spicy Score:\n" + presses + " Presses!!!");
+        }
     }
 
-    public void rotateImage(View view) {
+    public void rotateImage(final View view) {
 
-        final RotateAnimation rotateAnimation = new RotateAnimation(0,  360f,
+        int speed = BASE_SPEED + (5 * (momentum / 180));
+        if (curDegree + speed > 360 && momentum < 360) {
+            speed = 360 - (int) curDegree;
+            momentum = speed;
+        }
+
+        final RotateAnimation rotateAnimation = new RotateAnimation(curDegree,  curDegree + speed,
                 Animation.RELATIVE_TO_SELF, 0.5f,
                 Animation.RELATIVE_TO_SELF, 0.5f);
 
         rotateAnimation.setInterpolator(new LinearInterpolator());
-        rotateAnimation.setDuration(500);
-        rotateAnimation.setRepeatCount(Animation.ABSOLUTE);
+        rotateAnimation.setDuration(100);
+        rotateAnimation.setFillAfter(true);
 
         rotateAnimation.setAnimationListener(new Animation.AnimationListener() {
 
             public void onAnimationStart(Animation a) {
-                inProgress = true;
+                //Nothing
             }
 
             public void onAnimationRepeat(Animation a) {
-                rotations--;
+                //Nothing
             }
 
             public void onAnimationEnd(Animation a) {
-                inProgress = false;
-                if (rotations > 0) {
-                    rotateAnimation.setRepeatCount(rotations);
+                if (momentum > 0) {
+                    rotateImage(view);
+                } else {
+                    inProgress = false;
+
                 }
             }
         });
 
+        curDegree += speed;
+        momentum -= speed;
+
+        if (momentum <= 0) {
+            prevScore = presses;
+            presses = 0;
+            if (prevScore > 15) {
+                changeTip();
+            }
+        }
+
+        curDegree = curDegree % 360;
         findViewById(R.id.logo).startAnimation(rotateAnimation);
     }
 

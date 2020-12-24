@@ -9,9 +9,6 @@
     tools:openDrawer="start">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -136,7 +133,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/tools_menu"
                     app:layout_constraintVertical_bias="0.051"
-                    app:srcCompat="@color/colorAccent" />
+                    app:srcCompat="@drawable/unfinished_button" />
 
                 <ImageView
                     android:id="@+id/imageView9"
@@ -153,7 +150,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/tools_menu"
                     app:layout_constraintVertical_bias="0.051"
-                    app:srcCompat="@color/colorAccent" />
+                    app:srcCompat="@drawable/unfinished_button" />
 
                 <ImageView
                     android:id="@+id/imageView10"
@@ -170,7 +167,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/tools_menu"
                     app:layout_constraintVertical_bias="0.051"
-                    app:srcCompat="@color/colorAccent" />
+                    app:srcCompat="@drawable/unfinished_button" />
 
                 <ImageView
                     android:id="@+id/imageView11"
@@ -187,7 +184,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/tools_menu"
                     app:layout_constraintVertical_bias="0.051"
-                    app:srcCompat="@color/colorAccent" />
+                    app:srcCompat="@drawable/unfinished_button" />
 
             </LinearLayout>
         </ScrollView>
@@ -196,9 +193,7 @@
 
     <!-- HERE BE NAVBAR -->
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".MenuActivities.TimerScreen">

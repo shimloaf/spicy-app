@@ -32,6 +32,7 @@ public class ToolsScreen extends AppCompatActivity
 
     final ToolsScreen t = this;
     boolean usingTool = false;
+    int menuItem = 0;
     ClamatoUtils c;
 
     @Override
@@ -52,8 +53,19 @@ public class ToolsScreen extends AppCompatActivity
         navigationView.getMenu().getItem(4).setChecked(true);
 
          c = new ClamatoUtils(this.getApplication());
+         menuItem = getIntent().getIntExtra("tool", 0);
          hideEverything();
          setUpMenu();
+
+         simpleTool t = simpleTool.menu;
+         if (menuItem == 1) {
+             t = simpleTool.screwdriver;
+             pullUpSimpleTool(t);
+             usingTool = false;
+         } else {
+             pullUpSimpleTool(t);
+         }
+
     }
 
     private void setUpMenu() {
@@ -83,7 +95,6 @@ public class ToolsScreen extends AppCompatActivity
                 startActivity(appBrowser);
             }
         });
-        pullUpSimpleTool(simpleTool.menu);
     }
 
     private void pullUpSimpleTool(simpleTool t) {
