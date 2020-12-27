@@ -1,5 +1,6 @@
 package com.qr.shimloaf.spicyclamatapp.MenuActivities;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -19,16 +20,13 @@ import com.qr.shimloaf.spicyclamatapp.ToolActivities.BuzzerScreen;
 import com.qr.shimloaf.spicyclamatapp.ToolActivities.NotesScreen;
 import com.qr.shimloaf.spicyclamatapp.Utility.ClamatoUtils;
 
-enum simpleTool {
-
-    screwdriver,
-    menu
-
-}
-
 public class ToolsScreen extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    enum simpleTool {
+        screwdriver,
+        menu
+    }
 
     final ToolsScreen t = this;
     boolean usingTool = false;
@@ -68,6 +66,7 @@ public class ToolsScreen extends AppCompatActivity
 
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private void setUpMenu() {
         ImageView screwdriverButton = findViewById(R.id.screwdriver_button);
         ImageView buzzerButton = findViewById(R.id.buzzer_button);
@@ -75,26 +74,26 @@ public class ToolsScreen extends AppCompatActivity
         screwdriverButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                c.quickVibe(50);
                 pullUpSimpleTool(simpleTool.screwdriver);
             }
         });
+        screwdriverButton.setOnTouchListener((c.setButtonEffectListener(screwdriverButton)));
         notesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                c.quickVibe(50);
                 Intent appBrowser = new Intent(t, NotesScreen.class);
                 startActivity(appBrowser);
             }
         });
+        notesButton.setOnTouchListener((c.setButtonEffectListener(notesButton)));
         buzzerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                c.quickVibe(50);
                 Intent appBrowser = new Intent(t, BuzzerScreen.class);
                 startActivity(appBrowser);
             }
         });
+        buzzerButton.setOnTouchListener((c.setButtonEffectListener(buzzerButton)));
     }
 
     private void pullUpSimpleTool(simpleTool t) {

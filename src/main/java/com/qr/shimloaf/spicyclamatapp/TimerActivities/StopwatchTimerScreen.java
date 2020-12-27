@@ -3,13 +3,14 @@ package com.qr.shimloaf.spicyclamatapp.TimerActivities;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
-import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.qr.shimloaf.spicyclamatapp.Utility.ClamatoUtils;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.qr.shimloaf.spicyclamatapp.R;
+import com.qr.shimloaf.spicyclamatapp.Utility.ClamatoUtils;
 
 public class StopwatchTimerScreen extends AppCompatActivity {
 
@@ -32,15 +33,14 @@ public class StopwatchTimerScreen extends AppCompatActivity {
         stopwatchToggle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                c.quickVibe(100);
                 clockToggle(!clockRunning);
             }
         });
+        stopwatchToggle.setOnTouchListener((c.setButtonEffectListener(stopwatchToggle)));
 
         stopwatchReset.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                c.quickVibe(50);
                 clockToggle(false);
                 millis = 0;
                 start = 0;
@@ -49,6 +49,7 @@ public class StopwatchTimerScreen extends AppCompatActivity {
                 changeClock();
             }
         });
+        stopwatchReset.setOnTouchListener((c.setButtonEffectListener(stopwatchReset)));
 
     }
 

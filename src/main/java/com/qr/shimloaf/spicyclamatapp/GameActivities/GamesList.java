@@ -16,7 +16,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
-import com.qr.shimloaf.spicyclamatapp.MenuActivities.SuggestionScreen;
 import com.qr.shimloaf.spicyclamatapp.R;
 import com.qr.shimloaf.spicyclamatapp.Utility.ClamatoUtils;
 
@@ -236,7 +235,7 @@ public class GamesList extends AppCompatActivity {
             holder.gameTitle.setText(game.getTitles()[0]);
 
             if (!holder.curated) {
-                holder.cardBackground.setImageDrawable(getDrawable(R.drawable.game_background2));
+                holder.cardBackground.setImageResource(R.drawable.game_background2);
                 holder.gameTagline.setVisibility(View.GONE);
                 if (game.hasCardInfo() == -1) {
                     holder.tags.setVisibility(View.GONE);
@@ -248,7 +247,7 @@ public class GamesList extends AppCompatActivity {
                     holder.tags.setText(game.getPlayersTag(true));
                 }
             } else {
-                holder.cardBackground.setImageDrawable(getDrawable(R.drawable.game_background));
+                holder.cardBackground.setImageResource(R.drawable.game_background);
                 holder.gameTagline.setVisibility(View.VISIBLE);
                 holder.tags.setVisibility(View.VISIBLE);
                 holder.gameTagline.setText("\"" + game.getRandomTagline() + "\"");
@@ -258,7 +257,6 @@ public class GamesList extends AppCompatActivity {
             holder.gameCard.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    c.quickVibe(50);
                     Intent gamesList = new Intent(getApplicationContext(), GameDisplay.class);
                     gamesList.putExtra("id", idDatabase[position].intValue());
                     gamesList.putExtra("fromFav", fromFav);

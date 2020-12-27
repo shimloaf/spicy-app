@@ -5,10 +5,7 @@ import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.VibrationEffect;
-import android.os.Vibrator;
 import android.view.GestureDetector;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -21,6 +18,7 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
@@ -48,40 +46,6 @@ public class SuggestionScreen extends AppCompatActivity
 
     }
 
-    enum screenState {
-        prime,
-        expanded,
-        suggDisplay,
-        menuUpPrime,
-        menuUpExpanded
-    }
-
-    ClamatoUtils c;
-    sType currType = sType.emotion;
-
-    static class ButtonData {
-        Integer drawableId;
-        Integer arrayId;
-        String name;
-
-        ButtonData(Integer a_drawable, Integer a_array, String a_name) {
-            drawableId = a_drawable;
-            arrayId = a_array;
-            name = a_name;
-        }
-
-        ButtonData(Integer a_array, String a_name) {
-            arrayId = a_array;
-            name = a_name;
-            drawableId = -1;
-        }
-
-    }
-
-    /*
-      Managing suggestion types
-    */
-    HashMap<sType, ButtonData> types = new HashMap<>();
     private void setUpTypes() {
 
         ButtonData emotionButton = new ButtonData(R.drawable.emotion_button, R.array.emotions, "Emotion");
@@ -91,7 +55,7 @@ public class SuggestionScreen extends AppCompatActivity
         ButtonData grabBagButton = new ButtonData(R.drawable.grab_bag_button, R.array.grab_bag, "Grab Bag");
         ButtonData relationshipButton = new ButtonData(R.drawable.relationship_button, R.array.relationship, "Relationship");
         ButtonData duoButton = new ButtonData(R.drawable.duo_button, R.array.duo, "Famous Duo");
-        ButtonData ssugButton = new ButtonData(R.drawable.ssugg_button, R.array.ssuggs, "Suggest a Suggestion");
+        ButtonData ssugButton = new ButtonData(R.drawable.ssugg_button, R.array.ssuggs, "Suggestion Types");
 
         types.put(sType.emotion, emotionButton);
         types.put(sType.location, locationButton);
@@ -103,122 +67,6 @@ public class SuggestionScreen extends AppCompatActivity
         types.put(sType.ssugg, ssugButton);
     }
 
-    private void setSuggestionContent() {
-        TextView suggestion = findViewById(R.id.suggestion_text);
-        String c = "";
-        String[] possibleSuggestions;
-        try {
-            possibleSuggestions = getResources().getStringArray(types.get(currType).arrayId);
-
-        } catch (NullPointerException e) {
-            Toast.makeText(this, "David Hopping messed up. Tell him that. Code's buggy as f***.", Toast.LENGTH_SHORT).show();
-            possibleSuggestions = getResources().getStringArray(R.array.duo);
-        }
-
-        if (currType == sType.ssugg) {
-            c = "Ask for a suggestion of:\n";
-        }
-
-        c = c + (possibleSuggestions[(int)(Math.random()*possibleSuggestions.length)]);
-        c = c + "!";
-        suggestion.setText(c);
-    }
-
-    /*
-      State manipulation
-    */
-    @SuppressLint("ClickableViewAccessibility")
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_suggestion);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
-
-        NavigationView navigationView = findViewById(R.id.nav_view);
-        NavigationView full_nav = findViewById(R.id.full_menu);
-        navigationView.setNavigationItemSelectedListener(this);
-        navigationView.getMenu().getItem(2).setChecked(true);
-        full_nav.setNavigationItemSelectedListener(this);
-        c = new ClamatoUtils(this.getApplication());
-        setUpTypes();
-
-        final GestureDetector sButtonHandler = new GestureDetector(this, new SuggestionGesture());
-        ConstraintLayout rlayout = findViewById(R.id.main);
-        rlayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (status == screenState.expanded) {
-                    changeScreen(screenState.prime);
-                } else if (status == screenState.menuUpPrime) {
-                    changeScreen(screenState.prime);
-                } else if (status == screenState.menuUpExpanded) {
-                    changeScreen(screenState.expanded);
-                }
-            }
-        });
-        
-        ImageView image = findViewById(R.id.suggestion_button);
-        image.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                return sButtonHandler.onTouchEvent(event);
-            }
-        });
-
-        ImageView retry = findViewById(R.id.retry_button);
-        retry.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setSuggestionContent();
-            }
-        });
-
-        ImageView reset = findViewById(R.id.reset_button);
-        reset.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                changeScreen(screenState.prime);
-            }
-        });
-
-        ImageView[] miniButtons = getButtons();
-        final GestureDetector miniHandler = new GestureDetector(this, new smallSuggestionGesture(this));
-
-        for (final ImageView miniButton : miniButtons) {
-             miniButton.setOnTouchListener(new View.OnTouchListener() {
-                @Override
-                public boolean onTouch(View v, MotionEvent event) {
-                    currType = (sType) miniButton.getTag();
-                    return miniHandler.onTouchEvent(event);
-                }
-            });
-        }
-
-    }
-
-    //Back button behavior
-    @Override
-    public void onBackPressed() {
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else if (status == screenState.expanded || status == screenState.suggDisplay || status == screenState.menuUpExpanded){
-            changeScreen(screenState.prime);
-        } else if (status == screenState.menuUpPrime) {
-            changeScreen(screenState.expanded);
-        } else {
-            super.onBackPressed();
-        }
-    }
-
-    //Provides full menu interaction and drawer nav
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
 
@@ -278,43 +126,70 @@ public class SuggestionScreen extends AppCompatActivity
         return true;
     }
 
-    //Controls main button input
+    /*
+    / Above is all that needs to be modified to add a new type of suggestion.
+    / Below is unlikely to change often.
+    */
+
+    static class ButtonData {
+        Integer drawableId;
+        Integer arrayId;
+        String name;
+
+        ButtonData(Integer a_drawable, Integer a_array, String a_name) {
+            drawableId = a_drawable;
+            arrayId = a_array;
+            name = a_name;
+        }
+
+    }
+
+    enum screenState {
+        prime,
+        expanded,
+        suggDisplay,
+        menuUpPrime,
+        menuUpExpanded
+    }
+
+    ClamatoUtils c;
+
+    NavigationView navigationView;
+    NavigationView fullMenu;
+    ConstraintLayout rLayout;
+    ImageView suggestionButton;
+    ImageView retryButton;
+    ImageView resetButton;
+    TextView suggestionText;
+
+    sType currType = sType.emotion;
+    screenState status = screenState.prime;
+
+    boolean shouldRandomize = false;
+
+    HashMap<sType, ButtonData> types = new HashMap<>();
+    HashMap<sType, Boolean> used = resetUsed();
+
     class SuggestionGesture extends GestureDetector.SimpleOnGestureListener {
 
-        @Override
-        public boolean onDown(MotionEvent e) {
-            ImageView suggestionButton = findViewById(R.id.suggestion_button);
-            if (status == screenState.prime){
-                suggestionButton.setImageResource(R.drawable.question_button_depressed);
-            } else if (status == screenState.expanded) {
-                suggestionButton.setImageResource(R.drawable.happy_button_depressed);
-            }
-            return true;
-        }
-
-        public boolean onFling (MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-            ImageView suggestionButton = findViewById(R.id.suggestion_button);
-            if (status == screenState.prime) {
-                suggestionButton.setImageResource(R.drawable.question_button);
-            } else if (status == screenState.expanded) {
-                suggestionButton.setImageResource(R.drawable.happy_button);
-            }
-            return true;
-        }
-
-        public boolean onSingleTapUp (MotionEvent e) {
+        public boolean onSingleTapUp(MotionEvent e) {
+            c.quickVibe(50);
             if (status == screenState.expanded) {
-                ArrayList<sType> possibleTypes = new ArrayList<>(EnumSet.allOf(sType.class));
-                currType = possibleTypes.get((int)(Math.random() * possibleTypes.size()));
+                shouldRandomize = true;
                 changeScreen(screenState.suggDisplay);
-            } else if (status == screenState.prime){
+            } else if (status == screenState.prime) {
                 changeScreen(screenState.expanded);
             }
             return true;
         }
 
+        public boolean onDoubleTap(MotionEvent e) {
+            return onSingleTapUp(e);
+        }
+
         @Override
         public void onLongPress(MotionEvent e) {
+            c.quickVibe(50);
             if (status == screenState.prime) {
                 changeScreen(screenState.menuUpPrime);
             } else {
@@ -324,13 +199,14 @@ public class SuggestionScreen extends AppCompatActivity
 
     }
 
-    //Controls Small Button Input
     class smallSuggestionGesture extends GestureDetector.SimpleOnGestureListener {
 
         Context cText;
+        ImageView button;
 
-        smallSuggestionGesture(Context a_cText) {
+        smallSuggestionGesture(Context a_cText, ImageView pButton) {
             cText = a_cText;
+            button = pButton;
         }
 
         public boolean onSingleTapUp (MotionEvent e) {
@@ -341,32 +217,151 @@ public class SuggestionScreen extends AppCompatActivity
 
         @Override
         public void onLongPress(MotionEvent e) {
-            String type;
-            type = types.get(currType).name;
+            String type = types.get(currType).name;
             Toast.makeText(cText, type, Toast.LENGTH_SHORT).show();
             c.quickVibe(50);
         }
 
     }
 
-    /*
-    // State behavior
-    */
+    @SuppressLint("ClickableViewAccessibility")
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_suggestion);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
-    //State machine changes
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+
+        navigationView = findViewById(R.id.nav_view);
+        fullMenu = findViewById(R.id.full_menu);
+        navigationView.setNavigationItemSelectedListener(this);
+        navigationView.getMenu().getItem(2).setChecked(true);
+        fullMenu.setNavigationItemSelectedListener(this);
+        c = new ClamatoUtils(this.getApplication());
+        setUpTypes();
+
+        suggestionText = findViewById(R.id.suggestion_text);
+
+        final GestureDetector sButtonHandler = new GestureDetector(this, new SuggestionGesture());
+
+        rLayout = findViewById(R.id.main);
+        rLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (status == screenState.expanded) {
+                    changeScreen(screenState.prime);
+                } else if (status == screenState.menuUpPrime) {
+                    changeScreen(screenState.prime);
+                } else if (status == screenState.menuUpExpanded) {
+                    changeScreen(screenState.expanded);
+                }
+            }
+        });
+
+        suggestionButton = findViewById(R.id.suggestion_button);
+        suggestionButton.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                int action = event.getAction();
+                if (action == MotionEvent.ACTION_DOWN) {
+                    if (status == screenState.prime) {
+                        suggestionButton.setImageResource(R.drawable.question_button_depressed);
+                    } else if (status == screenState.expanded) {
+                        suggestionButton.setImageResource(R.drawable.happy_button_depressed);
+                    }
+                } else if (action == MotionEvent.ACTION_UP) {
+                    if (status == screenState.prime) {
+                        suggestionButton.setImageResource(R.drawable.question_button);
+                    } else if (status == screenState.expanded) {
+                        suggestionButton.setImageResource(R.drawable.happy_button);
+                    }
+                }
+                sButtonHandler.onTouchEvent(event);
+                return true;
+            }
+        });
+
+        retryButton = findViewById(R.id.retry_button);
+        retryButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setSuggestionContent();
+            }
+        });
+
+        retryButton.setOnTouchListener((c.setButtonEffectListener(retryButton)));
+
+        resetButton = findViewById(R.id.reset_button);
+        resetButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                changeScreen(screenState.prime);
+            }
+        });
+        resetButton.setOnTouchListener((c.setButtonEffectListener(resetButton)));
+
+        ImageView[] miniButtons = getMiniButtons();
+        for (final ImageView miniButton : miniButtons) {
+            final GestureDetector miniHandler = new GestureDetector(this, new smallSuggestionGesture(this, miniButton));
+            miniButton.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+
+                    int action = event.getAction();
+                    if (action == MotionEvent.ACTION_DOWN) {
+                        miniButton.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.suggestionButtonPressed), android.graphics.PorterDuff.Mode.MULTIPLY);
+                    } else if (action == MotionEvent.ACTION_UP) {
+                        miniButton.clearColorFilter();
+                    }
+
+                    currType = (sType) miniButton.getTag();
+                    return miniHandler.onTouchEvent(event);
+                }
+            });
+        }
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else if (status == screenState.expanded || status == screenState.suggDisplay || status == screenState.menuUpExpanded) {
+            changeScreen(screenState.prime);
+        } else if (status == screenState.menuUpPrime) {
+            changeScreen(screenState.expanded);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    private void setSuggestionContent() {
+
+        if (shouldRandomize) {
+            ArrayList<sType> possibleTypes = new ArrayList<>(EnumSet.allOf(sType.class));
+            currType = possibleTypes.get((int) (Math.random() * possibleTypes.size()));
+        }
+
+        String[] possibleSuggestions = getResources().getStringArray(types.get(currType).arrayId);
+        suggestionText.setText(String.format("%s!", possibleSuggestions[(int) (Math.random() * possibleSuggestions.length)]));
+    }
+
     private void changeScreen(screenState next) {
 
-        NavigationView fullMenu = findViewById(R.id.full_menu);
-        ImageView suggestionButton = findViewById(R.id.suggestion_button);
-        ImageView[] images = getButtons();
-        ImageView retryButton = findViewById(R.id.retry_button);
-        ImageView resetButton = findViewById(R.id.reset_button);
-        TextView suggestion = findViewById(R.id.suggestion_text);
+        ImageView[] images = getMiniButtons();
 
-        //View Visibility Changes and Icon Changes
+        if (next != screenState.suggDisplay && shouldRandomize) {
+            shouldRandomize = false;
+        }
 
         clearFullMenu();
-
         if (next != screenState.suggDisplay) {
             suggestionButton.setVisibility(View.VISIBLE);
         } else {
@@ -378,19 +373,22 @@ public class SuggestionScreen extends AppCompatActivity
             for (ImageView i : images) {
                 i.setVisibility(View.VISIBLE);
             }
-        } else if (next != screenState.prime){
+        } else {
             suggestionButton.setImageResource(R.drawable.question_button);
-            for (ImageView i : images) {
-                i.setVisibility(View.INVISIBLE);
+            animateButtons(false);
+            if (next != screenState.prime) {
+                for (ImageView i : images) {
+                    i.setVisibility(View.INVISIBLE);
+                }
             }
         }
 
         if (next == screenState.suggDisplay) {
-            suggestion.setVisibility(View.VISIBLE);
+            suggestionText.setVisibility(View.VISIBLE);
             retryButton.setVisibility(View.VISIBLE);
             resetButton.setVisibility(View.VISIBLE);
         } else {
-            suggestion.setVisibility(View.INVISIBLE);
+            suggestionText.setVisibility(View.INVISIBLE);
             retryButton.setVisibility(View.INVISIBLE);
             resetButton.setVisibility(View.INVISIBLE);
         }
@@ -402,43 +400,22 @@ public class SuggestionScreen extends AppCompatActivity
         }
 
         //Extra state changes
-
-        if (next == screenState.menuUpExpanded || next == screenState.menuUpPrime) {
-            Vibrator vibe = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                vibe.vibrate(VibrationEffect.createOneShot(100, VibrationEffect.DEFAULT_AMPLITUDE));
-            }
-        } else if (next == screenState.expanded && status == screenState.prime) {
-            animateButtons(true);
-            for (ImageView i: images) {
+        used = resetUsed();
+        if (next == screenState.prime) {
+            suggestionButton.setImageResource(R.drawable.question_button);
+        } else if (next == screenState.expanded) {
+            for (ImageView i : images) {
                 assignImageToButton(i);
             }
+            if (status == screenState.prime) {
+                animateButtons(true);
+            }
             suggestionButton.setImageResource(R.drawable.happy_button);
-        } else if (next == screenState.prime) {
-            animateButtons(false);
-            suggestionButton.setImageResource(R.drawable.question_button);
-            used = resetUsed();
         } else if (next == screenState.suggDisplay) {
             setSuggestionContent();
         }
 
         status = next;
-    }
-    screenState status = screenState.prime;
-
-    //Button random selection methods
-    HashMap<sType, Boolean> used = resetUsed();
-    private ImageView[] getButtons() {
-
-        ImageView[] images = new ImageView[6];
-        images[0] = findViewById(R.id.option1);
-        images[1] = findViewById(R.id.option2);
-        images[2] = findViewById(R.id.option3);
-        images[3] = findViewById(R.id.option4);
-        images[4] = findViewById(R.id.option5);
-        images[5] = findViewById(R.id.option6);
-
-        return images;
     }
 
     private void assignImageToButton(ImageView image) {
@@ -452,15 +429,7 @@ public class SuggestionScreen extends AppCompatActivity
         }
 
         int pos = (int) (Math.random() * possibleTypes.size());
-        int imageResource;
-        try {
-            imageResource = types.get(possibleTypes.get(pos)).drawableId;
-        } catch (NullPointerException e) {
-            Toast.makeText(this, "David Hopping messed up. Tell him that. Code's buggy as f***.", Toast.LENGTH_SHORT).show();
-            imageResource = R.drawable.duo_button;
-
-        }
-        image.setImageResource(imageResource);
+        image.setImageResource(types.get(possibleTypes.get(pos)).drawableId);
         image.setTag(possibleTypes.get(pos));
         used.put(possibleTypes.get(pos), true);
     }
@@ -468,19 +437,14 @@ public class SuggestionScreen extends AppCompatActivity
     private HashMap<sType,Boolean> resetUsed() {
         HashMap<sType, Boolean> ret = new HashMap<>();
         for (sType suggType : EnumSet.allOf(sType.class)) {
-            if (suggType == sType.ssugg) {
-                ret.put(suggType, true);
-            } else {
-                ret.put(suggType, false);
-            }
+            ret.put(suggType, false);
         }
         return ret;
     }
 
     private void animateButtons(boolean expand) {
 
-        ImageView suggestionButton = findViewById(R.id.suggestion_button);
-        ImageView[] images = getButtons();
+        ImageView[] images = getMiniButtons();
 
         float[] posX = new float[6];
         posX[0] = 500f;
@@ -502,21 +466,23 @@ public class SuggestionScreen extends AppCompatActivity
 
         if (expand) {
             for (int n = 0; n < 6; n++) {
+                images[n].clearColorFilter();
                 AnimatorSet expander = new AnimatorSet();
                 ObjectAnimator xAnimation = ObjectAnimator.ofFloat(images[n], "translationX", posX[n]);
                 xAnimation.setDuration(500);
                 ObjectAnimator yAnimation = ObjectAnimator.ofFloat(images[n], "translationY", posY[n]);
-                xAnimation.setDuration(500);
+                yAnimation.setDuration(500);
                 expander.play(xAnimation).with(yAnimation);
                 expander.start();
             }
         } else {
-            for (ImageView i: images) {
+            for (int n = 0; n < 6; n++) {
+                images[n].clearColorFilter();
                 AnimatorSet closer = new AnimatorSet();
-                ObjectAnimator xAnimation = ObjectAnimator.ofFloat(i, "translationX", xPos);
+                ObjectAnimator xAnimation = ObjectAnimator.ofFloat(images[n], "translationX", xPos);
                 xAnimation.setDuration(500);
-                ObjectAnimator yAnimation = ObjectAnimator.ofFloat(i, "translationY", yPos);
-                xAnimation.setDuration(500);
+                ObjectAnimator yAnimation = ObjectAnimator.ofFloat(images[n], "translationY", yPos);
+                yAnimation.setDuration(500);
                 closer.play(xAnimation).with(yAnimation);
                 closer.start();
             }
@@ -524,10 +490,22 @@ public class SuggestionScreen extends AppCompatActivity
     }
 
     private void clearFullMenu() {
-        NavigationView full_nav = findViewById(R.id.full_menu);
         for (int n = 0; n < used.size(); n++) {
-            full_nav.getMenu().getItem(n).setChecked(false);
+            fullMenu.getMenu().getItem(n).setChecked(false);
         }
+    }
+
+    private ImageView[] getMiniButtons() {
+
+        ImageView[] images = new ImageView[6];
+        images[0] = findViewById(R.id.option1);
+        images[1] = findViewById(R.id.option2);
+        images[2] = findViewById(R.id.option3);
+        images[3] = findViewById(R.id.option4);
+        images[4] = findViewById(R.id.option5);
+        images[5] = findViewById(R.id.option6);
+
+        return images;
     }
 }
 

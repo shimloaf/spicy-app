@@ -52,17 +52,6 @@
                     app:layout_constraintVertical_bias="0.051"
                     app:srcCompat="@android:color/background_light" />
 
-                <TextView
-                    android:id="@+id/padding_text2"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:text="Quick Tools"
-                    android:textColor="@color/ic_launcher_background"
-                    android:textSize="30sp"
-                    app:fontFamily="@font/seguibl" />
-
                 <ImageView
                     android:id="@+id/notepad_button"
                     android:layout_width="match_parent"

@@ -57,14 +57,13 @@ public class HalfLifeTimerScreen extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 resetClock();
-                c.quickVibe(50);
             }
         });
+        resetButton.setOnTouchListener((c.setButtonEffectListener(resetButton)));
 
         playButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                c.quickVibe(50);
                 if (millis > 100) {
                     clockToggle(true);
                     millis = topValue;
@@ -72,6 +71,7 @@ public class HalfLifeTimerScreen extends AppCompatActivity {
                 }
             }
         });
+        playButton.setOnTouchListener((c.setButtonEffectListener(playButton)));
 
         halfTimeButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,7 +79,6 @@ public class HalfLifeTimerScreen extends AppCompatActivity {
                 halfTimeButton.setImageDrawable(getDrawable(R.drawable.half_button_depressed));
                 halfTime();
                 updateClock();
-                c.quickVibe(50);
                 Handler buttonHandler = new Handler();
                 Runnable undoButton = new Runnable() {
                     public void run() {
@@ -98,11 +97,11 @@ public class HalfLifeTimerScreen extends AppCompatActivity {
                 clockToggle(false);
                 millis = topValue;
                 updateClock();
-                c.quickVibe(50);
                 animateBar.cancel();
                 sendBarToStart();
             }
         });
+        abortButton.setOnTouchListener((c.setButtonEffectListener(abortButton)));
 
         explosion.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -139,7 +138,7 @@ public class HalfLifeTimerScreen extends AppCompatActivity {
         millis = topValue;
 
         if (topValue / 2 < 100) {
-            halfTimeButton.setImageDrawable(getDrawable(R.drawable.half_button_danger));
+            halfTimeButton.setImageResource(R.drawable.half_button_danger);
         }
 
         sendBarToStart();

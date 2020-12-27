@@ -1,5 +1,6 @@
 package com.qr.shimloaf.spicyclamatapp.MenuActivities;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -22,6 +23,7 @@ public class GamerScreen extends AppCompatActivity
 
     ClamatoUtils c;
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,63 +52,63 @@ public class GamerScreen extends AppCompatActivity
         gamesListButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                c.quickVibe(50);
                 Intent gamesList = new Intent(getApplicationContext(), GamesList.class);
                 gamesList.putExtra("mode", "master_list");
                 gamesList.putExtra("filter", 0);
                 startActivity(gamesList);
             }
         });
+        gamesListButton.setOnTouchListener((c.setButtonEffectListener(gamesListButton)));
         shortFormButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                c.quickVibe(50);
                 Intent gamesList = new Intent(getApplicationContext(), GamesList.class);
                 gamesList.putExtra("mode", "none");
                 gamesList.putExtra("filter", 1);
                 startActivity(gamesList);
             }
         });
+        shortFormButton.setOnTouchListener((c.setButtonEffectListener(shortFormButton)));
         longFormButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                c.quickVibe(50);
                 Intent gamesList = new Intent(getApplicationContext(), GamesList.class);
                 gamesList.putExtra("mode", "none");
                 gamesList.putExtra("filter", 2);
                 startActivity(gamesList);
             }
         });
+        longFormButton.setOnTouchListener((c.setButtonEffectListener(longFormButton)));
         warmupButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                c.quickVibe(50);
                 Intent gamesList = new Intent(getApplicationContext(), GamesList.class);
                 gamesList.putExtra("mode", "none");
                 gamesList.putExtra("filter", 3);
                 startActivity(gamesList);
             }
         });
+        warmupButton.setOnTouchListener((c.setButtonEffectListener(warmupButton)));
         bookmarkButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                c.quickVibe(50);
                 Intent gamesList = new Intent(getApplicationContext(), GamesList.class);
                 gamesList.putExtra("mode", "bookmarks");
                 gamesList.putExtra("filter", 4);
                 startActivity(gamesList);
             }
         });
+        bookmarkButton.setOnTouchListener((c.setButtonEffectListener(bookmarkButton)));
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                c.quickVibe(50);
                 Intent gamesList = new Intent(getApplicationContext(), GamesList.class);
                 gamesList.putExtra("mode", "search");
                 gamesList.putExtra("filter", 0);
                 startActivity(gamesList);
             }
         });
+        searchButton.setOnTouchListener((c.setButtonEffectListener(searchButton)));
     }
 
     @Override

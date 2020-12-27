@@ -6,18 +6,18 @@ import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
-import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
 import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import com.qr.shimloaf.spicyclamatapp.R;
 
@@ -692,5 +692,26 @@ public class ClamatoUtils extends AppCompatActivity {
         }
 
         return ret.toString();
+    }
+
+    public View.OnTouchListener setButtonEffectListener(final ImageView toSet) {
+
+        return new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+
+                int action = event.getAction();
+                if (action == MotionEvent.ACTION_DOWN) {
+                    quickVibe(50);
+                    (toSet).setColorFilter(ContextCompat.getColor(a, R.color.colorMenu), android.graphics.PorterDuff.Mode.MULTIPLY);
+                } else if (action == MotionEvent.ACTION_UP) {
+                    (toSet).clearColorFilter();
+                } else if (action == MotionEvent.ACTION_CANCEL) {
+                    (toSet).clearColorFilter();
+                }
+
+                return toSet.onTouchEvent(event);
+            }
+        };
     }
 }

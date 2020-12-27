@@ -1,13 +1,10 @@
 package com.qr.shimloaf.spicyclamatapp.GameActivities;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.animation.AlphaAnimation;
-import android.view.animation.Animation;
-import android.view.animation.LinearInterpolator;
-import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -43,6 +40,7 @@ public class GameDisplay extends AppCompatActivity {
     String taglineString;
     String blurbString;
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,9 +92,9 @@ public class GameDisplay extends AppCompatActivity {
         }
 
         if (isInFavorites()) {
-            favoriteButton.setImageDrawable(getDrawable(R.drawable.bookmarked_button));
+            favoriteButton.setImageResource(R.drawable.bookmarked_button);
         } else {
-            favoriteButton.setImageDrawable(getDrawable(R.drawable.unbookmarked_button));
+            favoriteButton.setImageResource(R.drawable.unbookmarked_button);
         }
 
         favoriteButton.setOnClickListener(new View.OnClickListener() {
@@ -105,9 +103,9 @@ public class GameDisplay extends AppCompatActivity {
                 c.quickVibe(50);
                 toggleNoteFavorite();
                 if (isInFavorites()) {
-                    favoriteButton.setImageDrawable(getDrawable(R.drawable.bookmarked_button));
+                    favoriteButton.setImageResource(R.drawable.bookmarked_button);
                 } else {
-                    favoriteButton.setImageDrawable(getDrawable(R.drawable.unbookmarked_button));
+                    favoriteButton.setImageResource(R.drawable.unbookmarked_button);
                 }
             }
         });
@@ -115,19 +113,19 @@ public class GameDisplay extends AppCompatActivity {
         mysteryButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                c.quickVibe(50);
                 mysteryButton();
             }
         });
+        mysteryButton.setOnTouchListener((c.setButtonEffectListener(mysteryButton)));
 
         shuffleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                c.quickVibe(50);
                 shuffleFacts();
                 c.quickRotateImageView(shuffleButton, 100);
             }
         });
+        shuffleButton.setOnTouchListener((c.setButtonEffectListener(shuffleButton)));
 
     }
 

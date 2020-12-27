@@ -69,9 +69,9 @@ public class TenInSixtyTimerScreen extends AppCompatActivity {
                 resetPips();
                 nextMark = 60000 - (60000 / amount);
 
-                c.quickVibe(50);
             }
         });
+        resetButton.setOnTouchListener((c.setButtonEffectListener(resetButton)));
 
         playButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,7 +82,6 @@ public class TenInSixtyTimerScreen extends AppCompatActivity {
                     switchDisplay.setTextColor(getResources().getColor(R.color.displayColorGreen, getTheme()));
                     nextMark = 60000 - (60000 / amount);
                 }
-                c.quickVibe(50);
                 clockToggle(!clockRunning);
                 if (clockRunning) {
                     playButton.setImageDrawable(getDrawable(R.drawable.pause_button_small));
@@ -95,6 +94,7 @@ public class TenInSixtyTimerScreen extends AppCompatActivity {
                 }
             }
         });
+        playButton.setOnTouchListener((c.setButtonEffectListener(playButton)));
     }
 
     @Override

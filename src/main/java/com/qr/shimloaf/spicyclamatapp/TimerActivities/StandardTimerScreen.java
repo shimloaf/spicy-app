@@ -6,15 +6,14 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
-
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.qr.shimloaf.spicyclamatapp.Utility.ClamatoUtils;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.qr.shimloaf.spicyclamatapp.R;
+import com.qr.shimloaf.spicyclamatapp.Utility.ClamatoUtils;
 
 public class StandardTimerScreen extends AppCompatActivity {
 
@@ -43,24 +42,24 @@ public class StandardTimerScreen extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 incrementClock(1);
-                c.quickVibe(50);
             }
         });
+        oneMinuteButton.setOnTouchListener((c.setButtonEffectListener(oneMinuteButton)));
         twoMinuteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 incrementClock(2);
-                c.quickVibe(50);
             }
         });
+        twoMinuteButton.setOnTouchListener((c.setButtonEffectListener(twoMinuteButton)));
 
         fiveMinuteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 incrementClock(5);
-                c.quickVibe(50);
             }
         });
+        fiveMinuteButton.setOnTouchListener((c.setButtonEffectListener(fiveMinuteButton)));
 
         cancelTimerButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -69,9 +68,9 @@ public class StandardTimerScreen extends AppCompatActivity {
                 millis = 0;
                 changeClock();
                 clockToggle(false);
-                c.quickVibe(50);
             }
         });
+        cancelTimerButton.setOnTouchListener((c.setButtonEffectListener(cancelTimerButton)));
 
         resetTimerButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,16 +79,15 @@ public class StandardTimerScreen extends AppCompatActivity {
                 millis = savedMillis;
                 changeClock();
                 clockToggle(false);
-                c.quickVibe(50);
             }
         });
+        resetTimerButton.setOnTouchListener((c.setButtonEffectListener(resetTimerButton)));
 
         clockToggleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 shouldSave = false;
-                c.quickVibe(100);
                 TextView clockDisplay = findViewById(R.id.clockDisplay);
                 if (millis == 0) {
                     clockDisplay.setText("OO:OO");
@@ -98,11 +96,13 @@ public class StandardTimerScreen extends AppCompatActivity {
                 }
             }
         });
+        clockToggleButton.setOnTouchListener((c.setButtonEffectListener(clockToggleButton)));
 
     }
 
     @Override
     public void onBackPressed() {
+        stopClock();
         super.onBackPressed();
     }
 
