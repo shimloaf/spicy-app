@@ -8,7 +8,6 @@ import android.view.View;
 import android.widget.ImageView;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -16,18 +15,21 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import com.google.android.material.navigation.NavigationView;
 import com.qr.shimloaf.spicyclamatapp.GameActivities.GamesList;
 import com.qr.shimloaf.spicyclamatapp.R;
+import com.qr.shimloaf.spicyclamatapp.Utility.BaseActivity;
 import com.qr.shimloaf.spicyclamatapp.Utility.ClamatoUtils;
 
-public class GamerScreen extends AppCompatActivity
+public class GamerScreen extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    ClamatoUtils c;
+    protected int getLayoutResourceId() {
+        return R.layout.activity_games;
+    }
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_games);
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -116,43 +118,19 @@ public class GamerScreen extends AppCompatActivity
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
+        } else if (!backPressed) {
+            drawer.openDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
         }
+        backPressed = true;
     }
 
 
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
-        int id = item.getItemId();
-
-        if (id == R.id.nav_home) {
-            Intent appBrowser = new Intent(this, HomeScreen.class);
-            appBrowser.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(appBrowser);
-        } else if (id == R.id.nav_suggestion) {
-            Intent appBrowser = new Intent(this, SuggestionScreen.class);
-            appBrowser.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(appBrowser);
-        } else if (id == R.id.nav_timer) {
-            Intent appBrowser = new Intent(this, TimerScreen.class);
-            appBrowser.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(appBrowser);
-        } else if (id == R.id.nav_tools) {
-            Intent appBrowser = new Intent(this, ToolsScreen.class);
-            appBrowser.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(appBrowser);
-        } else if (id == R.id.nav_showbuilder) {
-
-        } else if (id == R.id.nav_credits) {
-            Intent appBrowser = new Intent(this, CreditsScreen.class);
-            appBrowser.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(appBrowser);
-        }
-
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
+        c.navigateDrawer(item.getItemId(), getApplicationContext());
+        ((DrawerLayout) findViewById(R.id.drawer_layout)).closeDrawer(GravityCompat.START);
         return true;
     }
 

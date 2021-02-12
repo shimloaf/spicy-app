@@ -11,29 +11,34 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 
 import com.qr.shimloaf.spicyclamatapp.R;
-import com.qr.shimloaf.spicyclamatapp.Utility.ClamatoUtils;
+import com.qr.shimloaf.spicyclamatapp.Utility.BaseActivity;
 
-public class TenInSixtyTimerScreen extends AppCompatActivity {
+public class TenInSixtyTimerScreen extends BaseActivity {
+
+    protected int getLayoutResourceId() {
+        return R.layout.gauntlet_timer;
+    }
 
     long millis = 60000;
     boolean clockRunning = false;
     long nextMark;
     int amount;
     CountDownTimer clock;
-    ClamatoUtils c;
     TextView switchDisplay;
     ImageView[] pips = new ImageView[9];
     int pipNum = 0;
     ImageView playButton;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.gauntlet_timer);
-        c = new ClamatoUtils(this.getApplication());
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         amount = 10;
         nextMark = 60000 - (60000 / amount);
@@ -44,6 +49,12 @@ public class TenInSixtyTimerScreen extends AppCompatActivity {
         ImageView resetButton = findViewById(R.id.ts_reset_button);
         switchDisplay = findViewById(R.id.ts_switch_text);
         switchDisplay.setText("BEGIN");
+
+        if (c.isColorblindMode()) {
+            switchDisplay.setTextColor(getResources().getColor(R.color.magenta_colorblind, getTheme()));
+            TextView clockDisplay = findViewById(R.id.ts_time);
+            clockDisplay.setTextColor(getResources().getColor(R.color.magenta_colorblind, getTheme()));
+        }
 
         pips[0] = findViewById(R.id.pip1);
         pips[1] = findViewById(R.id.pip2);
@@ -59,7 +70,11 @@ public class TenInSixtyTimerScreen extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                switchDisplay.setTextColor(getResources().getColor(R.color.displayColorGreen, getTheme()));
+                if (c.isColorblindMode()) {
+                    switchDisplay.setTextColor(getResources().getColor(R.color.magenta_colorblind, getTheme()));
+                } else {
+                    switchDisplay.setTextColor(getResources().getColor(R.color.bright_green, getTheme()));
+                }
                 switchDisplay.setText("BEGIN");
                 switchDisplay.setVisibility(View.VISIBLE);
 
@@ -79,7 +94,13 @@ public class TenInSixtyTimerScreen extends AppCompatActivity {
                 if (millis < 100) {
                     resetClock();
                     resetPips();
-                    switchDisplay.setTextColor(getResources().getColor(R.color.displayColorGreen, getTheme()));
+
+                    if (c.isColorblindMode()) {
+                        switchDisplay.setTextColor(getResources().getColor(R.color.magenta_colorblind, getTheme()));
+                    } else {
+                        switchDisplay.setTextColor(getResources().getColor(R.color.bright_green, getTheme()));
+                    }
+
                     nextMark = 60000 - (60000 / amount);
                 }
                 clockToggle(!clockRunning);
@@ -88,7 +109,13 @@ public class TenInSixtyTimerScreen extends AppCompatActivity {
                     switchDisplay.setVisibility(View.INVISIBLE);
                 } else {
                     playButton.setImageDrawable(getDrawable(R.drawable.play_button_small));
-                    switchDisplay.setTextColor(getResources().getColor(R.color.displayColorGreen, getTheme()));
+
+                    if (c.isColorblindMode()) {
+                        switchDisplay.setTextColor(getResources().getColor(R.color.magenta_colorblind, getTheme()));
+                    } else {
+                        switchDisplay.setTextColor(getResources().getColor(R.color.bright_green, getTheme()));
+                    }
+
                     switchDisplay.setText("RESUME");
                     switchDisplay.setVisibility(View.VISIBLE);
                 }
@@ -106,8 +133,6 @@ public class TenInSixtyTimerScreen extends AppCompatActivity {
 
     private void updateClock() {
         TextView clockDisplay = findViewById(R.id.ts_time);
-
-        long seconds = millis / 1000;
 
         String time = Long.toString(millis);
         if (millis >= 10000) {
@@ -134,7 +159,11 @@ public class TenInSixtyTimerScreen extends AppCompatActivity {
 
     private void flashMessage(String s) {
         switchDisplay.setText(s);
-        switchDisplay.setTextColor(getResources().getColor(R.color.displayColorRed, getTheme()));
+        if (c.isColorblindMode()) {
+            switchDisplay.setTextColor(getResources().getColor(R.color.magenta_colorblind, getTheme()));
+        } else {
+            switchDisplay.setTextColor(getResources().getColor(R.color.bright_red, getTheme()));
+        }
         switchDisplay.setVisibility(View.VISIBLE);
 
         Handler flashHandler = new Handler();
@@ -154,7 +183,11 @@ public class TenInSixtyTimerScreen extends AppCompatActivity {
         }
         if (millis < 100) {
             for (int n = 0; n < 9; n++) {
-                pips[n].setImageDrawable(getDrawable(R.drawable.green_pip_bright));
+                if (c.isColorblindMode()) {
+                    pips[n].setImageDrawable(getDrawable(R.drawable.magenta_pip_bright));
+                } else {
+                    pips[n].setImageDrawable(ContextCompat.getDrawable(this, R.drawable.green_pip_bright));
+                }
             }
         } else {
             pips[pipNum].setImageDrawable(getDrawable(R.drawable.red_pip_bright));
@@ -194,7 +227,11 @@ public class TenInSixtyTimerScreen extends AppCompatActivity {
                 Vibrator vibe = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     vibe.vibrate(VibrationEffect.createOneShot(1000, VibrationEffect.DEFAULT_AMPLITUDE));
-                    switchDisplay.setTextColor(getResources().getColor(R.color.displayColorGreen, getTheme()));
+                    if (c.isColorblindMode()) {
+                        switchDisplay.setTextColor(getResources().getColor(R.color.magenta_colorblind, getTheme()));
+                    } else {
+                        switchDisplay.setTextColor(getResources().getColor(R.color.bright_green, getTheme()));
+                    }
                     switchDisplay.setText("GOOD JOB");
                     switchDisplay.setVisibility(View.VISIBLE);
                     playButton.setImageDrawable(getDrawable(R.drawable.play_button_small));

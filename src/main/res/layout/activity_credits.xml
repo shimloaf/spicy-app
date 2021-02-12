@@ -8,7 +8,6 @@
     android:fitsSystemWindows="true"
     tools:openDrawer="start">
 
-
     <!-- HERE BE NAVBAR -->
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -33,25 +32,9 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <ImageView
-                    android:id="@+id/padding"
-                    android:layout_width="match_parent"
-                    android:layout_height="25dp"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginRight="8dp"
-                    android:layout_marginBottom="8dp"
-                    android:visibility="invisible"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/tools_menu"
-                    app:layout_constraintVertical_bias="0.051"
-                    app:srcCompat="@android:color/background_light" />
+                android:orientation="vertical"
+                android:paddingTop="30dp"
+                android:theme="@style/TextTheme">
 
                 <TextView
                     android:id="@+id/TitleCredits"
@@ -59,86 +42,89 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/seguibl"
                     android:gravity="center"
+                    android:paddingBottom="10dp"
                     android:text="Credits:"
-                    android:textSize="30sp" />
+                    android:textSize="50sp" />
 
-                <ImageView
-                    android:id="@+id/padding4"
+                <View
+                    android:id="@+id/divider5"
                     android:layout_width="match_parent"
-                    android:layout_height="25dp"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginRight="8dp"
-                    android:layout_marginBottom="8dp"
-                    android:visibility="invisible"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/tools_menu"
-                    app:layout_constraintVertical_bias="0.051"
-                    app:srcCompat="@android:color/background_light" />
+                    android:layout_height="1dp"
+                    android:background="?android:attr/listDivider" />
 
                 <TextView
                     android:id="@+id/credits1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="10dp"
                     android:text="Primary Developer:\nDavid Hopping"
                     android:textSize="24sp" />
 
-                <ImageView
-                    android:id="@+id/padding2"
+                <View
+                    android:id="@+id/divider6"
                     android:layout_width="match_parent"
-                    android:layout_height="25dp"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginRight="8dp"
-                    android:layout_marginBottom="8dp"
-                    android:visibility="invisible"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/tools_menu"
-                    app:layout_constraintVertical_bias="0.051"
-                    app:srcCompat="@android:color/background_light" />
+                    android:layout_height="1dp"
+                    android:background="?android:attr/listDivider" />
 
                 <TextView
                     android:id="@+id/credits3"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="10dp"
                     android:text="Best Boy:\nGabe Harmon"
                     android:textSize="24sp" />
 
-                <ImageView
-                    android:id="@+id/padding3"
+                <View
+                    android:id="@+id/divider7"
                     android:layout_width="match_parent"
-                    android:layout_height="25dp"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginRight="8dp"
-                    android:layout_marginBottom="8dp"
-                    android:visibility="invisible"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/tools_menu"
-                    app:layout_constraintVertical_bias="0.051"
-                    app:srcCompat="@android:color/background_light" />
+                    android:layout_height="1dp"
+                    android:background="?android:attr/listDivider" />
 
                 <TextView
                     android:id="@+id/credits2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="10dp"
                     android:text="Great Thanks:\nAll the members of Spicy Clamato"
                     android:textSize="24sp" />
+
+                <View
+                    android:id="@+id/divider8"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="?android:attr/listDivider" />
+
+                <TextView
+                    android:id="@+id/credits"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="10dp"
+                    android:text="Games Provided by:\nThe Improv Encyclopedia"
+                    android:textSize="24sp" />
+
+                <Button
+                    android:id="@+id/encyclopedia_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:theme="@style/TextTheme"
+                    android:textColor="@color/white"
+                    android:layout_gravity="center"
+                    android:text="Visit Their Site!" />
+
+                <View
+                    android:id="@+id/divider9"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="?android:attr/listDivider" />
 
             </LinearLayout>
         </ScrollView>
@@ -153,14 +139,14 @@
         <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:theme="@style/AppTheme.AppBarOverlay">
+            android:theme="@style/SpicyClamato.AppBarOverlay">
 
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:background="?attr/colorPrimary"
-                app:popupTheme="@style/AppTheme.PopupOverlay" />
+                app:popupTheme="@style/SpicyClamato.PopupOverlay" />
 
         </com.google.android.material.appbar.AppBarLayout>
 
@@ -174,6 +160,6 @@
         android:fitsSystemWindows="true"
         app:headerLayout="@layout/nav_header_main"
         app:menu="@menu/activity_main_drawer"
-        app:itemTextAppearance="@style/NavBarItem" />
+        android:theme="@style/NavMenu" />
 
 </androidx.drawerlayout.widget.DrawerLayout>

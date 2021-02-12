@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/noteDisplayConstraintLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -34,7 +33,7 @@
 
             <TextView
                 android:id="@+id/game_title"
-                style="@style/AppTextTheme"
+                style="@style/TextTheme"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
                 android:autoSizeMaxTextSize="70sp"
@@ -43,11 +42,11 @@
                 android:paddingLeft="4dp"
                 android:paddingRight="4dp"
                 android:text="Game Title"
-                android:textSize="70sp" />
+                android:textSize="50sp" />
 
             <TextView
                 android:id="@+id/tagline"
-                style="@style/AppTextTheme"
+                style="@style/TextTheme"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingLeft="4dp"
@@ -55,11 +54,15 @@
                 android:paddingBottom="16dp"
                 android:text='"This is the games tagline!"' />
 
-            <View style="@style/Divider" />
+            <View
+                android:id="@+id/divider"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="?android:attr/listDivider" />
 
             <TextView
                 android:id="@+id/instructions_title"
-                style="@style/AppTextTheme"
+                style="@style/TextTheme"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingTop="16dp"
@@ -69,7 +72,7 @@
 
             <TextView
                 android:id="@+id/instructions_text"
-                style="@style/AppTextTheme"
+                style="@style/TextTheme"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingLeft="4dp"
@@ -79,11 +82,15 @@
                 android:text="This is how you play the game."
                 android:textSize="18sp" />
 
-            <View style="@style/Divider" />
+            <View
+                android:id="@+id/divider2"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="?android:attr/listDivider" />
 
             <TextView
                 android:id="@+id/blurb_title"
-                style="@style/AppTextTheme"
+                style="@style/TextTheme"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingTop="8dp"
@@ -93,7 +100,7 @@
 
             <TextView
                 android:id="@+id/blurb_text"
-                style="@style/AppTextTheme"
+                style="@style/TextTheme"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingLeft="4dp"
@@ -103,7 +110,11 @@
                 android:text="This game is really fun!"
                 android:textSize="18sp" />
 
-            <View style="@style/Divider" />
+            <View
+                android:id="@+id/divider3"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="?android:attr/listDivider" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/game_display_button_layout"
@@ -162,13 +173,18 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <View style="@style/Divider" />
+            <View
+                android:id="@+id/divider4"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="?android:attr/listDivider" />
 
             <TextView
                 android:id="@+id/game_display_tags"
-                style="@style/AppTextTheme"
+                style="@style/TextTheme"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:gravity="center"
                 android:paddingLeft="4dp"
                 android:paddingTop="8dp"
                 android:paddingRight="4dp"

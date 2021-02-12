@@ -4,7 +4,6 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.GestureDetector;
 import android.view.MenuItem;
@@ -15,7 +14,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
@@ -24,14 +22,14 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.material.navigation.NavigationView;
 import com.qr.shimloaf.spicyclamatapp.R;
-import com.qr.shimloaf.spicyclamatapp.Utility.ClamatoUtils;
+import com.qr.shimloaf.spicyclamatapp.Utility.BaseActivity;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.HashMap;
 
 
-public class SuggestionScreen extends AppCompatActivity
+public class SuggestionScreen extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     enum sType {
@@ -94,35 +92,8 @@ public class SuggestionScreen extends AppCompatActivity
             changeScreen(screenState.suggDisplay);
         }
 
-        //Nav Drawer
-        if (id == R.id.nav_home) {
-            Intent appBrowser = new Intent(this, HomeScreen.class);
-            appBrowser.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(appBrowser);
-        } else if (id == R.id.nav_games) {
-            Intent appBrowser = new Intent(this, GamerScreen.class);
-            appBrowser.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(appBrowser);
-        } else if (id == R.id.nav_timer) {
-            Intent appBrowser = new Intent(this, TimerScreen.class);
-            appBrowser.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(appBrowser);
-        } else if (id == R.id.nav_suggestion) {
-            changeScreen(screenState.prime);
-        } else if (id == R.id.nav_tools) {
-            Intent appBrowser = new Intent(this, ToolsScreen.class);
-            appBrowser.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(appBrowser);
-        } else if (id == R.id.nav_showbuilder) {
-
-        } else if (id == R.id.nav_credits) {
-            Intent appBrowser = new Intent(this, CreditsScreen.class);
-            appBrowser.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(appBrowser);
-        }
-
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
+        c.navigateDrawer(item.getItemId(), getApplicationContext());
+        ((DrawerLayout) findViewById(R.id.drawer_layout)).closeDrawer(GravityCompat.START);
         return true;
     }
 
@@ -151,8 +122,6 @@ public class SuggestionScreen extends AppCompatActivity
         menuUpPrime,
         menuUpExpanded
     }
-
-    ClamatoUtils c;
 
     NavigationView navigationView;
     NavigationView fullMenu;
@@ -224,11 +193,15 @@ public class SuggestionScreen extends AppCompatActivity
 
     }
 
+    protected int getLayoutResourceId() {
+        return R.layout.activity_suggestion;
+    }
+
     @SuppressLint("ClickableViewAccessibility")
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_suggestion);
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -243,7 +216,6 @@ public class SuggestionScreen extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.getMenu().getItem(2).setChecked(true);
         fullMenu.setNavigationItemSelectedListener(this);
-        c = new ClamatoUtils(this.getApplication());
         setUpTypes();
 
         suggestionText = findViewById(R.id.suggestion_text);
@@ -315,7 +287,7 @@ public class SuggestionScreen extends AppCompatActivity
 
                     int action = event.getAction();
                     if (action == MotionEvent.ACTION_DOWN) {
-                        miniButton.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.suggestionButtonPressed), android.graphics.PorterDuff.Mode.MULTIPLY);
+                        miniButton.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.tan_depressed), android.graphics.PorterDuff.Mode.MULTIPLY);
                     } else if (action == MotionEvent.ACTION_UP) {
                         miniButton.clearColorFilter();
                     }
@@ -337,9 +309,12 @@ public class SuggestionScreen extends AppCompatActivity
             changeScreen(screenState.prime);
         } else if (status == screenState.menuUpPrime) {
             changeScreen(screenState.expanded);
+        } else if (!backPressed) {
+            drawer.openDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
         }
+        backPressed = true;
     }
 
     private void setSuggestionContent() {

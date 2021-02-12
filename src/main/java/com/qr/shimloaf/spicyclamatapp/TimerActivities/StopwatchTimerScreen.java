@@ -7,23 +7,27 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.qr.shimloaf.spicyclamatapp.R;
-import com.qr.shimloaf.spicyclamatapp.Utility.ClamatoUtils;
+import com.qr.shimloaf.spicyclamatapp.Utility.BaseActivity;
 
-public class StopwatchTimerScreen extends AppCompatActivity {
+public class StopwatchTimerScreen extends BaseActivity {
+
+    protected int getLayoutResourceId() {
+        return R.layout.stopwatch_timer;
+    }
 
     boolean clockRunning = false;
     Handler clock;
     long millis, start, buffer, newTime = 0;
-    ClamatoUtils c;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.stopwatch_timer);
-        c = new ClamatoUtils(this.getApplication());
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         ImageView stopwatchReset = findViewById(R.id.stopwatchReset);
         final ImageView stopwatchToggle = findViewById(R.id.stopwatchPlayButton);

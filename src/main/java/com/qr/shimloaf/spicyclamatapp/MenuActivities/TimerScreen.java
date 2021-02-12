@@ -8,7 +8,6 @@ import android.view.View;
 import android.widget.ImageView;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -19,17 +18,19 @@ import com.qr.shimloaf.spicyclamatapp.TimerActivities.HalfLifeTimerScreen;
 import com.qr.shimloaf.spicyclamatapp.TimerActivities.StandardTimerScreen;
 import com.qr.shimloaf.spicyclamatapp.TimerActivities.StopwatchTimerScreen;
 import com.qr.shimloaf.spicyclamatapp.TimerActivities.TenInSixtyTimerScreen;
-import com.qr.shimloaf.spicyclamatapp.Utility.ClamatoUtils;
+import com.qr.shimloaf.spicyclamatapp.Utility.BaseActivity;
 
-public class TimerScreen extends AppCompatActivity
+public class TimerScreen extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    ClamatoUtils c;
+    protected int getLayoutResourceId() {
+        return R.layout.activity_timer;
+    }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_timer);
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -43,7 +44,6 @@ public class TimerScreen extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.getMenu().getItem(3).setChecked(true);
 
-         c = new ClamatoUtils(this.getApplication());
         setUpMenu();
 
     }
@@ -96,44 +96,20 @@ public class TimerScreen extends AppCompatActivity
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
+        } else if (!backPressed) {
+            drawer.openDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
         }
+        backPressed = true;
     }
 
 
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
 
-        // Handle navigation view item clicks here.
-        int id = item.getItemId();
-
-        if (id == R.id.nav_home) {
-            Intent appBrowser = new Intent(this, HomeScreen.class);
-            appBrowser.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(appBrowser);
-        } else if (id == R.id.nav_games) {
-            Intent appBrowser = new Intent(this, GamerScreen.class);
-            appBrowser.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(appBrowser);
-        } else if (id == R.id.nav_suggestion) {
-            Intent appBrowser = new Intent(this, SuggestionScreen.class);
-            appBrowser.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(appBrowser);
-        } else if (id == R.id.nav_tools) {
-            Intent appBrowser = new Intent(this, ToolsScreen.class);
-            appBrowser.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(appBrowser);
-        }  else if (id == R.id.nav_showbuilder) {
-
-        } else if (id == R.id.nav_credits) {
-            Intent appBrowser = new Intent(this, CreditsScreen.class);
-            appBrowser.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(appBrowser);
-        }
-
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
+        c.navigateDrawer(item.getItemId(), getApplicationContext());
+        ((DrawerLayout) findViewById(R.id.drawer_layout)).closeDrawer(GravityCompat.START);
         return true;
     }
 

@@ -11,38 +11,26 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
+        android:theme="@style/SpicyClamato.DefaultTheme.NoActionBar"
         tools:ignore="GoogleAppIndexingWarning">
+
         <activity
             android:name=".MenuActivities.HomeScreen"
-            android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
         <!-- MENU ACTIVITIES-->
-        <activity
-            android:name=".MenuActivities.GamerScreen"
-            android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar"/>
-        <activity
-            android:name=".MenuActivities.TimerScreen"
-            android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar"/>
-        <activity
-            android:name=".MenuActivities.SuggestionScreen"
-            android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".MenuActivities.ToolsScreen"
-            android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".MenuActivities.CreditsScreen"
-            android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".MenuActivities.GamerScreen" />
+        <activity android:name=".MenuActivities.TimerScreen" />
+        <activity android:name=".MenuActivities.SuggestionScreen" />
+        <activity android:name=".MenuActivities.ToolsScreen" />
+        <activity android:name=".MenuActivities.ShowScreen" />
+        <activity android:name=".MenuActivities.CreditsScreen" />
+        <activity android:name=".MenuActivities.SettingsScreen" />
 
         <!-- TIMER SUB-ACTIVITIES-->
         <activity android:name=".TimerActivities.StandardTimerScreen" />

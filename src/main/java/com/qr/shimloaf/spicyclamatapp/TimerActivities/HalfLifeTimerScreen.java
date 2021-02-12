@@ -1,26 +1,31 @@
 package com.qr.shimloaf.spicyclamatapp.TimerActivities;
 
 import android.animation.ObjectAnimator;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.os.Handler;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 
 import com.qr.shimloaf.spicyclamatapp.R;
-import com.qr.shimloaf.spicyclamatapp.Utility.ClamatoUtils;
+import com.qr.shimloaf.spicyclamatapp.Utility.BaseActivity;
 
-public class HalfLifeTimerScreen extends AppCompatActivity {
+public class HalfLifeTimerScreen extends BaseActivity {
 
+    protected int getLayoutResourceId() {
+        return R.layout.half_life_timer;
+    }
 
     final long highestValue = 60000;
     long topValue = highestValue;
@@ -28,34 +33,43 @@ public class HalfLifeTimerScreen extends AppCompatActivity {
     long millis = 0;
     boolean clockRunning = false;
     CountDownTimer clock;
-    ClamatoUtils c;
     ObjectAnimator animateBar;
     ObjectAnimator reverseAnimateBar;
     ImageView halfTimeButton;
     MediaPlayer mp;
+    ImageView explosion;
+    ImageView resetButton;
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.half_life_timer);
-        c = new ClamatoUtils(this.getApplication());
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        if (c.isColorblindMode()) {
+            TextView clockDisplay = findViewById(R.id.hClockDisplay);
+            clockDisplay.setTextColor(getResources().getColor(R.color.magenta_colorblind, getTheme()));
+        }
 
         halfTimeButton = findViewById(R.id.hHalfButton);
+        resetButton = findViewById(R.id.hReset);
+        explosion = findViewById(R.id.massiveExplosion);
 
         resetClock();
 
         ImageView playButton = findViewById(R.id.hPlay);
-        ImageView resetButton = findViewById(R.id.hReset);
         ImageView abortButton = findViewById(R.id.hAbortButton);
         ImageView meter = findViewById(R.id.hProgressBar);
-        final ImageView explosion = findViewById(R.id.massiveExplosion);
 
         reverseAnimateBar = ObjectAnimator.ofFloat(meter, "translationY", 0f);
-        animateBar = ObjectAnimator.ofFloat(meter, "translationY", 1875f);
+        animateBar = ObjectAnimator.ofFloat(meter, "translationY", 2000f);
 
         resetButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                c.quickRotateImageView(resetButton, 200, false);
                 resetClock();
             }
         });
@@ -68,6 +82,10 @@ public class HalfLifeTimerScreen extends AppCompatActivity {
                     clockToggle(true);
                     millis = topValue;
                     animateMeter();
+                } else {
+                    millis = topValue;
+                    updateClock();
+                    sendBarToStart();
                 }
             }
         });
@@ -76,18 +94,40 @@ public class HalfLifeTimerScreen extends AppCompatActivity {
         halfTimeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                halfTimeButton.setImageDrawable(getDrawable(R.drawable.half_button_depressed));
                 halfTime();
                 updateClock();
-                Handler buttonHandler = new Handler();
-                Runnable undoButton = new Runnable() {
-                    public void run() {
-                        if (topValue / 2 > 100) {
-                            halfTimeButton.setImageDrawable(getDrawable(R.drawable.half_button));
-                        }
+            }
+        });
+
+        halfTimeButton.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+
+                int action = event.getAction();
+                if (action == MotionEvent.ACTION_DOWN) {
+                    if (topValue / 2 > 100) {
+                        halfTimeButton.setImageResource(R.drawable.half_button_depressed);
+                    } else {
+                        halfTimeButton.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.light_gray), android.graphics.PorterDuff.Mode.MULTIPLY);
                     }
-                };
-                buttonHandler.postDelayed(undoButton, 100);
+                    c.quickVibe(50);
+                } else if (action == MotionEvent.ACTION_UP) {
+                    (halfTimeButton).clearColorFilter();
+                    if (topValue / 2 > 100) {
+                        halfTimeButton.setImageResource(R.drawable.half_button);
+                    } else if (topValue / 2 < 100) {
+                        halfTimeButton.setImageResource(R.drawable.half_button_danger);
+                    }
+                } else if (action == MotionEvent.ACTION_CANCEL) {
+                    (halfTimeButton).clearColorFilter();
+                    if (topValue / 2 > 100) {
+                        halfTimeButton.setImageResource(R.drawable.half_button);
+                    } else if (topValue / 2 < 100) {
+                        halfTimeButton.setImageResource(R.drawable.half_button_danger);
+                    }
+                }
+
+                return halfTimeButton.onTouchEvent(event);
             }
         });
 
@@ -120,6 +160,7 @@ public class HalfLifeTimerScreen extends AppCompatActivity {
                 bar.setVisibility(View.VISIBLE);
             }
         });
+        explosion.setOnTouchListener((c.setButtonEffectListener(explosion)));
     }
 
     @Override
@@ -135,23 +176,19 @@ public class HalfLifeTimerScreen extends AppCompatActivity {
             return;
         }
         topValue = topValue / 2;
-        millis = topValue;
-
         if (topValue / 2 < 100) {
             halfTimeButton.setImageResource(R.drawable.half_button_danger);
         }
-
+        millis = topValue;
         sendBarToStart();
     }
 
     private void explodeScreen() {
         mp = MediaPlayer.create(this.getApplicationContext(), R.raw.explosion);
         mp.start();
-        ImageView explosion = findViewById(R.id.massiveExplosion);
         c.quickVibe(1000);
         explosion.setVisibility(View.VISIBLE);
         ImageView playButton = findViewById(R.id.hPlay);
-        ImageView resetButton = findViewById(R.id.hReset);
         ImageView blackYellow = findViewById(R.id.blackYellowBar);
         ImageView bar = findViewById(R.id.hProgressBar);
         TextView clockDisplay = findViewById(R.id.hClockDisplay);
@@ -184,7 +221,6 @@ public class HalfLifeTimerScreen extends AppCompatActivity {
 
     private void clockToggle(boolean shouldStart) {
         ImageView playButton = findViewById(R.id.hPlay);
-        ImageView resetButton = findViewById(R.id.hReset);
         ImageView abortButton = findViewById(R.id.hAbortButton);
         if (shouldStart) {
             startClock();

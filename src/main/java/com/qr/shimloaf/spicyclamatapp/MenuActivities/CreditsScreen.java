@@ -1,27 +1,32 @@
 package com.qr.shimloaf.spicyclamatapp.MenuActivities;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
-import com.google.android.material.navigation.NavigationView;
-import com.qr.shimloaf.spicyclamatapp.R;
-import com.qr.shimloaf.spicyclamatapp.Utility.ClamatoUtils;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import android.view.MenuItem;
 
-public class CreditsScreen extends AppCompatActivity
+import com.google.android.material.navigation.NavigationView;
+import com.qr.shimloaf.spicyclamatapp.R;
+import com.qr.shimloaf.spicyclamatapp.Utility.BaseActivity;
+
+public class CreditsScreen extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    ClamatoUtils c;
+    protected int getLayoutResourceId() {
+        return R.layout.activity_credits;
+    }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_credits);
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -35,8 +40,14 @@ public class CreditsScreen extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.getMenu().getItem(6).setChecked(true);
 
-         c = new ClamatoUtils(this.getApplication());
-
+        Button encyclopediaButton = findViewById(R.id.encyclopedia_button);
+        encyclopediaButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://improvencyclopedia.org/"));
+                startActivity(browserIntent);
+            }
+        });
     }
 
     @Override
@@ -44,46 +55,21 @@ public class CreditsScreen extends AppCompatActivity
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
+        } else if (!backPressed) {
+            drawer.openDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
         }
+        backPressed = true;
     }
 
 
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
-        int id = item.getItemId();
-
-        if (id == R.id.nav_home) {
-            Intent appBrowser = new Intent(this, HomeScreen.class);
-            appBrowser.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(appBrowser);
-        } else if (id == R.id.nav_games) {
-            Intent appBrowser = new Intent(this, GamerScreen.class);
-            appBrowser.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(appBrowser);
-        } else if (id == R.id.nav_suggestion) {
-            Intent appBrowser = new Intent(this, SuggestionScreen.class);
-            appBrowser.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(appBrowser);
-        } else if (id == R.id.nav_timer) {
-            Intent appBrowser = new Intent(this, TimerScreen.class);
-            appBrowser.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(appBrowser);
-        } else if (id == R.id.nav_tools) {
-            Intent appBrowser = new Intent(this, ToolsScreen.class);
-            appBrowser.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(appBrowser);
-        } else if (id == R.id.nav_showbuilder) {
-
-        }
-
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
+        c.navigateDrawer(item.getItemId(), getApplicationContext());
+        ((DrawerLayout) findViewById(R.id.drawer_layout)).closeDrawer(GravityCompat.START);
         return true;
     }
-
 
 }
 

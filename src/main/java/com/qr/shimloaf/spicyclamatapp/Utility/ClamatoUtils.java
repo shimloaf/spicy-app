@@ -2,6 +2,7 @@ package com.qr.shimloaf.spicyclamatapp.Utility;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.VibrationEffect;
@@ -19,6 +20,14 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
+import com.qr.shimloaf.spicyclamatapp.MenuActivities.CreditsScreen;
+import com.qr.shimloaf.spicyclamatapp.MenuActivities.GamerScreen;
+import com.qr.shimloaf.spicyclamatapp.MenuActivities.HomeScreen;
+import com.qr.shimloaf.spicyclamatapp.MenuActivities.SettingsScreen;
+import com.qr.shimloaf.spicyclamatapp.MenuActivities.ShowScreen;
+import com.qr.shimloaf.spicyclamatapp.MenuActivities.SuggestionScreen;
+import com.qr.shimloaf.spicyclamatapp.MenuActivities.TimerScreen;
+import com.qr.shimloaf.spicyclamatapp.MenuActivities.ToolsScreen;
 import com.qr.shimloaf.spicyclamatapp.R;
 
 import org.json.JSONArray;
@@ -138,8 +147,13 @@ public class ClamatoUtils extends AppCompatActivity {
             return ret.toString().substring(0, ret.toString().length() - 2);
         }
 
-        public String getRandomTitle() { return titles[(int) (Math.random() * titles.length)]; }
-        public String getRandomTagline() { return taglines[(int) (Math.random() * taglines.length)]; }
+        public String getRandomTitle() {
+            return titles[(int) (Math.random() * titles.length)];
+        }
+
+        public String getRandomTagline() {
+            return taglines[(int) (Math.random() * taglines.length)];
+        }
 
         //Retrieve value from ar != s
         //Return first value in the array if ar.length = 1
@@ -253,7 +267,7 @@ public class ClamatoUtils extends AppCompatActivity {
         }
     }
 
-    public void quickRotateImageView(final ImageView toRotate, final int duration) {
+    public void quickRotateImageView(final ImageView toRotate, final int duration, boolean fillAfter) {
 
         final RotateAnimation rotateAnimation = new RotateAnimation(0, 360,
                 Animation.RELATIVE_TO_SELF, 0.5f,
@@ -261,7 +275,7 @@ public class ClamatoUtils extends AppCompatActivity {
 
         rotateAnimation.setInterpolator(new LinearInterpolator());
         rotateAnimation.setDuration(duration);
-        rotateAnimation.setFillAfter(true);
+        rotateAnimation.setFillAfter(fillAfter);
 
         rotateAnimation.setAnimationListener(new Animation.AnimationListener() {
 
@@ -436,7 +450,7 @@ public class ClamatoUtils extends AppCompatActivity {
                         } else if (curatedGameList.containsKey(rhs)) {
                             return 1;
                         } else {
-                           return (encyclopediaGameList.get(lhs).getTitles()[0].toLowerCase().compareTo(encyclopediaGameList.get(rhs).getTitles()[0].toLowerCase()));
+                            return (encyclopediaGameList.get(lhs).getTitles()[0].toLowerCase().compareTo(encyclopediaGameList.get(rhs).getTitles()[0].toLowerCase()));
                         }
                     }
                 }
@@ -528,6 +542,37 @@ public class ClamatoUtils extends AppCompatActivity {
         return idList;
     }
 
+    public ArrayList<Integer> filterIds(String query, ArrayList<Integer> oldIds) {
+        ArrayList<Integer> newIds = new ArrayList<>();
+        query = query.toLowerCase();
+        for (Integer i : oldIds) {
+            ClamatoGame curGame = curatedGameList.get(i);
+            if (curGame == null) {
+                curGame = encyclopediaGameList.get(i);
+            }
+            if (query.charAt(0) == '#') {
+                for (String tag : curGame.getTags()) {
+                    if (tag.toLowerCase().equals(query.substring(1))) {
+                        newIds.add(i);
+                        break;
+                    }
+                }
+            } else if (query.charAt(0) == '"' && query.charAt(query.length() - 1) == '"') {
+                if (curGame.getInstructions().toLowerCase().contains(query.substring(1, query.length() - 1))) {
+                    newIds.add(i);
+                }
+            } else {
+                for (String title : curGame.getTitles()) {
+                    if (title.toLowerCase().contains(query)) {
+                        newIds.add(i);
+                        break;
+                    }
+                }
+            }
+        }
+        return newIds;
+    }
+
     public ArrayList<Integer> getFilteredGameIds(String query, String length) {
 
         ArrayList<Integer> allCuratedGames = new ArrayList<>(curatedGameList.keySet());
@@ -537,6 +582,8 @@ public class ClamatoUtils extends AppCompatActivity {
         ArrayList<Integer> filteredEncyclopediaGames = new ArrayList<>();
 
         ArrayList<Integer> allGames = new ArrayList<>();
+
+        query = query.toLowerCase();
 
         if (length.equals("Short Form") || length.equals("Long Form") || length.equals("Warmup")) {
             for (Integer i : allCuratedGames) {
@@ -553,7 +600,22 @@ public class ClamatoUtils extends AppCompatActivity {
                 }
             }
         } else if (!query.equals("")) {
+            for (Integer i : allCuratedGames) {
+                ClamatoGame curGame = curatedGameList.get(i);
+                for (String title : curGame.getTitles()) {
+                    if (title.toLowerCase().contains(query)) {
+                        filteredCuratedGames.add(i);
+                        break;
+                    }
+                }
+            }
 
+            for (Integer i : allEncyclopediaGames) {
+                ClamatoGame curGame = encyclopediaGameList.get(i);
+                if (curGame.getTitles()[0].toLowerCase().contains(query)) {
+                    filteredEncyclopediaGames.add(i);
+                }
+            }
         } else {
             filteredCuratedGames.addAll(allCuratedGames);
             filteredEncyclopediaGames.addAll(allEncyclopediaGames);
@@ -597,28 +659,65 @@ public class ClamatoUtils extends AppCompatActivity {
 
     public void verifySaveData(Context context) {
 
-        String[] paths = new String[2];
+        String[] paths = new String[4];
         paths[0] = "notes.txt";
         paths[1] = "favorites.txt";
+        paths[2] = "settings.txt";
+        paths[3] = "team.txt";
         for (String p : paths) {
             try {
                 InputStream inputStream = context.openFileInput(p);
             } catch (IOException e) {
                 try {
                     OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput(p, Context.MODE_PRIVATE));
-                    if (p.equals("favorites.txt")) {
-                        outputStreamWriter.write(",");
-                    } else if (p.equals("notes.txt")) {
-                        outputStreamWriter.write("Initialized");
-                    }
+                    outputStreamWriter.write("");
                     outputStreamWriter.close();
-                    Toast.makeText(context, "Initialized " + p, Toast.LENGTH_SHORT).show();
+
+                    if (p.equals("favorites.txt")) {
+                        writeToFile(",", p, "");
+                    } else if (p.equals("notes.txt")) {
+                        writeToFile("Initialized", p, "");
+                    } else if (p.equals("settings.txt")) {
+                        writeToFile(getSettingsDefault(), p, "");
+                    } else if (p.equals("team.txt")) {
+                        writeToFile("Tap to set Team Name,", p, "");
+                    }
+
+                    Toast.makeText(a.getApplicationContext(), "Initialized " + p, Toast.LENGTH_SHORT).show();
                 } catch (IOException ex) {
-                    Toast.makeText(context, "File Write Failed. AKA David Hopping f**ked up coding.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(a.getApplicationContext(), "File Write Failed. AKA David Hopping f**ked up coding.", Toast.LENGTH_SHORT).show();
                 }
             }
         }
 
+    }
+
+    public boolean isDarkMode() {
+        String oldSettings = readFromFile("settings.txt", "");
+        if (oldSettings.length() != getSettingsLength()) {
+            writeToFile(getSettingsDefault(), "settings.txt", "");
+        }
+        if (oldSettings.length() == 0) {
+            return false;
+        } else {
+            return oldSettings.charAt(0) == 't';
+        }
+    }
+
+    public boolean isColorblindMode() {
+        String oldSettings = readFromFile("settings.txt", "");
+        if (oldSettings.length() != getSettingsLength()) {
+            writeToFile(getSettingsDefault(), "settings.txt", "");
+        }
+        return oldSettings.charAt(1) == 't';
+    }
+
+    public int getSettingsLength() {
+        return 2;
+    }
+
+    public String getSettingsDefault() {
+        return "ff";
     }
 
     public void writeToFile(String data, String path, String directory) {
@@ -651,6 +750,8 @@ public class ClamatoUtils extends AppCompatActivity {
     }
 
     public String readFromFile(String path, String directory) {
+
+        verifySaveData(a.getApplicationContext());
 
         StringBuilder ret = new StringBuilder();
         File d = a.getApplicationContext().getDir(directory, Context.MODE_PRIVATE);
@@ -703,7 +804,7 @@ public class ClamatoUtils extends AppCompatActivity {
                 int action = event.getAction();
                 if (action == MotionEvent.ACTION_DOWN) {
                     quickVibe(50);
-                    (toSet).setColorFilter(ContextCompat.getColor(a, R.color.colorMenu), android.graphics.PorterDuff.Mode.MULTIPLY);
+                    (toSet).setColorFilter(ContextCompat.getColor(a, R.color.light_gray), android.graphics.PorterDuff.Mode.MULTIPLY);
                 } else if (action == MotionEvent.ACTION_UP) {
                     (toSet).clearColorFilter();
                 } else if (action == MotionEvent.ACTION_CANCEL) {
@@ -713,5 +814,41 @@ public class ClamatoUtils extends AppCompatActivity {
                 return toSet.onTouchEvent(event);
             }
         };
+    }
+
+    public void navigateDrawer(int id, Context c) {
+        if (id == R.id.nav_home) {
+            Intent appBrowser = new Intent(c, HomeScreen.class);
+            appBrowser.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            c.startActivity(appBrowser);
+        } else if (id == R.id.nav_games) {
+            Intent appBrowser = new Intent(c, GamerScreen.class);
+            appBrowser.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            c.startActivity(appBrowser);
+        } else if (id == R.id.nav_suggestion) {
+            Intent appBrowser = new Intent(c, SuggestionScreen.class);
+            appBrowser.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            c.startActivity(appBrowser);
+        } else if (id == R.id.nav_timer) {
+            Intent appBrowser = new Intent(c, TimerScreen.class);
+            appBrowser.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            c.startActivity(appBrowser);
+        } else if (id == R.id.nav_tools) {
+            Intent appBrowser = new Intent(c, ToolsScreen.class);
+            appBrowser.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            c.startActivity(appBrowser);
+        } else if (id == R.id.nav_showbuilder) {
+            Intent appBrowser = new Intent(c, ShowScreen.class);
+            appBrowser.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            c.startActivity(appBrowser);
+        } else if (id == R.id.nav_credits) {
+            Intent appBrowser = new Intent(c, CreditsScreen.class);
+            appBrowser.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            c.startActivity(appBrowser);
+        } else if (id == R.id.nav_settings) {
+            Intent appBrowser = new Intent(c, SettingsScreen.class);
+            appBrowser.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            c.startActivity(appBrowser);
+        }
     }
 }

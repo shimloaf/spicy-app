@@ -1,12 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#e84a27</color>
-    <color name="colorPrimaryDark">#13294b</color>
-    <color name="colorAccent">#ee5e5e</color>
-    <color name="colorMenu">#817e7e</color>
-    <color name="displayColorRed">#E84E4E</color>
-    <color name="displayColorGreen">#509F53</color>
-    <color name="colorTextGray">#1C1C1C</color>
-    <color name="colorPrimaryPressed">#9F351E</color>
-    <color name="suggestionButtonPressed">#95734E</color>
+    <color name="bright_orange">#e84a27</color>
+
+    <color name="dark_blue">#13294b</color>
+    <color name="darker_blue">#061327</color>
+
+    <color name="red_orange">#ee5e5e</color>
+    <color name="sky_blue">#4269A6</color>
+
+    <color name="white">#FFFFFF</color>
+    <color name="dark_velvet">#1C1C1C</color>
+    <color name="dark_surface">#121212</color>
+    <color name="light_gray">#817e7e</color>
+
+    <color name="bright_red">#E84E4E</color>
+    <color name="bright_green">#509F53</color>
+    <color name="magenta_colorblind">#F41DE9</color>
+
+    <color name="orange_depressed">#9F351E</color>
+    <color name="tan_depressed">#95734E</color>
+
 </resources>

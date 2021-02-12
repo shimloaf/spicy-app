@@ -12,18 +12,23 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.qr.shimloaf.spicyclamatapp.R;
+import com.qr.shimloaf.spicyclamatapp.Utility.BaseActivity;
 import com.qr.shimloaf.spicyclamatapp.Utility.ClamatoUtils;
 
 import java.io.IOException;
 
-public class BuzzerScreen extends AppCompatActivity {
+public class BuzzerScreen extends BaseActivity {
+
+    protected int getLayoutResourceId() {
+        return R.layout.buzzers;
+    }
 
     public static class BuzzerSliderFragment extends Fragment {
 
@@ -105,13 +110,14 @@ public class BuzzerScreen extends AppCompatActivity {
 
     final int NUM_PAGES = 5;
     ViewPager2 mPager;
-    ClamatoUtils c;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.buzzers);
-        c = new ClamatoUtils(this.getApplication());
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
         mPager = findViewById(R.id.pager);
         BuzzerSliderAdapter pagerAdapter = new BuzzerSliderAdapter(this);
         mPager.setAdapter(pagerAdapter);

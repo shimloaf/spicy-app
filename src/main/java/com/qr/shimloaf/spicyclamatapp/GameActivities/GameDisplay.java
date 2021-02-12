@@ -4,24 +4,27 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.qr.shimloaf.spicyclamatapp.MenuActivities.ToolsScreen;
 import com.qr.shimloaf.spicyclamatapp.R;
 import com.qr.shimloaf.spicyclamatapp.TimerActivities.HalfLifeTimerScreen;
+import com.qr.shimloaf.spicyclamatapp.Utility.BaseActivity;
 import com.qr.shimloaf.spicyclamatapp.Utility.ClamatoUtils;
 
-public class GameDisplay extends AppCompatActivity {
+public class GameDisplay extends BaseActivity {
+
+    protected int getLayoutResourceId() {
+        return R.layout.game_info_display;
+    }
 
     final int PARTY_COEFFICIENT = 10;
 
-    ClamatoUtils c;
     int id = 0;
     TextView title;
     TextView tagline;
@@ -42,10 +45,8 @@ public class GameDisplay extends AppCompatActivity {
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.game_info_display);
-        c = new ClamatoUtils(this.getApplication());
 
         id = getIntent().getIntExtra("id", 0);
         fromFavorites = getIntent().getBooleanExtra("fromFav", false);
@@ -71,8 +72,7 @@ public class GameDisplay extends AppCompatActivity {
         instructions.setText(game.getInstructions());
 
         blurbString = game.getTips()[0];
-        mightyNumberNine = 0; // This variable means if it's a tip variant or fact, 0 = tip
-        //This is terrible naming practice but its my app dammit
+        mightyNumberNine = 0; // This variable means if it's a tip variant or fact, 0 = tip, shut up about naming practices BRIAN
         blurb.setText(blurbString);
 
         tags.setText(game.getTagsText());
@@ -83,6 +83,7 @@ public class GameDisplay extends AppCompatActivity {
             blurb.setVisibility(View.GONE);
 
             blurbTitle.setText("Courtesy of Improv Encyclopedia");
+            blurbTitle.setGravity(Gravity.CENTER);
             blurbTitle.setTextSize(14);
 
             instructionsTitle.setText("Description:");
@@ -122,7 +123,7 @@ public class GameDisplay extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 shuffleFacts();
-                c.quickRotateImageView(shuffleButton, 100);
+                c.quickRotateImageView(shuffleButton, 100, true);
             }
         });
         shuffleButton.setOnTouchListener((c.setButtonEffectListener(shuffleButton)));
@@ -206,7 +207,7 @@ public class GameDisplay extends AppCompatActivity {
     private void letsParty(int partyNumber) {
         if (partyNumber == 0) {
             c.quickVibe(500);
-            c.quickRotateImageView(mysteryButton, 500);
+            c.quickRotateImageView(mysteryButton, 500, true);
         } else if (partyNumber == 1) {
             Toast.makeText(getApplicationContext(), "Your lucky number is... " + ((int) (Math.random() * 2000000000)), Toast.LENGTH_SHORT).show();
         } else if (partyNumber == 2) {

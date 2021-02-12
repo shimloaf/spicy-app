@@ -20,10 +20,9 @@
         android:id="@+id/buzzer_text"
         android:layout_width="334dp"
         android:layout_height="154dp"
-        android:fontFamily="@font/seguibl"
+        android:theme="@style/TextTheme"
         android:gravity="center"
         android:text='"The Classic"'
-        android:textColor="@color/colorPrimaryDark"
         android:textSize="30sp"
         app:autoSizeMaxTextSize="30sp"
         app:autoSizeMinTextSize="16sp"

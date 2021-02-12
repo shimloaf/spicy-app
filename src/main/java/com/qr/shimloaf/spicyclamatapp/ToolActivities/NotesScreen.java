@@ -13,22 +13,24 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.qr.shimloaf.spicyclamatapp.R;
-import com.qr.shimloaf.spicyclamatapp.Utility.ClamatoUtils;
+import com.qr.shimloaf.spicyclamatapp.Utility.BaseActivity;
 
 import java.io.File;
 import java.util.ArrayList;
 
-public class NotesScreen extends AppCompatActivity {
+public class NotesScreen extends BaseActivity {
 
+    protected int getLayoutResourceId() {
+        return R.layout.notes_screen;
+    }
 
-    ClamatoUtils c;
     RecyclerView notesList;
     LinearLayoutManager notesManager;
     NotesAdapter nAdapter;
@@ -85,12 +87,13 @@ public class NotesScreen extends AppCompatActivity {
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_notes);
-        c = new ClamatoUtils(this.getApplication());
 
-        notesList = (RecyclerView) findViewById(R.id.notes_list);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        notesList = findViewById(R.id.notes_list);
         notesList.setHasFixedSize(true);
 
         notesManager = new LinearLayoutManager(this);

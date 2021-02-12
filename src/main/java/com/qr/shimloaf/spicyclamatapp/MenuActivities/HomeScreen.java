@@ -1,8 +1,6 @@
 package com.qr.shimloaf.spicyclamatapp.MenuActivities;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
@@ -11,23 +9,25 @@ import android.view.animation.RotateAnimation;
 import android.widget.TextView;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.material.navigation.NavigationView;
 import com.qr.shimloaf.spicyclamatapp.R;
-import com.qr.shimloaf.spicyclamatapp.Utility.ClamatoUtils;
+import com.qr.shimloaf.spicyclamatapp.Utility.BaseActivity;
 
-public class HomeScreen extends AppCompatActivity
+public class HomeScreen extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    protected int getLayoutResourceId() {
+        return R.layout.activity_home;
+    }
 
     final int MAX_SPINS = 20;
     final int BASE_SPEED = 45;
     final int MAX_MOMENTUM = 360 * MAX_SPINS;
 
-    ClamatoUtils c;
     boolean inProgress = false;
     int momentum = 0;
     float curDegree = 0f;
@@ -35,9 +35,10 @@ public class HomeScreen extends AppCompatActivity
     int prevScore = 0;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -52,8 +53,6 @@ public class HomeScreen extends AppCompatActivity
 
         navigationView.getMenu().getItem(0).setChecked(true);
         changeTip();
-        c = new ClamatoUtils(this.getApplication());
-        c.verifySaveData(this);
 
     }
 
@@ -62,49 +61,25 @@ public class HomeScreen extends AppCompatActivity
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
+        } else if (!backPressed) {
+            drawer.openDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
         }
+        backPressed = true;
     }
 
 
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
-        int id = item.getItemId();
-
-        if (id == R.id.nav_games) {
-            Intent appBrowser = new Intent(this, GamerScreen.class);
-            appBrowser.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(appBrowser);
-        } else if (id == R.id.nav_suggestion) {
-            Intent appBrowser = new Intent(this, SuggestionScreen.class);
-            appBrowser.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(appBrowser);
-        } else if (id == R.id.nav_timer) {
-            Intent appBrowser = new Intent(this, TimerScreen.class);
-            appBrowser.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(appBrowser);
-        } else if (id == R.id.nav_tools) {
-            Intent appBrowser = new Intent(this, ToolsScreen.class);
-            appBrowser.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(appBrowser);
-        } else if (id == R.id.nav_showbuilder) {
-
-        } else if (id == R.id.nav_credits) {
-            Intent appBrowser = new Intent(this, CreditsScreen.class);
-            appBrowser.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(appBrowser);
-        }
-
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
+        c.navigateDrawer(item.getItemId(), getApplicationContext());
+        ((DrawerLayout) findViewById(R.id.drawer_layout)).closeDrawer(GravityCompat.START);
         return true;
     }
 
     public void onImageClick(View view) {
-        changeTip();
         presses++;
+        changeTip();
 
         // A tap always adds a full spin, unless we have enough momentum for
         // more spins than the spin limit
@@ -133,7 +108,7 @@ public class HomeScreen extends AppCompatActivity
             String[] tips = getResources().getStringArray(R.array.tips_array);
             String prevTip = (String) (tip.getText());
             do {
-                tip.setText("Spicy Tip:\n" + tips[(int) (Math.random() * tips.length)]);
+                tip.setText(tips[(int) (Math.random() * tips.length)]);
             } while ((tip.getText()).equals(prevTip));
         } else if (presses < 25) {
             tip.setText("Spicy Score:\n" + presses + " Presses.");

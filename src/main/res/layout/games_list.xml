@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/noteDisplayConstraintLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -24,8 +23,8 @@
         app:menu_animationDelayPerItem="50"
         app:menu_backgroundColor="@android:color/transparent"
         app:menu_buttonSpacing="0dp"
-        app:menu_colorNormal="@color/colorPrimary"
-        app:menu_colorPressed="@color/colorPrimaryPressed"
+        app:menu_colorNormal="@color/bright_orange"
+        app:menu_colorPressed="@color/orange_depressed"
         app:menu_colorRipple="#99FFFFFF"
         app:menu_fab_size="normal"
         app:menu_labels_colorNormal="#333333"
@@ -57,8 +56,8 @@
             android:layout_height="wrap_content"
             android:src="@drawable/ic_history_icon"
             android:visibility="gone"
-            app:fab_colorNormal="@color/colorPrimary"
-            app:fab_colorPressed="@color/colorPrimaryPressed"
+            app:fab_colorNormal="@color/bright_orange"
+            app:fab_colorPressed="@color/orange_depressed"
             app:fab_colorRipple="#99FFFFFF"
             app:fab_label="Newest" />
 
@@ -67,8 +66,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/people_icon"
-            app:fab_colorNormal="@color/colorPrimary"
-            app:fab_colorPressed="@color/colorPrimaryPressed"
+            app:fab_colorNormal="@color/bright_orange"
+            app:fab_colorPressed="@color/orange_depressed"
             app:fab_colorRipple="#99FFFFFF"
             app:fab_label="# of Players" />
 
@@ -77,8 +76,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/alpha_sort_icon"
-            app:fab_colorNormal="@color/colorPrimary"
-            app:fab_colorPressed="@color/colorPrimaryPressed"
+            app:fab_colorNormal="@color/bright_orange"
+            app:fab_colorPressed="@color/orange_depressed"
             app:fab_colorRipple="#99FFFFFF"
             app:fab_label="Alphabetical" />
 
@@ -87,8 +86,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_shuffle_icon"
-            app:fab_colorNormal="@color/colorPrimary"
-            app:fab_colorPressed="@color/colorPrimaryPressed"
+            app:fab_colorNormal="@color/bright_orange"
+            app:fab_colorPressed="@color/orange_depressed"
             app:fab_colorRipple="#99FFFFFF"
             app:fab_label="Shuffle" />
 
@@ -110,13 +109,43 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0">
 
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="@style/SpicyClamato.AppBarOverlay">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="?attr/colorPrimary" />
+        </com.google.android.material.appbar.AppBarLayout>
+
+
         <SearchView
             android:id="@+id/search_bar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:iconifiedByDefault="false"
             android:visibility="gone">
 
         </SearchView>
+
+        <HorizontalScrollView
+            android:id="@+id/chip_list"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="4dp"
+            android:paddingRight="4dp"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:id="@+id/chip_list_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" />
+        </HorizontalScrollView>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/games_list_display"
@@ -135,7 +164,7 @@
             android:fontFamily="@font/seguibl"
             android:gravity="center"
             android:text="You don't have any favorites yet."
-            android:textColor="@color/colorTextGray"
+            android:textColor="@color/dark_velvet"
             android:textSize="36sp"
             android:visibility="gone" />
 
