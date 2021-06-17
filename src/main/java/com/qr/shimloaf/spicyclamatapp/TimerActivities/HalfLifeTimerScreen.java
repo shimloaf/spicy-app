@@ -20,6 +20,7 @@ import androidx.core.content.ContextCompat;
 
 import com.qr.shimloaf.spicyclamatapp.R;
 import com.qr.shimloaf.spicyclamatapp.Utility.BaseActivity;
+import com.qr.shimloaf.spicyclamatapp.Utility.ClamatoUtils;
 
 public class HalfLifeTimerScreen extends BaseActivity {
 
@@ -48,7 +49,7 @@ public class HalfLifeTimerScreen extends BaseActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        if (c.isColorblindMode()) {
+        if ((boolean) c.getSetting(ClamatoUtils.setting.ColorblindMode)) {
             TextView clockDisplay = findViewById(R.id.hClockDisplay);
             clockDisplay.setTextColor(getResources().getColor(R.color.magenta_colorblind, getTheme()));
         }

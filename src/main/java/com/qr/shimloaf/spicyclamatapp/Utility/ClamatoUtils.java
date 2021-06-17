@@ -7,6 +7,7 @@ import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
@@ -218,6 +219,12 @@ public class ClamatoUtils extends AppCompatActivity {
             }
             return -1;
         }
+    }
+
+    public enum setting {
+        DarkMode,
+        ColorblindMode,
+        PalNickname
     }
 
     Application a;
@@ -692,32 +699,69 @@ public class ClamatoUtils extends AppCompatActivity {
 
     }
 
-    public boolean isDarkMode() {
-        String oldSettings = readFromFile("settings.txt", "");
-        if (oldSettings.length() != getSettingsLength()) {
-            writeToFile(getSettingsDefault(), "settings.txt", "");
-        }
-        if (oldSettings.length() == 0) {
-            return false;
-        } else {
-            return oldSettings.charAt(0) == 't';
-        }
+    private String setCharAt(int pos, String toModify, char toChange) {
+        return toModify.substring(0, pos) + toChange + toModify.substring(pos + 1);
     }
 
-    public boolean isColorblindMode() {
-        String oldSettings = readFromFile("settings.txt", "");
-        if (oldSettings.length() != getSettingsLength()) {
-            writeToFile(getSettingsDefault(), "settings.txt", "");
+    private int getNthIndexOfDelimiter(String s, char delimiter, int n) {
+
+        int pos = 0;
+        int count = 0;
+
+        while (count != n) {
+            pos++;
+            if (s.charAt(pos) == delimiter) {
+                count++;
+            }
         }
-        return oldSettings.charAt(1) == 't';
+
+        return pos;
+    }
+
+    public void toggleSetting(ClamatoUtils.setting s, String newSetting) {
+        String settings = readFromFile("settings.txt", "");
+
+        if (s == setting.DarkMode) {
+            if ((boolean) getSetting(setting.DarkMode)) {
+                settings = setCharAt(0, settings, 'f');
+            } else {
+                settings = setCharAt(0, settings, 't');
+            }
+        } else if (s == setting.ColorblindMode) {
+            if ((boolean) getSetting(setting.ColorblindMode)) {
+                settings = setCharAt(2, settings, 'f');
+            } else {
+                settings = setCharAt(2, settings, 't');
+            }
+        } else if (s == setting.PalNickname) {
+            settings = settings.substring(0, getNthIndexOfDelimiter(settings, '\n', 2) + 1) + newSetting + settings.substring(getNthIndexOfDelimiter(settings, '\n', 3));
+        }
+
+        writeToFile(settings, "settings.txt", "");
+    }
+
+    public Object getSetting(ClamatoUtils.setting setting) {
+
+        String oldSettings = readFromFile("settings.txt", "");
+
+        if (setting == ClamatoUtils.setting.DarkMode) {
+            //Cheat for not having to parse booleans due to consistant positions in the file
+            return oldSettings.charAt(0) == 't';
+        } else if (setting == ClamatoUtils.setting.ColorblindMode) {
+            //Ditto
+            return oldSettings.charAt(2) == 't';
+        } else if (setting == ClamatoUtils.setting.PalNickname) {
+            return oldSettings.substring(4, oldSettings.indexOf('\n', 4));
+        }
+        return false;
     }
 
     public int getSettingsLength() {
-        return 2;
+        return getSettingsDefault().length();
     }
 
     public String getSettingsDefault() {
-        return "ff";
+        return "f\nf\nSuggestion Buddy\n";
     }
 
     public void writeToFile(String data, String path, String directory) {

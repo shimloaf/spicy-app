@@ -20,7 +20,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         c = new ClamatoUtils(this.getApplication());
         c.verifySaveData(this);
 
-        if (c.isDarkMode()) {
+        if ((boolean) c.getSetting(ClamatoUtils.setting.DarkMode)) {
             AppCompatDelegate.setDefaultNightMode(
                     AppCompatDelegate.MODE_NIGHT_YES);
         } else {

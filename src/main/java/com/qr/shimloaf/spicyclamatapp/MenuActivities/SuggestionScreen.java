@@ -23,6 +23,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import com.google.android.material.navigation.NavigationView;
 import com.qr.shimloaf.spicyclamatapp.R;
 import com.qr.shimloaf.spicyclamatapp.Utility.BaseActivity;
+import com.qr.shimloaf.spicyclamatapp.Utility.ClamatoUtils;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
@@ -130,6 +131,7 @@ public class SuggestionScreen extends BaseActivity
     ImageView retryButton;
     ImageView resetButton;
     TextView suggestionText;
+    TextView palName;
 
     sType currType = sType.emotion;
     screenState status = screenState.prime;
@@ -219,6 +221,7 @@ public class SuggestionScreen extends BaseActivity
         setUpTypes();
 
         suggestionText = findViewById(R.id.suggestion_text);
+        palName = findViewById(R.id.pal_name);
 
         final GestureDetector sButtonHandler = new GestureDetector(this, new SuggestionGesture());
 
@@ -366,6 +369,42 @@ public class SuggestionScreen extends BaseActivity
             suggestionText.setVisibility(View.INVISIBLE);
             retryButton.setVisibility(View.INVISIBLE);
             resetButton.setVisibility(View.INVISIBLE);
+        }
+
+        if (next == screenState.prime || next == screenState.expanded) {
+            palName.setVisibility(View.VISIBLE);
+            if (next == screenState.expanded) {
+
+                String greeting = "Hi, my name's " + c.getSetting(ClamatoUtils.setting.PalNickname) + "!";
+                String tip = "Click me for a random suggestion!";
+
+                int seed = (int) (Math.random() * 4);
+
+                if (seed == 1) {
+                    tip = "Click a smaller button for a suggestion of that type!";
+                } else if (seed == 2) {
+                    tip = "Long press me to choose from a list of all types!";
+                } else if (seed == 3) {
+                    if (c.getSetting(ClamatoUtils.setting.PalNickname).equals("Suggestion Pal")) {
+                        tip = "You can change my name in the settings menu!";
+                    }
+                }
+
+                seed = (int) (Math.random() * 3);
+
+                if (seed == 1) {
+                    greeting = "Howdy, it's me, " + c.getSetting(ClamatoUtils.setting.PalNickname) + "!";
+                } else if (seed == 2) {
+                    greeting = c.getSetting(ClamatoUtils.setting.PalNickname) + "'s my name, don't wear it out!";
+                }
+
+                palName.setText(greeting + "\n" + tip);
+
+            } else {
+                palName.setText("Don't be shy, click it!");
+            }
+        } else {
+            palName.setVisibility(View.INVISIBLE);
         }
 
         if (next == screenState.menuUpExpanded || next == screenState.menuUpPrime) {

@@ -16,6 +16,7 @@ import androidx.core.content.ContextCompat;
 
 import com.qr.shimloaf.spicyclamatapp.R;
 import com.qr.shimloaf.spicyclamatapp.Utility.BaseActivity;
+import com.qr.shimloaf.spicyclamatapp.Utility.ClamatoUtils;
 
 public class TenInSixtyTimerScreen extends BaseActivity {
 
@@ -50,7 +51,7 @@ public class TenInSixtyTimerScreen extends BaseActivity {
         switchDisplay = findViewById(R.id.ts_switch_text);
         switchDisplay.setText("BEGIN");
 
-        if (c.isColorblindMode()) {
+        if ((boolean) c.getSetting(ClamatoUtils.setting.ColorblindMode)) {
             switchDisplay.setTextColor(getResources().getColor(R.color.magenta_colorblind, getTheme()));
             TextView clockDisplay = findViewById(R.id.ts_time);
             clockDisplay.setTextColor(getResources().getColor(R.color.magenta_colorblind, getTheme()));
@@ -70,7 +71,7 @@ public class TenInSixtyTimerScreen extends BaseActivity {
             @Override
             public void onClick(View v) {
 
-                if (c.isColorblindMode()) {
+                if ((boolean) c.getSetting(ClamatoUtils.setting.ColorblindMode)) {
                     switchDisplay.setTextColor(getResources().getColor(R.color.magenta_colorblind, getTheme()));
                 } else {
                     switchDisplay.setTextColor(getResources().getColor(R.color.bright_green, getTheme()));
@@ -95,7 +96,7 @@ public class TenInSixtyTimerScreen extends BaseActivity {
                     resetClock();
                     resetPips();
 
-                    if (c.isColorblindMode()) {
+                    if ((boolean) c.getSetting(ClamatoUtils.setting.ColorblindMode)) {
                         switchDisplay.setTextColor(getResources().getColor(R.color.magenta_colorblind, getTheme()));
                     } else {
                         switchDisplay.setTextColor(getResources().getColor(R.color.bright_green, getTheme()));
@@ -110,7 +111,7 @@ public class TenInSixtyTimerScreen extends BaseActivity {
                 } else {
                     playButton.setImageDrawable(getDrawable(R.drawable.play_button_small));
 
-                    if (c.isColorblindMode()) {
+                    if ((boolean) c.getSetting(ClamatoUtils.setting.ColorblindMode)) {
                         switchDisplay.setTextColor(getResources().getColor(R.color.magenta_colorblind, getTheme()));
                     } else {
                         switchDisplay.setTextColor(getResources().getColor(R.color.bright_green, getTheme()));
@@ -159,7 +160,7 @@ public class TenInSixtyTimerScreen extends BaseActivity {
 
     private void flashMessage(String s) {
         switchDisplay.setText(s);
-        if (c.isColorblindMode()) {
+        if ((boolean) c.getSetting(ClamatoUtils.setting.ColorblindMode)) {
             switchDisplay.setTextColor(getResources().getColor(R.color.magenta_colorblind, getTheme()));
         } else {
             switchDisplay.setTextColor(getResources().getColor(R.color.bright_red, getTheme()));
@@ -183,7 +184,7 @@ public class TenInSixtyTimerScreen extends BaseActivity {
         }
         if (millis < 100) {
             for (int n = 0; n < 9; n++) {
-                if (c.isColorblindMode()) {
+                if ((boolean) c.getSetting(ClamatoUtils.setting.ColorblindMode)) {
                     pips[n].setImageDrawable(getDrawable(R.drawable.magenta_pip_bright));
                 } else {
                     pips[n].setImageDrawable(ContextCompat.getDrawable(this, R.drawable.green_pip_bright));
@@ -227,7 +228,7 @@ public class TenInSixtyTimerScreen extends BaseActivity {
                 Vibrator vibe = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     vibe.vibrate(VibrationEffect.createOneShot(1000, VibrationEffect.DEFAULT_AMPLITUDE));
-                    if (c.isColorblindMode()) {
+                    if ((boolean) c.getSetting(ClamatoUtils.setting.ColorblindMode)) {
                         switchDisplay.setTextColor(getResources().getColor(R.color.magenta_colorblind, getTheme()));
                     } else {
                         switchDisplay.setTextColor(getResources().getColor(R.color.bright_green, getTheme()));

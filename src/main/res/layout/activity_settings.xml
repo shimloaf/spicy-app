@@ -51,6 +51,23 @@
             android:textSize="24sp"
             android:theme="@style/TextTheme" />
 
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/nick_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Suggestion Pal's Nickname"
+            android:theme="@style/TextTheme" >
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/suggestion_nickname"
+                android:text=""
+                android:singleLine="true"
+                />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
     </LinearLayout>
 
     <!-- HERE BE NAVBAR-->
