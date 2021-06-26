@@ -46,6 +46,7 @@
         <item name="android:textColor">@color/dark_velvet</item>
         <item name="android:textColorSecondary">@color/dark_blue</item>
         <item name="android:text">Game Title</item>
+
     </style>
 
     <style name="ChipStyle" parent="Widget.MaterialComponents.Chip.Entry">
@@ -53,6 +54,9 @@
         <item name="android:paddingLeft">4dp</item>
         <item name="android:paddingRight">4dp</item>
         <item name="checkedIconVisible">false</item>
+    </style>
+
+    <style name="IconTheme">
     </style>
 
 </resources>

@@ -164,7 +164,7 @@
             android:fontFamily="@font/seguibl"
             android:gravity="center"
             android:text="You don't have any favorites yet."
-            android:textColor="@color/dark_velvet"
+            android:theme="@style/TextTheme"
             android:textSize="36sp"
             android:visibility="gone" />
 

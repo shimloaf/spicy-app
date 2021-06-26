@@ -1,9 +1,14 @@
 package com.qr.shimloaf.spicyclamatapp.Utility;
 
 import android.app.Application;
+import android.content.ContentResolver;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Build;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
@@ -36,12 +41,15 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStreamWriter;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -666,11 +674,12 @@ public class ClamatoUtils extends AppCompatActivity {
 
     public void verifySaveData(Context context) {
 
-        String[] paths = new String[4];
+        String[] paths = new String[5];
         paths[0] = "notes.txt";
         paths[1] = "favorites.txt";
         paths[2] = "settings.txt";
         paths[3] = "team.txt";
+        paths[4] = "teamlogo.jpg";
         for (String p : paths) {
             try {
                 InputStream inputStream = context.openFileInput(p);
@@ -688,6 +697,8 @@ public class ClamatoUtils extends AppCompatActivity {
                         writeToFile(getSettingsDefault(), p, "");
                     } else if (p.equals("team.txt")) {
                         writeToFile("Tap to set Team Name,", p, "");
+                    } else if (p.equals("teamlogo.jpg")) {
+                        writeToFile("", p, "");
                     }
 
                     Toast.makeText(a.getApplicationContext(), "Initialized " + p, Toast.LENGTH_SHORT).show();
@@ -756,12 +767,37 @@ public class ClamatoUtils extends AppCompatActivity {
         return false;
     }
 
-    public int getSettingsLength() {
-        return getSettingsDefault().length();
-    }
-
     public String getSettingsDefault() {
         return "f\nf\nSuggestion Buddy\n";
+    }
+
+    public void saveLogo(Bitmap bitmapImage) {
+            ContextWrapper cw = new ContextWrapper(a.getApplicationContext());
+            // path to /data/data/yourapp/app_data/imageDir
+            File directory = cw.getDir("", Context.MODE_PRIVATE);
+            // Create imageDir
+            File mypath=new File(directory,"teamlogo.jpg");
+
+            FileOutputStream fos = null;
+            try {
+                fos = new FileOutputStream(mypath);
+                // Use the compress method on the BitMap object to write image to the OutputStream
+                bitmapImage.compress(Bitmap.CompressFormat.PNG, 100, fos);
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                try {
+                    fos.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+    }
+
+    public Bitmap getTeamLogo() throws FileNotFoundException {
+        File d = a.getApplicationContext().getDir("", Context.MODE_PRIVATE);
+        File myPath = new File(d, "teamlogo.jpg");
+        return BitmapFactory.decodeStream(new FileInputStream(myPath));
     }
 
     public void writeToFile(String data, String path, String directory) {
