@@ -25,7 +25,9 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.material.navigation.NavigationView;
+import com.qr.shimloaf.spicyclamatapp.GameActivities.GamesList;
 import com.qr.shimloaf.spicyclamatapp.R;
+import com.qr.shimloaf.spicyclamatapp.ShowbuilderActivities.TeamSettings;
 import com.qr.shimloaf.spicyclamatapp.Utility.BaseActivity;
 import com.qr.shimloaf.spicyclamatapp.Utility.ClamatoUtils;
 
@@ -131,11 +133,21 @@ public class ShowScreen extends BaseActivity
             savedLogo = c.getTeamLogo();
             logo.setImageBitmap(savedLogo);
         } catch (FileNotFoundException e) {
+            logo.setImageResource(R.drawable.placeholder_logo);
             //If there is no saved logo, use the default.
         }
 
         logo.setOnClickListener(view -> {
             requestLogo();
+        });
+
+        ImageView settingsButton = findViewById(R.id.show_settings_button);
+        settingsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent settings = new Intent(getApplicationContext(), TeamSettings.class);
+                startActivity(settings);
+            }
         });
 
     }

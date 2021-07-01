@@ -58,6 +58,289 @@ import java.util.HashMap;
 
 public class ClamatoUtils extends AppCompatActivity {
 
+    /*
+    *   General class signature and members
+    */
+
+    Application a;
+    public ClamatoUtils(Application application) {
+        a = application;
+    }
+
+    /*
+     *   Universal functions across several activities
+     */
+
+    public void navigateDrawer(int id, Context c) {
+        if (id == R.id.nav_home) {
+            Intent appBrowser = new Intent(c, HomeScreen.class);
+            appBrowser.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            c.startActivity(appBrowser);
+        } else if (id == R.id.nav_games) {
+            Intent appBrowser = new Intent(c, GamerScreen.class);
+            appBrowser.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            c.startActivity(appBrowser);
+        } else if (id == R.id.nav_suggestion) {
+            Intent appBrowser = new Intent(c, SuggestionScreen.class);
+            appBrowser.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            c.startActivity(appBrowser);
+        } else if (id == R.id.nav_timer) {
+            Intent appBrowser = new Intent(c, TimerScreen.class);
+            appBrowser.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            c.startActivity(appBrowser);
+        } else if (id == R.id.nav_tools) {
+            Intent appBrowser = new Intent(c, ToolsScreen.class);
+            appBrowser.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            c.startActivity(appBrowser);
+        } else if (id == R.id.nav_showbuilder) {
+            Intent appBrowser = new Intent(c, ShowScreen.class);
+            appBrowser.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            c.startActivity(appBrowser);
+        } else if (id == R.id.nav_credits) {
+            Intent appBrowser = new Intent(c, CreditsScreen.class);
+            appBrowser.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            c.startActivity(appBrowser);
+        } else if (id == R.id.nav_settings) {
+            Intent appBrowser = new Intent(c, SettingsScreen.class);
+            appBrowser.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            c.startActivity(appBrowser);
+        }
+    }
+
+    /*
+    *   Utility functions general
+    */
+
+    public String loadJSONFromAsset(String filename) {
+        String json = null;
+        try {
+            InputStream is = a.getAssets().open(filename);
+            int size = is.available();
+            byte[] buffer = new byte[size];
+            is.read(buffer);
+            is.close();
+            json = new String(buffer, "UTF-8");
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            return null;
+        }
+        return json;
+    }
+
+    private int getNthIndexOfDelimiter(String s, char delimiter, int n) {
+
+        int pos = 0;
+        int count = 0;
+
+        while (count != n) {
+            if (s.charAt(pos) == delimiter) {
+                count++;
+            }
+            pos++;
+        }
+
+        return pos - 1;
+    }
+
+    /*
+    *   Utility Functions for data management
+    */
+
+    public void setDefaultSaveData() {
+
+        File d = a.getApplicationContext().getDir("", Context.MODE_PRIVATE);
+
+        File file = new File(d, "favorites.txt");
+        if(!file.exists())
+            writeToFile(",", "favorites.txt", "");
+
+        file = new File(d, "notes.txt");
+        if(!file.exists())
+            writeToFile("Initialized", "notes.txt", "");
+
+        file = new File(d, "settings.txt");
+        if(!file.exists()) {
+            writeToFile(getSettingsDefault(), "settings.txt", "");
+        }
+
+        file = new File(d, "team.txt");
+        if(!file.exists())
+            writeToFile("Tap to set Team Name,", "team.txt", "");
+
+    }
+
+    public String readFromFile(String path, String directory) {
+
+        File d = a.getApplicationContext().getDir(directory, Context.MODE_PRIVATE);
+        File f = new File(d, path);
+
+        return readFromFile(f);
+    }
+
+    public String readFromFile(File f) {
+
+        StringBuilder ret = new StringBuilder();
+
+        try (FileReader reader = new FileReader(f)) {
+            int content;
+
+            while ((content = reader.read()) != -1) {
+                ret.append((char) content);
+            }
+
+        } catch (FileNotFoundException e) {
+            //Toast.makeText(a.getApplicationContext(), "File not found. AKA David Hopping f**ked up coding.", Toast.LENGTH_SHORT).show();
+        } catch (IOException e) {
+            Toast.makeText(a.getApplicationContext(), "File Write Failed. AKA David Hopping f**ked up coding.", Toast.LENGTH_SHORT).show();
+
+        }
+
+        return ret.toString();
+    }
+
+    public void writeToFile(String data, String path, String directory) {
+
+        File file = new File(a.getApplicationContext().getDir(directory, Context.MODE_PRIVATE), path);
+
+        try {
+            FileWriter writer = new FileWriter(file);
+            writer.write(data);
+            writer.close();
+        } catch (IOException e) {
+            Toast.makeText(a.getApplicationContext(), "File Write Failed. AKA David Hopping f**ked up coding.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    /*
+    *   Functions for logo data
+    */
+
+    public void saveLogo(Bitmap bitmapImage) {
+        ContextWrapper cw = new ContextWrapper(a.getApplicationContext());
+        File directory = cw.getDir("", Context.MODE_PRIVATE);
+        File mypath=new File(directory,"teamlogo.jpg");
+
+        FileOutputStream fos = null;
+        try {
+            fos = new FileOutputStream(mypath);
+            bitmapImage.compress(Bitmap.CompressFormat.PNG, 100, fos);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                fos.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public Bitmap getTeamLogo() throws FileNotFoundException {
+        File d = a.getApplicationContext().getDir("", Context.MODE_PRIVATE);
+        File myPath = new File(d, "teamlogo.jpg");
+        return BitmapFactory.decodeStream(new FileInputStream(myPath));
+    }
+
+    /*
+    *   Functions for universal animation/effects.
+    */
+
+    public void fadeSwitchText(final TextView t, final String s) {
+
+        final Animation in = new AlphaAnimation(0.0f, 1.0f);
+        final Animation out = new AlphaAnimation(1.0f, 0.0f);
+
+        in.setDuration(500);
+        out.setDuration(500);
+
+        out.setAnimationListener(new Animation.AnimationListener() {
+
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                t.setText(s);
+                t.startAnimation(in);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+
+        t.startAnimation(out);
+    }
+
+    public void quickVibe(int n) {
+        Vibrator vibe = (Vibrator) a.getSystemService(Context.VIBRATOR_SERVICE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            vibe.vibrate(VibrationEffect.createOneShot(n, VibrationEffect.DEFAULT_AMPLITUDE));
+        }
+    }
+
+    public void quickRotateImageView(final ImageView toRotate, final int duration, boolean fillAfter) {
+
+        final RotateAnimation rotateAnimation = new RotateAnimation(0, 360,
+                Animation.RELATIVE_TO_SELF, 0.5f,
+                Animation.RELATIVE_TO_SELF, 0.5f);
+
+        rotateAnimation.setInterpolator(new LinearInterpolator());
+        rotateAnimation.setDuration(duration);
+        rotateAnimation.setFillAfter(fillAfter);
+
+        rotateAnimation.setAnimationListener(new Animation.AnimationListener() {
+
+            public void onAnimationStart(Animation a) {
+                //Nothing
+            }
+
+            public void onAnimationRepeat(Animation a) {
+                //Nothing
+            }
+
+            public void onAnimationEnd(Animation a) {
+                //Nothing
+            }
+        });
+
+        toRotate.startAnimation(rotateAnimation);
+    }
+
+    public View.OnTouchListener setButtonEffectListener(final ImageView toSet) {
+
+        return new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+
+                int action = event.getAction();
+                if (action == MotionEvent.ACTION_DOWN) {
+                    quickVibe(50);
+                    (toSet).setColorFilter(ContextCompat.getColor(a, R.color.light_gray), android.graphics.PorterDuff.Mode.MULTIPLY);
+                } else if (action == MotionEvent.ACTION_UP) {
+                    (toSet).clearColorFilter();
+                } else if (action == MotionEvent.ACTION_CANCEL) {
+                    (toSet).clearColorFilter();
+                }
+
+                return toSet.onTouchEvent(event);
+            }
+        };
+    }
+
+    public String generateTitle() {
+        String[] part1 = a.getResources().getStringArray(R.array.titles_1);
+        String[] part2 = a.getResources().getStringArray(R.array.titles_2);
+        return (part1[(int) (Math.random() * part1.length)] + " " + part2[(int) (Math.random() * part2.length)]);
+    }
+
+    /*
+    *   Functions for Game Dictionary Management
+    */
+
     public static class ClamatoGame {
         int id;
         String[] titles;
@@ -229,92 +512,9 @@ public class ClamatoUtils extends AppCompatActivity {
         }
     }
 
-    public enum setting {
-        DarkMode,
-        ColorblindMode,
-        PalNickname
-    }
-
-    Application a;
     HashMap<Integer, ClamatoGame> curatedGameList = new HashMap<>();
     HashMap<Integer, ClamatoGame> encyclopediaGameList = new HashMap<>();
     HashMap<Integer, ClamatoGame> games = new HashMap<>();
-    MediaPlayer mp = new MediaPlayer();
-
-    public ClamatoUtils(Application application) {
-        a = application;
-    }
-
-    public void fadeSwitchText(final TextView t, final String s) {
-
-        final Animation in = new AlphaAnimation(0.0f, 1.0f);
-        final Animation out = new AlphaAnimation(1.0f, 0.0f);
-
-        in.setDuration(500);
-        out.setDuration(500);
-
-        out.setAnimationListener(new Animation.AnimationListener() {
-
-            @Override
-            public void onAnimationStart(Animation animation) {
-
-            }
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                t.setText(s);
-                t.startAnimation(in);
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-
-            }
-        });
-
-        t.startAnimation(out);
-    }
-
-    public void quickVibe(int n) {
-        Vibrator vibe = (Vibrator) a.getSystemService(Context.VIBRATOR_SERVICE);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            vibe.vibrate(VibrationEffect.createOneShot(n, VibrationEffect.DEFAULT_AMPLITUDE));
-        }
-    }
-
-    public void quickRotateImageView(final ImageView toRotate, final int duration, boolean fillAfter) {
-
-        final RotateAnimation rotateAnimation = new RotateAnimation(0, 360,
-                Animation.RELATIVE_TO_SELF, 0.5f,
-                Animation.RELATIVE_TO_SELF, 0.5f);
-
-        rotateAnimation.setInterpolator(new LinearInterpolator());
-        rotateAnimation.setDuration(duration);
-        rotateAnimation.setFillAfter(fillAfter);
-
-        rotateAnimation.setAnimationListener(new Animation.AnimationListener() {
-
-            public void onAnimationStart(Animation a) {
-                //Nothing
-            }
-
-            public void onAnimationRepeat(Animation a) {
-                //Nothing
-            }
-
-            public void onAnimationEnd(Animation a) {
-                //Nothing
-            }
-        });
-
-        toRotate.startAnimation(rotateAnimation);
-    }
-
-    public String generateTitle() {
-        String[] part1 = a.getResources().getStringArray(R.array.titles_1);
-        String[] part2 = a.getResources().getStringArray(R.array.titles_2);
-        return (part1[(int) (Math.random() * part1.length)] + " " + part2[(int) (Math.random() * part2.length)]);
-    }
 
     private void generateGames() {
         if (curatedGameList.size() == 0 && encyclopediaGameList.size() == 0) {
@@ -672,83 +872,47 @@ public class ClamatoUtils extends AppCompatActivity {
         return games.get(id);
     }
 
-    public void verifySaveData(Context context) {
+    /*
+    *   Functions for Settings management
+    */
 
-        String[] paths = new String[5];
-        paths[0] = "notes.txt";
-        paths[1] = "favorites.txt";
-        paths[2] = "settings.txt";
-        paths[3] = "team.txt";
-        paths[4] = "teamlogo.jpg";
-        for (String p : paths) {
-            try {
-                InputStream inputStream = context.openFileInput(p);
-            } catch (IOException e) {
-                try {
-                    OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput(p, Context.MODE_PRIVATE));
-                    outputStreamWriter.write("");
-                    outputStreamWriter.close();
-
-                    if (p.equals("favorites.txt")) {
-                        writeToFile(",", p, "");
-                    } else if (p.equals("notes.txt")) {
-                        writeToFile("Initialized", p, "");
-                    } else if (p.equals("settings.txt")) {
-                        writeToFile(getSettingsDefault(), p, "");
-                    } else if (p.equals("team.txt")) {
-                        writeToFile("Tap to set Team Name,", p, "");
-                    } else if (p.equals("teamlogo.jpg")) {
-                        writeToFile("", p, "");
-                    }
-
-                    Toast.makeText(a.getApplicationContext(), "Initialized " + p, Toast.LENGTH_SHORT).show();
-                } catch (IOException ex) {
-                    Toast.makeText(a.getApplicationContext(), "File Write Failed. AKA David Hopping f**ked up coding.", Toast.LENGTH_SHORT).show();
-                }
-            }
-        }
-
+    public enum setting {
+        DarkMode,
+        ColorblindMode,
+        PalNickname,
+        UseLogo,
+        NameSettings,
     }
 
-    private String setCharAt(int pos, String toModify, char toChange) {
-        return toModify.substring(0, pos) + toChange + toModify.substring(pos + 1);
+    public String getSettingsDefault() {
+        return "\nf\nf\nSuggestion Buddy\nt\n1110\n";
     }
 
-    private int getNthIndexOfDelimiter(String s, char delimiter, int n) {
+    private String getUpdatedSettings(int settingID, String oldSettings, String newValue) {
+        return oldSettings.substring(0, getNthIndexOfDelimiter(oldSettings, '\n', settingID) + 1) + newValue + oldSettings.substring(getNthIndexOfDelimiter(oldSettings, '\n', settingID + 1));
+    }
 
-        int pos = 0;
-        int count = 0;
-
-        while (count != n) {
-            pos++;
-            if (s.charAt(pos) == delimiter) {
-                count++;
-            }
-        }
-
-        return pos;
+    private String getSettingFromID(int settingID, String oldSettings) {
+        return oldSettings.substring(getNthIndexOfDelimiter(oldSettings, '\n', settingID) + 1, getNthIndexOfDelimiter(oldSettings, '\n', settingID + 1));
     }
 
     public void toggleSetting(ClamatoUtils.setting s, String newSetting) {
         String settings = readFromFile("settings.txt", "");
 
         if (s == setting.DarkMode) {
-            if ((boolean) getSetting(setting.DarkMode)) {
-                settings = setCharAt(0, settings, 'f');
-            } else {
-                settings = setCharAt(0, settings, 't');
-            }
+            settings = getUpdatedSettings(1, settings, newSetting);
         } else if (s == setting.ColorblindMode) {
-            if ((boolean) getSetting(setting.ColorblindMode)) {
-                settings = setCharAt(2, settings, 'f');
-            } else {
-                settings = setCharAt(2, settings, 't');
-            }
+            settings = getUpdatedSettings(2, settings, newSetting);
         } else if (s == setting.PalNickname) {
-            settings = settings.substring(0, getNthIndexOfDelimiter(settings, '\n', 2) + 1) + newSetting + settings.substring(getNthIndexOfDelimiter(settings, '\n', 3));
+            settings = getUpdatedSettings(3, settings, newSetting);
+        } else if (s == setting.UseLogo) {
+            settings = getUpdatedSettings(4, settings, newSetting);
+        } else if (s == setting.NameSettings) {
+            settings = getUpdatedSettings(5, settings, newSetting);
         }
 
         writeToFile(settings, "settings.txt", "");
+
     }
 
     public Object getSetting(ClamatoUtils.setting setting) {
@@ -756,179 +920,15 @@ public class ClamatoUtils extends AppCompatActivity {
         String oldSettings = readFromFile("settings.txt", "");
 
         if (setting == ClamatoUtils.setting.DarkMode) {
-            //Cheat for not having to parse booleans due to consistant positions in the file
-            return oldSettings.charAt(0) == 't';
+            return (getSettingFromID(1, oldSettings).equals("t"));
         } else if (setting == ClamatoUtils.setting.ColorblindMode) {
-            //Ditto
-            return oldSettings.charAt(2) == 't';
+            return (getSettingFromID(2, oldSettings).equals("t"));
         } else if (setting == ClamatoUtils.setting.PalNickname) {
-            return oldSettings.substring(4, oldSettings.indexOf('\n', 4));
+            return getSettingFromID(3, oldSettings);
+        } else if (setting == ClamatoUtils.setting.UseLogo) {
+            return getSettingFromID(4, oldSettings).equals("t");
         }
         return false;
     }
 
-    public String getSettingsDefault() {
-        return "f\nf\nSuggestion Buddy\n";
-    }
-
-    public void saveLogo(Bitmap bitmapImage) {
-            ContextWrapper cw = new ContextWrapper(a.getApplicationContext());
-            // path to /data/data/yourapp/app_data/imageDir
-            File directory = cw.getDir("", Context.MODE_PRIVATE);
-            // Create imageDir
-            File mypath=new File(directory,"teamlogo.jpg");
-
-            FileOutputStream fos = null;
-            try {
-                fos = new FileOutputStream(mypath);
-                // Use the compress method on the BitMap object to write image to the OutputStream
-                bitmapImage.compress(Bitmap.CompressFormat.PNG, 100, fos);
-            } catch (Exception e) {
-                e.printStackTrace();
-            } finally {
-                try {
-                    fos.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-    }
-
-    public Bitmap getTeamLogo() throws FileNotFoundException {
-        File d = a.getApplicationContext().getDir("", Context.MODE_PRIVATE);
-        File myPath = new File(d, "teamlogo.jpg");
-        return BitmapFactory.decodeStream(new FileInputStream(myPath));
-    }
-
-    public void writeToFile(String data, String path, String directory) {
-        File d = a.getApplicationContext().getDir(directory, Context.MODE_PRIVATE);
-        File myPath = new File(d, path);
-
-        try {
-            FileWriter writer = new FileWriter(myPath);
-            writer.write(data);
-            writer.close();
-        } catch (IOException e) {
-            Toast.makeText(a.getApplicationContext(), "File Write Failed. AKA David Hopping f**ked up coding.", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    public String loadJSONFromAsset(String filename) {
-        String json = null;
-        try {
-            InputStream is = a.getAssets().open(filename);
-            int size = is.available();
-            byte[] buffer = new byte[size];
-            is.read(buffer);
-            is.close();
-            json = new String(buffer, "UTF-8");
-        } catch (IOException ex) {
-            ex.printStackTrace();
-            return null;
-        }
-        return json;
-    }
-
-    public String readFromFile(String path, String directory) {
-
-        verifySaveData(a.getApplicationContext());
-
-        StringBuilder ret = new StringBuilder();
-        File d = a.getApplicationContext().getDir(directory, Context.MODE_PRIVATE);
-        File myPath = new File(d, path);
-
-        try (FileReader reader = new FileReader(myPath)) {
-            int content;
-
-            while ((content = reader.read()) != -1) {
-                ret.append((char) content);
-            }
-
-        } catch (FileNotFoundException e) {
-            //Toast.makeText(a.getApplicationContext(), "File not found. AKA David Hopping f**ked up coding.", Toast.LENGTH_SHORT).show();
-        } catch (IOException e) {
-            Toast.makeText(a.getApplicationContext(), "File Write Failed. AKA David Hopping f**ked up coding.", Toast.LENGTH_SHORT).show();
-
-        }
-
-        return ret.toString();
-    }
-
-    public String readFromFile(File f) {
-
-        StringBuilder ret = new StringBuilder();
-
-        try (FileReader reader = new FileReader(f)) {
-            int content;
-
-            while ((content = reader.read()) != -1) {
-                ret.append((char) content);
-            }
-
-        } catch (FileNotFoundException e) {
-            //Toast.makeText(a.getApplicationContext(), "File not found. AKA David Hopping f**ked up coding.", Toast.LENGTH_SHORT).show();
-        } catch (IOException e) {
-            Toast.makeText(a.getApplicationContext(), "File Write Failed. AKA David Hopping f**ked up coding.", Toast.LENGTH_SHORT).show();
-
-        }
-
-        return ret.toString();
-    }
-
-    public View.OnTouchListener setButtonEffectListener(final ImageView toSet) {
-
-        return new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-
-                int action = event.getAction();
-                if (action == MotionEvent.ACTION_DOWN) {
-                    quickVibe(50);
-                    (toSet).setColorFilter(ContextCompat.getColor(a, R.color.light_gray), android.graphics.PorterDuff.Mode.MULTIPLY);
-                } else if (action == MotionEvent.ACTION_UP) {
-                    (toSet).clearColorFilter();
-                } else if (action == MotionEvent.ACTION_CANCEL) {
-                    (toSet).clearColorFilter();
-                }
-
-                return toSet.onTouchEvent(event);
-            }
-        };
-    }
-
-    public void navigateDrawer(int id, Context c) {
-        if (id == R.id.nav_home) {
-            Intent appBrowser = new Intent(c, HomeScreen.class);
-            appBrowser.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            c.startActivity(appBrowser);
-        } else if (id == R.id.nav_games) {
-            Intent appBrowser = new Intent(c, GamerScreen.class);
-            appBrowser.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            c.startActivity(appBrowser);
-        } else if (id == R.id.nav_suggestion) {
-            Intent appBrowser = new Intent(c, SuggestionScreen.class);
-            appBrowser.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            c.startActivity(appBrowser);
-        } else if (id == R.id.nav_timer) {
-            Intent appBrowser = new Intent(c, TimerScreen.class);
-            appBrowser.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            c.startActivity(appBrowser);
-        } else if (id == R.id.nav_tools) {
-            Intent appBrowser = new Intent(c, ToolsScreen.class);
-            appBrowser.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            c.startActivity(appBrowser);
-        } else if (id == R.id.nav_showbuilder) {
-            Intent appBrowser = new Intent(c, ShowScreen.class);
-            appBrowser.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            c.startActivity(appBrowser);
-        } else if (id == R.id.nav_credits) {
-            Intent appBrowser = new Intent(c, CreditsScreen.class);
-            appBrowser.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            c.startActivity(appBrowser);
-        } else if (id == R.id.nav_settings) {
-            Intent appBrowser = new Intent(c, SettingsScreen.class);
-            appBrowser.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            c.startActivity(appBrowser);
-        }
-    }
 }

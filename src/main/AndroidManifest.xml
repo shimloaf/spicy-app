@@ -47,6 +47,8 @@
         <activity android:name=".GameActivities.GamesList" />
         <activity android:name=".GameActivities.GameDisplay" />
 
+        <!-- SHOW SUB-ACTIVITIES -->
+        <activity android:name=".ShowbuilderActivities.TeamSettings"/>
 
     </application>
 

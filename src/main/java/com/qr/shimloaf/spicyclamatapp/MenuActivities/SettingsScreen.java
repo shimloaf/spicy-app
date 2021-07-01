@@ -35,14 +35,6 @@ public class SettingsScreen extends BaseActivity
         return R.layout.activity_settings;
     }
 
-    private boolean isDarkMode() {
-        return (boolean) c.getSetting(ClamatoUtils.setting.DarkMode);
-    }
-
-    private boolean isColorblindMode() {
-        return (boolean) c.getSetting(ClamatoUtils.setting.ColorblindMode);
-    }
-
     @Override
     public boolean dispatchTouchEvent(MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
@@ -78,7 +70,6 @@ public class SettingsScreen extends BaseActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         navigationView.getMenu().getItem(7).setChecked(true);
-        c.verifySaveData(this);
 
         SwitchCompat darkSwitch = findViewById(R.id.dark_mode_switch);
         darkSwitch.setChecked(isDarkMode());
@@ -90,7 +81,11 @@ public class SettingsScreen extends BaseActivity
         palName.setText((String) c.getSetting(ClamatoUtils.setting.PalNickname));
 
         darkSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            c.toggleSetting(ClamatoUtils.setting.DarkMode, "");
+            if (isDarkMode()) {
+                c.toggleSetting(ClamatoUtils.setting.DarkMode, "f");
+            } else {
+                c.toggleSetting(ClamatoUtils.setting.DarkMode, "t");
+            }
             if (isDarkMode()) {
                 AppCompatDelegate.setDefaultNightMode(
                         AppCompatDelegate.MODE_NIGHT_YES);
@@ -101,7 +96,11 @@ public class SettingsScreen extends BaseActivity
         });
 
         colorblindSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            c.toggleSetting(ClamatoUtils.setting.ColorblindMode, "");
+            if (isColorblindMode()) {
+                c.toggleSetting(ClamatoUtils.setting.ColorblindMode, "f");
+            } else {
+                c.toggleSetting(ClamatoUtils.setting.ColorblindMode, "t");
+            }
         });
 
         palName.setOnKeyListener(new View.OnKeyListener() {
