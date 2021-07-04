@@ -49,6 +49,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
+            android:paddingTop="10dp"
             android:paddingBottom="5dp"
             android:text="Member Name Configuration"
             android:textSize="18sp"
@@ -57,35 +58,69 @@
         <com.google.android.material.chip.ChipGroup
             android:id="@+id/name_config_chip_group"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:theme="@style/SpicyClamato.DefaultTheme">
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/first_name_chip"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:checkable="true"
+                android:checked="false"
                 android:text="First"
+                android:theme="@style/ChipStyle"
                 app:checkedIconVisible="false" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/nickname_chip"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Nickname" />
+                android:checkable="true"
+                android:text="Nickname"
+                android:theme="@style/ChipStyle"
+                app:checkedIconVisible="false" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/last_name_chip"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Last" />
+                android:checkable="true"
+                android:text="Last"
+                android:theme="@style/ChipStyle"
+                app:checkedIconVisible="false" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/initial_chip"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Initial" />
+                android:checkable="true"
+                android:text="Initial"
+                android:theme="@style/ChipStyle"
+                app:checkedIconVisible="false" />
 
         </com.google.android.material.chip.ChipGroup>
 
     </LinearLayout>
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="visible">
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="@style/SpicyClamato.AppBarOverlay">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="?attr/colorPrimary"
+                app:popupTheme="@style/SpicyClamato.PopupOverlay" />
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -5,9 +5,9 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.net.Uri;
+import android.opengl.Visibility;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -16,7 +16,6 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.QuickContactBadge;
 import android.widget.TextView;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -25,7 +24,6 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.material.navigation.NavigationView;
-import com.qr.shimloaf.spicyclamatapp.GameActivities.GamesList;
 import com.qr.shimloaf.spicyclamatapp.R;
 import com.qr.shimloaf.spicyclamatapp.ShowbuilderActivities.TeamSettings;
 import com.qr.shimloaf.spicyclamatapp.Utility.BaseActivity;
@@ -33,7 +31,6 @@ import com.qr.shimloaf.spicyclamatapp.Utility.ClamatoUtils;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 
 public class ShowScreen extends BaseActivity
@@ -68,6 +65,18 @@ public class ShowScreen extends BaseActivity
     Team team;
     EditText title;
     ImageView logo;
+
+    private void updateDisplay() {
+
+        loadTeam();
+        setUpTeam();
+
+        if (!(Boolean) c.getSetting(ClamatoUtils.setting.UseLogo)) {
+            logo.setVisibility(View.GONE);
+        } else {
+            logo.setVisibility(View.VISIBLE);
+        }
+    }
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent event) {
@@ -149,6 +158,7 @@ public class ShowScreen extends BaseActivity
                 startActivity(settings);
             }
         });
+        settingsButton.setOnTouchListener((c.setButtonEffectListener(settingsButton)));
 
     }
 
@@ -192,6 +202,11 @@ public class ShowScreen extends BaseActivity
         backPressed = true;
     }
 
+    @Override
+    protected void onStart() {
+        updateDisplay();
+        super.onStart();
+    }
 
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {

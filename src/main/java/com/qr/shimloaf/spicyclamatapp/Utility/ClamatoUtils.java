@@ -927,8 +927,33 @@ public class ClamatoUtils extends AppCompatActivity {
             return getSettingFromID(3, oldSettings);
         } else if (setting == ClamatoUtils.setting.UseLogo) {
             return getSettingFromID(4, oldSettings).equals("t");
+        } else if (setting == ClamatoUtils.setting.NameSettings) {
+            return getSettingFromID(5, oldSettings);
         }
         return false;
+    }
+
+    /*
+    *   Specific settings helper functions
+    */
+
+    public boolean isDarkMode() {
+        return (boolean) getSetting(setting.DarkMode);
+    }
+
+    public boolean isColorblindMode() {
+        return (boolean) getSetting(setting.ColorblindMode);
+    }
+
+    public boolean[] decodeNameChips() {
+        String raw = (String) getSetting(setting.NameSettings);
+        boolean[] decoded = new boolean[4];
+
+        for (int n = 0; n < 4; n++) {
+            decoded[n] = (raw.charAt(n) == '1');
+        }
+
+        return decoded;
     }
 
 }

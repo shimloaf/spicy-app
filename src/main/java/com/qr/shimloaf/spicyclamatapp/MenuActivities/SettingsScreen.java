@@ -72,21 +72,21 @@ public class SettingsScreen extends BaseActivity
         navigationView.getMenu().getItem(7).setChecked(true);
 
         SwitchCompat darkSwitch = findViewById(R.id.dark_mode_switch);
-        darkSwitch.setChecked(isDarkMode());
+        darkSwitch.setChecked(c.isDarkMode());
 
         SwitchCompat colorblindSwitch = findViewById(R.id.colorblind_mode_switch);
-        colorblindSwitch.setChecked(isColorblindMode());
+        colorblindSwitch.setChecked(c.isColorblindMode());
 
         TextInputEditText palName = findViewById(R.id.suggestion_nickname);
         palName.setText((String) c.getSetting(ClamatoUtils.setting.PalNickname));
 
         darkSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (isDarkMode()) {
+            if (c.isDarkMode()) {
                 c.toggleSetting(ClamatoUtils.setting.DarkMode, "f");
             } else {
                 c.toggleSetting(ClamatoUtils.setting.DarkMode, "t");
             }
-            if (isDarkMode()) {
+            if (c.isDarkMode()) {
                 AppCompatDelegate.setDefaultNightMode(
                         AppCompatDelegate.MODE_NIGHT_YES);
             } else {
@@ -96,7 +96,7 @@ public class SettingsScreen extends BaseActivity
         });
 
         colorblindSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (isColorblindMode()) {
+            if (c.isColorblindMode()) {
                 c.toggleSetting(ClamatoUtils.setting.ColorblindMode, "f");
             } else {
                 c.toggleSetting(ClamatoUtils.setting.ColorblindMode, "t");

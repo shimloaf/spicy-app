@@ -10,14 +10,6 @@ public abstract class BaseActivity extends AppCompatActivity {
     public ClamatoUtils c;
     public boolean backPressed;
 
-    public boolean isDarkMode() {
-        return (boolean) c.getSetting(ClamatoUtils.setting.DarkMode);
-    }
-
-    public boolean isColorblindMode() {
-        return (boolean) c.getSetting(ClamatoUtils.setting.ColorblindMode);
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,7 +20,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         c = new ClamatoUtils(this.getApplication());
         c.setDefaultSaveData();
 
-        if (isDarkMode()) {
+        if (c.isDarkMode()) {
             AppCompatDelegate.setDefaultNightMode(
                     AppCompatDelegate.MODE_NIGHT_YES);
         } else {
